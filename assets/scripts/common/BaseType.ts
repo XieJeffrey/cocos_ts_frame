@@ -17,3 +17,11 @@ enum ViewType {
     normal = 0,
     cache = 1,
 }
+
+enum BgmType{
+    
+}
+
+enum SoundType{
+
+}

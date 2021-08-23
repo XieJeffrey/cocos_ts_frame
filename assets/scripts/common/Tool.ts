@@ -1,9 +1,8 @@
-import { IManager } from "../base/IManager";
 
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-08-23 17:48:29
+ * @LastEditTime: 2021-08-23 23:07:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -11,12 +10,8 @@ import { IManager } from "../base/IManager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass('Tool')
-export default class Tool extends IManager {
-    constructor() {
-        super();
-    }
-
-    init() {
+export default class Tool  {   
+    init() {        
         String.prototype.format = function () {
             if (arguments.length == 0) return this;
             var param = arguments[0];

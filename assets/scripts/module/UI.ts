@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:15:56
- * @LastEditTime: 2021-08-23 17:57:47
+ * @LastEditTime: 2021-08-23 23:22:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\ui .ts
@@ -13,13 +13,14 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import IManager  from "../base/IManager";
 import { IView } from "../base/IView";
 import { UIConfig } from "../config/UIConfig";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class UI {
+export default class UI extends IManager{
     uiList: Map<string, { node: cc.Node, script: IView }> = new Map<string, { node: cc.Node, script: IView }>();
     root: cc.Node;
     bundle: any;

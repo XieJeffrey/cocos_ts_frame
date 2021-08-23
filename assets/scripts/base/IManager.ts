@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:58:20
- * @LastEditTime: 2021-08-23 15:02:37
+ * @LastEditTime: 2021-08-23 23:22:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\base\IManager.ts
@@ -16,6 +16,16 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export abstract class IManager {
-    abstract init(params: any): any;
+export default class IManager {
+    private static _instance:IManager;
+    public static getInstance(){
+        if(!this._instance)
+        {
+            this._instance=new IManager();
+        }
+        return this._instance;
+    }
+
+    init(params?: any){}
+
 }
