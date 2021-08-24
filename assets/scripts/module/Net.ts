@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 23:55:12
- * @LastEditTime: 2021-08-24 00:16:22
+ * @LastEditTime: 2021-08-24 14:29:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Net.ts
@@ -15,19 +15,12 @@
 
 import IManager from "../base/IManager";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Net extends IManager {
-    init(){
-        let promise=new Promise((resolve,reject)=>{
-            resolve(1);
-        })
-        return promise;
-    }
-
-    get(url){
-        return new Promise((resolve,reject)=>{
+    get(url) {
+        return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 400)) {
@@ -41,7 +34,7 @@ export default class Net extends IManager {
         })
     }
 
-    post(url,obj){
+    post(url, obj) {
         return new Promise<string>((resolve, reject) => {
             var str = this.obj2qs(obj);
             var xhr = new XMLHttpRequest();
@@ -49,7 +42,7 @@ export default class Net extends IManager {
                 if (xhr.readyState !== 4) return;//忽略未完成的请求
                 if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 400)) {
                     var response = xhr.responseText;
-                    resolve(JSON.parse(response));                 
+                    resolve(JSON.parse(response));
                 }
             };
             // console.log('request:' + url + "?" + str);

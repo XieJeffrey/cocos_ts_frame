@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:56:09
- * @LastEditTime: 2021-08-24 00:24:28
+ * @LastEditTime: 2021-08-24 16:13:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\App.ts
@@ -16,7 +16,10 @@
 import Event from "./module/Event";
 import Sound from "./module/Sound";
 import UI from "./module/UI";
-import Net  from "./module/Net";
+import Net from "./module/Net";
+import IManager from "./base/IManager";
+import Storage from "./module/Storage";
+import Res from "./module/Res";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -24,22 +27,27 @@ export default class App {
     ui: UI = UI.getInstance() as UI;
     sound: Sound = Sound.getInstance() as Sound;
     event: Event = Event.getInstance() as Event;
-    net:Net= Net.getInstance() as Net;
+    net: Net = Net.getInstance() as Net;
+    storage: Storage = Storage.getInstance() as Storage;
+    res: Res = Res.getInstance() as Res;
 
-    curInit: number = 5;
-    totalInit: number = 0;
-    initCall:Function=null;
-    init(call: Function) {
-        this.initCall=call;
-        this.ui.init().then(this.inited);
-        this.sound.init().then(this.inited);
-        this.event.init().then(this.inited);
-        this.net.init().then(this.inited);
+    curInited: number = 0;
+    initCall: Function = null;
+
+    public init(call: Function) {
+        this.initCall = call;
+
+        this.sound.init().then(function () { this.inited() }.bind(this));
+        this.storage.init().then(function () { this.inited() }.bind(this));
+        this.res.init().then(function () { this.inited() }.bind(this));
+        this.ui.init().then(function () { this.inited() }.bind(this));
     }
 
-
-
     inited() {
-
+        if (this.initCall) {
+            this.curInited += 0.25;
+            console.log(this.curInited)
+            this.initCall(this.curInited)
+        }
     }
 }

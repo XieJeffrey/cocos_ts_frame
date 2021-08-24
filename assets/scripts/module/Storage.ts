@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-08-24 00:43:02
+ * @LastEditTime: 2021-08-24 14:26:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -14,17 +14,26 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import IManager from "../base/IManager";
-import GameData from "../data/gameData";
+import GameData from "../data/GameData";
 import UserData from "../data/UserData";
 
 const { ccclass, property } = cc._decorator;
-
+const localStorage = true;
 @ccclass
 export default class Storage extends IManager {
     dataKey: string = "debug_key";
+
     init() {
         return new Promise(function (resolve, reject) {
+            if (localStorage) {
+                this.loadGameData()
+                this.loadUserData()
+                console.log("[storage inited]")
+                resolve(1)
+            }
+            else {
 
+            }
         }.bind(this))
     }
 
@@ -42,7 +51,7 @@ export default class Storage extends IManager {
         }
     }
 
-    loadUserData() { 
+    loadUserData() {
         let str: string = cc.sys.localStorage.getItem("userData" + this.dataKey)
         if (str === "" || str === null) {
             UserData.init()

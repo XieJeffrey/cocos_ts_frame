@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 22:58:19
- * @LastEditTime: 2021-08-23 23:27:20
+ * @LastEditTime: 2021-08-24 14:31:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Event.ts
@@ -20,14 +20,6 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Event extends IManager {
     public eventList: Map<string, [{ func: Function, node: cc.Node }]>;
-
-    init() {
-        let promise = new Promise(function (resolve, reject) {
-            this.eventList = new Map<string, [{ func: Function, node: cc.Node }]>();
-            resolve(1);
-        }.bind(this))
-        return promise;
-    }
 
     on(name: string, node: cc.Node, func: Function) {
         if (name == "" || node == null || func == null)

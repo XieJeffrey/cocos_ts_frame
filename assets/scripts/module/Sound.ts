@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 21:10:42
- * @LastEditTime: 2021-08-23 23:08:07
+ * @LastEditTime: 2021-08-24 11:29:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Sound.ts
@@ -13,7 +13,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import  IManager from "../base/IManager";
+import IManager from "../base/IManager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -27,17 +27,17 @@ export default class Sound extends IManager {
      * @description: 初始化
      * @param {*}
      * @return {*}
-     */    
+     */
     public init() {
         super.init()
-        let promise=new Promise(function(resolve,reject){
+        let promise = new Promise(function (resolve, reject) {
             var local = cc.sys.localStorage.getItem('Music');
             if (local === "" || local === null || local === 0)
                 this.musicOn = false;
             else {
                 this.musicOn = true;
             }
-    
+
             cc.assetManager.loadBundle('audios', function (err, bundle) {
                 if (err) {
                     console.error(err);
@@ -49,7 +49,7 @@ export default class Sound extends IManager {
                 resolve(1);
             }.bind(this))
         }.bind(this))
-       return promise;
+        return promise;
     }
 
     /**
@@ -105,7 +105,7 @@ export default class Sound extends IManager {
         if (!this.musicOn)
             return
         if (this.soundCache.has(name)) {
-            cc.audioEngine.playEffect(this.soundCache.get(name),false);
+            cc.audioEngine.playEffect(this.soundCache.get(name), false);
         }
         else {
             this.audioBundle.load(name, cc.AudioClip, function (err, audio) {

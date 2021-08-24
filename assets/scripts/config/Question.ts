@@ -1,10 +1,10 @@
 /*
  * @Author: your name
- * @Date: 2021-08-24 00:26:36
- * @LastEditTime: 2021-08-24 11:00:37
- * @LastEditors: Please set LastEditors
+ * @Date: 2021-08-24 17:22:35
+ * @LastEditTime: 2021-08-24 17:23:13
+ * @LastEditors: your name
  * @Description: In User Settings Edit
- * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
+ * @FilePath: \cocos_ts_frame\assets\scripts\config\Question.ts
  */
 // Learn TypeScript:
 //  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
@@ -16,9 +16,7 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class GameData {
-    public static init() { }
-
-    public static load(data: string) { }
+export default class QandA extends cc.Component {
+    question: ""
 
 }

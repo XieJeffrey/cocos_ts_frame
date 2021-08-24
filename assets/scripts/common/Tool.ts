@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-08-23 23:07:25
+ * @LastEditTime: 2021-08-24 15:58:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -10,8 +10,8 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass('Tool')
-export default class Tool  {   
-    init() {        
+export default class Tool {
+    init() {
         String.prototype.format = function () {
             if (arguments.length == 0) return this;
             var param = arguments[0];
@@ -26,6 +26,15 @@ export default class Tool  {
                     s = s.replace(new RegExp("\\{" + i + "\\}", "g"), arguments[i]);
                 return s;
             }
+        }
+
+        /**
+         * @description: 首字母大写
+         * @param {string} param1
+         * @return {*}
+         */
+        String.prototype.capitalize = function () {
+            return this[0].toUpperCase() + this.substring(1, this.length);
         }
 
         cc.Node.prototype.findChild = function (path: string) {

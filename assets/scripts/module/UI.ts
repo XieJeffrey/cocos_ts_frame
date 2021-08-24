@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:15:56
- * @LastEditTime: 2021-08-23 23:22:03
+ * @LastEditTime: 2021-08-24 16:12:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\ui .ts
@@ -13,17 +13,19 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import IManager  from "../base/IManager";
+import IManager from "../base/IManager";
 import { IView } from "../base/IView";
 import { UIConfig } from "../config/UIConfig";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class UI extends IManager{
+export default class UI extends IManager {
     uiList: Map<string, { node: cc.Node, script: IView }> = new Map<string, { node: cc.Node, script: IView }>();
     root: cc.Node;
     bundle: any;
+
+    getInstance() { }
 
     public init() {
         let promise = new Promise((resolve, reject) => {
@@ -32,7 +34,7 @@ export default class UI extends IManager{
                 resolve(1);
                 return;
             }
-            this.root = cc.find("Root")
+            this.root = cc.find("Canvas/Root")
 
             cc.assetManager.loadBundle('prefab', function (err, loadedBundle) {
                 if (err) {
@@ -40,13 +42,13 @@ export default class UI extends IManager{
                     return;
                 }
                 this.bundle = loadedBundle;
-                console.log("uiBundle loaded");
+                console.log("[uiBundle loaded]");
 
                 if (UIConfig.preload.length == 0)
                     resolve(1);
                 let loadedNum: number = 0;
                 for (let i = 0; i < UIConfig.preload.length; i++) {
-                    this.load(UIConfig.preload[i].name, function (node) {
+                    this.load(UIConfig.preload[i], function (node) {
                         node.active = false;
                         loadedNum++;
                         if (loadedNum == UIConfig.preload.length) {
@@ -60,14 +62,13 @@ export default class UI extends IManager{
     }
 
     private load(name: string, call: Function) {
+        name = name.capitalize();
         console.log("[loading view:" + name + "....]")
-        name = name.toLowerCase();
         if (this.uiList.has(name)) {
             call(this.uiList[name].node)
             return;
         }
 
-        console.log(this.bundle);
         this.bundle.load("view/" + name, cc.Prefab, function (err, prefab) {
             if (err) {
                 console.error(err)
@@ -76,10 +77,12 @@ export default class UI extends IManager{
             var node = cc.instantiate(prefab);
             node.name = name;
             node.zIndex = UIConfig.uiList.get(name).order;
-            node.parent = this.root;
+            this.root.addChild(node);
+            //  node.parent = this.root;
+            console.log(node);
             this.uiList.set(name, {
                 node: node,
-                script: node.addComponent(UIConfig.uiList.get(name).script)
+                script: node.addComponent(UIConfig.uiList.get(name).script.capitalize())
             })
             if (this.uiList.get(name).script == undefined) {
                 console.error("[UIManager]:addComponent {0} failed".format(name));
@@ -94,6 +97,7 @@ export default class UI extends IManager{
     }
 
     public showUI(name: string, params?: any) {
+        name = name.capitalize();
         if (this.uiList.has(name)) {
             this.uiList.get(name).node.active = true;
             this.uiList.get(name).script.onLoad();
@@ -106,6 +110,7 @@ export default class UI extends IManager{
     }
 
     public hideUI(name: string, params?: any) {
+        name = name.capitalize();
         if (this.uiList.has(name)) {
             let obj: any = this.uiList.get(name);
             obj.node.active = false;
