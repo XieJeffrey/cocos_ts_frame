@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:26:36
- * @LastEditTime: 2021-08-24 11:00:37
+ * @LastEditTime: 2021-08-26 11:10:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
@@ -17,6 +17,9 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class GameData {
+    public static soliderLv: number = 0;
+    public static endlessRecord: number = 0;
+
     public static init() { }
 
     public static load(data: string) { }

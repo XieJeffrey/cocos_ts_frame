@@ -1,0 +1,76 @@
+
+zl1zhan.png
+size: 512,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+图层 1
+  rotate: false
+  xy: 2, 718
+  size: 159, 276
+  orig: 159, 276
+  offset: 0, 0
+  index: -1
+图层 10
+  rotate: false
+  xy: 324, 718
+  size: 159, 276
+  orig: 159, 276
+  offset: 0, 0
+  index: -1
+图层 2
+  rotate: false
+  xy: 2, 440
+  size: 159, 276
+  orig: 159, 276
+  offset: 0, 0
+  index: -1
+图层 3
+  rotate: false
+  xy: 163, 718
+  size: 159, 276
+  orig: 159, 276
+  offset: 0, 0
+  index: -1
+图层 4
+  rotate: false
+  xy: 324, 441
+  size: 158, 275
+  orig: 158, 275
+  offset: 0, 0
+  index: -1
+图层 5
+  rotate: false
+  xy: 324, 164
+  size: 158, 275
+  orig: 158, 275
+  offset: 0, 0
+  index: -1
+图层 6
+  rotate: true
+  xy: 2, 2
+  size: 158, 275
+  orig: 158, 275
+  offset: 0, 0
+  index: -1
+图层 7
+  rotate: false
+  xy: 163, 163
+  size: 159, 275
+  orig: 159, 275
+  offset: 0, 0
+  index: -1
+图层 8
+  rotate: false
+  xy: 2, 162
+  size: 159, 276
+  orig: 159, 276
+  offset: 0, 0
+  index: -1
+图层 9
+  rotate: false
+  xy: 163, 440
+  size: 159, 276
+  orig: 159, 276
+  offset: 0, 0
+  index: -1

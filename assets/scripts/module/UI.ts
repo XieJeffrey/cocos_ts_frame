@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:15:56
- * @LastEditTime: 2021-08-24 16:12:41
+ * @LastEditTime: 2021-08-26 16:18:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\ui .ts
@@ -16,7 +16,8 @@
 import IManager from "../base/IManager";
 import { IView } from "../base/IView";
 import { UIConfig } from "../config/UIConfig";
-
+import Float from "../view/Float";
+import { ViewType } from "../common/BaseType";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -74,12 +75,12 @@ export default class UI extends IManager {
                 console.error(err)
                 return;
             }
-            var node = cc.instantiate(prefab);
+            var node: cc.Node = cc.instantiate(prefab);
             node.name = name;
             node.zIndex = UIConfig.uiList.get(name).order;
             this.root.addChild(node);
-            //  node.parent = this.root;
-            console.log(node);
+            node.height = cc.view.getVisibleSize().height;
+            node.width = cc.view.getVisibleSize().width;
             this.uiList.set(name, {
                 node: node,
                 script: node.addComponent(UIConfig.uiList.get(name).script.capitalize())
@@ -88,7 +89,6 @@ export default class UI extends IManager {
                 console.error("[UIManager]:addComponent {0} failed".format(name));
                 return
             }
-            this.uiList.get(name).script.onLoad();
             if (call) {
                 console.log("ui:" + name + "is loaded");
                 call(node)
@@ -100,7 +100,7 @@ export default class UI extends IManager {
         name = name.capitalize();
         if (this.uiList.has(name)) {
             this.uiList.get(name).node.active = true;
-            this.uiList.get(name).script.onLoad();
+            this.uiList.get(name).script.onShow(params);
             return;
         }
         this.load(name, function (node) {
@@ -114,7 +114,7 @@ export default class UI extends IManager {
         if (this.uiList.has(name)) {
             let obj: any = this.uiList.get(name);
             obj.node.active = false;
-            obj.node.onHide(params);
+            obj.script.onHide(params);
 
             switch (obj.script.cacheType) {
                 case ViewType.cache:
@@ -136,5 +136,22 @@ export default class UI extends IManager {
             return this.uiList.get(name).node.active;
         }
         return false;
+    }
+
+    /**
+     * @description: 播放飘字动画
+     * @param {string} msg
+     * @return {*}
+     */
+    public showFloatMsg(msg: string): void {
+        if (this.uiList.has("Float")) {
+            (this.uiList.get("Float").script as Float).showFloatMsg(msg);
+        }
+        else {
+            this.load("Float", function (node) {
+                node.active = true;
+                (this.uiList.get("Float").script as Float).showFloatMsg(msg);
+            })
+        }
     }
 }

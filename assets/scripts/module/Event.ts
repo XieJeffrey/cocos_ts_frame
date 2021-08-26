@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 22:58:19
- * @LastEditTime: 2021-08-24 14:31:03
+ * @LastEditTime: 2021-08-25 12:00:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Event.ts
@@ -19,24 +19,24 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Event extends IManager {
-    public eventList: Map<string, [{ func: Function, node: cc.Node }]>;
+    private eventList: Map<number, [{ func: Function, node: cc.Node }]>;
 
-    on(name: string, node: cc.Node, func: Function) {
-        if (name == "" || node == null || func == null)
+    on(id: number, node: cc.Node, func: Function) {
+        if (node == null || func == null)
             return;
 
-        if (this.eventList.has(name)) {
-            let array = this.eventList.get(name);
+        if (this.eventList.has(id)) {
+            let array = this.eventList.get(id);
             array.push({ node: node, func: func });
         }
         else {
-            this.eventList.set(name, [{ node: node, func: func }]);
+            this.eventList.set(id, [{ node: node, func: func }]);
         }
     }
 
-    emit(name: string, param: any) {
-        if (this.eventList.has(name)) {
-            let array = this.eventList.get(name)
+    emit(id: number, param: any) {
+        if (this.eventList.has(id)) {
+            let array = this.eventList.get(id)
             for (let i = 0; i < array.length; i++) {
                 if (array[i].node.active) {
                     array[i].func.call(array[i].node, param);

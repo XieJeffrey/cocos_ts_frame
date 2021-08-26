@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:49:06
- * @LastEditTime: 2021-08-24 16:22:07
+ * @LastEditTime: 2021-08-26 15:51:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\Main.ts
@@ -34,7 +34,6 @@ export default class Main extends cc.Component {
 
         this.app.init(function (progress) {
             this.loadedValue = progress;
-            console.log(this.loadedValue)
         }.bind(this));
     }
 

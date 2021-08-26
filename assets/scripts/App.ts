@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:56:09
- * @LastEditTime: 2021-08-24 16:13:35
+ * @LastEditTime: 2021-08-26 11:43:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\App.ts
@@ -20,6 +20,7 @@ import Net from "./module/Net";
 import IManager from "./base/IManager";
 import Storage from "./module/Storage";
 import Res from "./module/Res";
+import Question from "./manager/Question";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -30,6 +31,7 @@ export default class App {
     net: Net = Net.getInstance() as Net;
     storage: Storage = Storage.getInstance() as Storage;
     res: Res = Res.getInstance() as Res;
+    question: Question = Question.getInstance() as Question;
 
     curInited: number = 0;
     initCall: Function = null;
@@ -41,12 +43,12 @@ export default class App {
         this.storage.init().then(function () { this.inited() }.bind(this));
         this.res.init().then(function () { this.inited() }.bind(this));
         this.ui.init().then(function () { this.inited() }.bind(this));
+        this.question.init().then(function () { this.inited() }.bind(this));
     }
 
     inited() {
         if (this.initCall) {
-            this.curInited += 0.25;
-            console.log(this.curInited)
+            this.curInited += 1 / 5;
             this.initCall(this.curInited)
         }
     }
