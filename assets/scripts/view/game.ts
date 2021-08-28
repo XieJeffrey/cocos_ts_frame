@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-08-24 16:12:59
+ * @LastEditTime: 2021-08-27 15:15:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -21,6 +21,18 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class game extends IView {
+    startBg: cc.Node;
+    bgList: cc.Node;
+    decorate: {
+        sand: {
+            parent: cc.Node,
+            list: Array<cc.Node>;
+        }
+        tree: {
+            parent: cc.Node,
+            list: Array<cc.Node>;
+        }
+    }
 
     onLoad() { }
 
