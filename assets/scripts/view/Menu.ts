@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-08-26 14:51:23
+ * @LastEditTime: 2021-08-29 11:38:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -23,7 +23,6 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Menu extends IView {
     soliderSpriteList: Array<cc.SpriteFrame> = new Array<cc.SpriteFrame>();
-    shareBtn: cc.Node;
     rankBtn: cc.Node;
     startBtn: cc.Node;
     downloadBtn: cc.Node;
@@ -33,16 +32,15 @@ export default class Menu extends IView {
     endlessRecordTxt: cc.Label;
     soliderIcon: cc.Sprite;
     soliderLvUpBtn: cc.Node;
-
+    anima: sp.Skeleton;
 
     onLoad() {
-        this.shareBtn = this.node.findChild('share');
         this.rankBtn = this.node.findChild('rank');
         this.infoBtn = this.node.findChild('info');
         this.startBtn = this.node.findChild('start');
         this.downloadBtn = this.node.findChild('download');
         this.exchangeBtn = this.node.findChild('exchange');
-        this.soliderNumTxt = this.exchangeBtn.findChild('txt').getComponent(cc.Label);
+        this.soliderNumTxt = this.node.findChild('soliderValue/txt').getComponent(cc.Label);
         this.endlessRecordTxt = this.node.findChild('record/txt').getComponent(cc.Label);
         this.soliderIcon = this.node.findChild('solider/icon').getComponent(cc.Sprite);
         this.soliderLvUpBtn = this.node.findChild('solider/lvUp')
@@ -52,7 +50,6 @@ export default class Menu extends IView {
 
     register() {
         console.log("register");
-        this.shareBtn.on('click', this.onClickShare, this)
         this.rankBtn.on('click', this.onClickRank, this)
         this.infoBtn.on('click', this.onClickInfo, this)
         this.startBtn.on('click', this.onClickStart, this)
@@ -64,6 +61,22 @@ export default class Menu extends IView {
     onShow() {
         this.refreshSolider();
         this.refreshRecord();
+        if (this.anima == null) {
+            this.anima = new cc.Node('anima').addComponent(sp.Skeleton);
+            this.node.addChild(this.anima.node);
+            this.anima.node.setSiblingIndex(1);//仅高于背景层
+            this.anima.node.setPosition(0, -180);
+            this.anima.node.active = true;
+            cc.resources.load("skeleton/start/startcc", sp.SkeletonData, function (err, res: sp.SkeletonData) {
+                if (err) {
+                    console.error(err)
+                    return;
+                }
+                console.log(this.anima.node)
+                this.anima.skeletonData = res;
+                this.anima.setAnimation(0, "animation", true);
+            }.bind(this))
+        }
     }
 
     onHide() { }
@@ -107,7 +120,7 @@ export default class Menu extends IView {
     }
 
     onClickStart() {
-        UI.getInstance().showUI("problem")
+        UI.getInstance().showUI("game")
     }
 
     onClickDown() { }
@@ -115,8 +128,6 @@ export default class Menu extends IView {
     onClickRank() { }
 
     onClickInfo() { }
-
-    onClickShare() { }
 
     onClickLvUp() { }
 

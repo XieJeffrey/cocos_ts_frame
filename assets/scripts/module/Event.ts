@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 22:58:19
- * @LastEditTime: 2021-08-25 12:00:58
+ * @LastEditTime: 2021-08-29 20:36:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Event.ts
@@ -19,7 +19,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Event extends IManager {
-    private eventList: Map<number, [{ func: Function, node: cc.Node }]>;
+    private eventList: Map<number, [{ func: Function, node: cc.Node }]>=new Map<number, [{ func: Function, node: cc.Node }]>();
 
     on(id: number, node: cc.Node, func: Function) {
         if (node == null || func == null)

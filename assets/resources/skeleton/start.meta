@@ -1,9 +1,9 @@
 {
   "ver": "1.1.3",
-  "uuid": "e5c50004-4766-4788-966a-39466f06b170",
+  "uuid": "26f80294-d9a7-49b2-b815-afe8c45ef609",
   "importer": "folder",
-  "isBundle": true,
-  "bundleName": "audios",
+  "isBundle": false,
+  "bundleName": "",
   "priority": 1,
   "compressionType": {},
   "optimizeHotUpdate": {},
