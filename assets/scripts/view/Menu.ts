@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-08-29 11:38:45
+ * @LastEditTime: 2021-08-30 16:02:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -65,14 +65,13 @@ export default class Menu extends IView {
             this.anima = new cc.Node('anima').addComponent(sp.Skeleton);
             this.node.addChild(this.anima.node);
             this.anima.node.setSiblingIndex(1);//仅高于背景层
-            this.anima.node.setPosition(0, -180);
+            this.anima.node.setPosition(0, -105);
             this.anima.node.active = true;
-            cc.resources.load("skeleton/start/startcc", sp.SkeletonData, function (err, res: sp.SkeletonData) {
+            cc.resources.load("skeleton/start/cc-start-zhan", sp.SkeletonData, function (err, res: sp.SkeletonData) {
                 if (err) {
                     console.error(err)
                     return;
                 }
-                console.log(this.anima.node)
                 this.anima.skeletonData = res;
                 this.anima.setAnimation(0, "animation", true);
             }.bind(this))

@@ -1,0 +1,34 @@
+
+cc-start-zhan.png
+size: 512,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cc
+  rotate: true
+  xy: 2, 35
+  size: 216, 310
+  orig: 216, 310
+  offset: 0, 0
+  index: -1
+披风
+  rotate: false
+  xy: 314, 40
+  size: 184, 211
+  orig: 184, 211
+  offset: 0, 0
+  index: -1
+披风头
+  rotate: false
+  xy: 64, 2
+  size: 46, 31
+  orig: 46, 31
+  offset: 0, 0
+  index: -1
+披风带
+  rotate: true
+  xy: 2, 7
+  size: 26, 60
+  orig: 26, 60
+  offset: 0, 0
+  index: -1

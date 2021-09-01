@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-08-28 23:15:21
+ * @LastEditTime: 2021-08-30 16:02:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -20,16 +20,37 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Res extends IManager {
     spriteBundle: cc.AssetManager.Bundle = null;
-    skeletonBundle: cc.AssetManager.Bundle = null;
-    scene_sand:Array<cc.SpriteFrame>=null;
-    scene_tree:Array<cc.SpriteFrame>=null;
+    sceneSprite: Array<Array<cc.SpriteFrame>>;
+    soliderAnima = {
+        zl: {
+            zhan: {},
+            zou: {},
+            attack: {},
+        },
+
+        zb: {
+            zhan: {},
+            zou: {},
+            attack: {},
+        },
+        db: {
+            zhan: {},
+            zou: {},
+            attack: {},
+        }
+    };
+    heroAnima = {
+        zhan: null,
+        zou: null,
+        attack: null,
+    }
 
     init() {
         return new Promise((resolve, reject) => {
             let loadNum = 0;
-            let total=4;
-            let checkLoaded=function(){
-                if(loadNum==total){
+            let total = 3;
+            let checkLoaded = function () {
+                if (loadNum == total) {
                     resolve(1)
                     console.log("[res inited]");
                 }
@@ -48,52 +69,64 @@ export default class Res extends IManager {
                 checkLoaded();
             }.bind(this))
 
-            //加载骨骼的bundle
-            cc.assetManager.loadBundle("skeleton", function (err, bundle) {
+            //加载场景的背景
+            this.sceneSprite = new Array<Array<cc.SpriteFrame>>();
+            cc.resources.loadDir("scene", cc.SpriteFrame, function (err, asset) {
                 if (err) {
-                    console.log("[load skeleton res fail]");
+                    console.log("[load sceneImg res fail]");
                     console.error(err);
                     reject();
                     return;
                 }
-                this.skeletonBundle = bundle;
-                resolve(1);
+                for (let i = 0; i < 3; i++) {
+                    this.sceneSprite.push(new Array<cc.SpriteFrame>());
+                }
+                for (let i = 0; i < asset.length; i++) {
+                    let name: string = asset[i].name;
+                    name = name.replace('bg', '');
+                    let idx: number = parseInt(name.split('-')[0]) - 1;
+                    this.sceneSprite[idx].push(asset[i]);
+                }
+
                 loadNum++;
                 checkLoaded();
-            })
+            }.bind(this))
 
-            //加载场景的沙子
-            cc.resources.loadDir("sand",cc.SpriteFrame,function(err,asset){
-                if(err){
-                    console.log("[load sand res fail]");
-                    console.error(err);
-                    reject();
+            //加载士兵的骨骼动画
+            cc.resources.loadDir("skeleton/solider", sp.SkeletonData, function (err, asset) {
+                if (err) {
+                    console.log("[load solider from res fail]")
+                    console.error(err)
                     return;
                 }
-                this.scene_sand=new Array<cc.SpriteFrame>();
-                for(let i=0;i<asset.length;i++){
-                    this.scene_sand.push(asset[i]);
+
+                for (let i = 0; i < asset.length; i++) {
+                    let tmp: string[] = asset[i].name.split('_')
+                    let camp = tmp[0]
+                    let lv = tmp[1]
+                    let action = tmp[2]
+                    this.soliderAnima[camp][action][lv] = asset[i]
                 }
                 loadNum++;
                 checkLoaded();
             }.bind(this))
 
-            //加载场景的树
-            cc.resources.loadDir("tree",cc.SpriteFrame,function(err,asset){
-                if(err){
-                    console.log("[load tree res fail]");
-                    console.error(err);
-                    reject();
+            cc.resources.loadDir("skeleton/hero", sp.SkeletonData, function (err, asset) {
+                if (err) {
+                    console.log("[load hero from res fail]")
+                    console.error(err)
                     return;
                 }
-                this.scene_tree=new Array<cc.SpriteFrame>();
-                for(let i=0;i<asset.length;i++){
-                    this.scene_tree.push(asset[i]);
+
+                for (let i = 0; i < asset.length; i++) {
+                    let tmp: string[] = asset[i].name.split('_')
+
+                    let action = tmp[1]
+                    this.heroAnima[action] = asset[i]
                 }
                 loadNum++;
                 checkLoaded();
             }.bind(this))
-
         })
     }
 

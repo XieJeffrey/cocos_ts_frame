@@ -3,7 +3,7 @@ import IManager from "../base/IManager";
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-08-26 11:42:12
+ * @LastEditTime: 2021-09-01 10:45:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -38,7 +38,7 @@ export default class Tool extends IManager {
             return this[0].toUpperCase() + this.substring(1, this.length);
         }
 
-        cc.Node.prototype.findChild = function (path: string) {
+        cc.Node.prototype.findChild = function (path: string): cc.Node {
             var paths = path.split("/");
             var parent = this;
             var child = this;

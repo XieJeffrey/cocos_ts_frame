@@ -251,7 +251,7 @@
         "__id__": 13
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 16

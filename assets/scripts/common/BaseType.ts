@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:33:41
- * @LastEditTime: 2021-08-29 20:11:57
+ * @LastEditTime: 2021-09-01 11:12:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\BaseType.ts
@@ -27,7 +27,7 @@ export enum SoundType {
 }
 
 export enum EventType {
-    DialogClose=0,
+    DialogClose = 0,
 }
 
 /**
@@ -35,9 +35,9 @@ export enum EventType {
  * @param {*}
  * @return {*}
  */
-export enum GameMode{
-    Pattern=0,//闯关模式
-    Endless=1,//无尽模式
+export enum GameMode {
+    Pattern = 0,//闯关模式
+    Endless = 1,//无尽模式
 }
 
 /**
@@ -45,10 +45,22 @@ export enum GameMode{
  * @param {*}
  * @return {*}
  */
-export enum GameState{
-    Dialog=0,//对话出征阶段
-    Rush=1,//冲锋
-    Answer=2,//答题
-    Fight=3,//战斗
-    Over=4,//结算
+export enum GameState {
+    Dialog = 0,//对话出征阶段
+    Rush = 1,//冲锋
+    Answer = 2,//答题
+    Fight = 3,//战斗
+    Over = 4,//结算
+}
+
+export enum RoleType {
+    Mine = "zb",
+    Neutral = "zl",
+    Enemy = "db",
+}
+
+export enum Action {
+    Run = "zou",
+    Idle = "zhan",
+    Attack = "attack"
 }

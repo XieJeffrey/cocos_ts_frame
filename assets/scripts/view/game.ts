@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-08-29 20:37:15
+ * @LastEditTime: 2021-09-01 17:35:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -13,27 +13,29 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import App from "../App";
 import { IView } from "../base/IView";
-import { EventType, GameMode, GameState } from "../common/BaseType";
-import Pool from "../common/Pool";
+import { Action, EventType, GameMode, GameState, RoleType } from "../common/BaseType";
+import GameConfig from "../config/GameConfig";
 import Event from "../module/Event";
 import Res from "../module/Res";
 import UI from "../module/UI";
+import GameData from "../data/GameData";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Game extends IView {
-    bgList: Array<cc.Node> = new Array<cc.Node>();
-    startBg: cc.Node;
-    sandParent:cc.Node;
-    sandList: Array<cc.Node>;
-    treeParent:cc.Node;
-    treeList:Array<cc.Node>;
-    gameMode:GameMode;
-    gameState:GameState;
-
+    bgList: Array<Array<cc.Sprite>>;//背景列表
+    cloud: cc.Node;//背景云
+    gameMode: GameMode;//游戏模式，闯关中|无尽
+    gameState: GameState;//游戏状态
+    //骨骼动画组件
+    heroAnima: sp.Skeleton;
+    mineRole: Array<sp.Skeleton>;
+    otherRole: Array<sp.Skeleton>;
+    //拦路小兵
+    curWave: number;//当前波数
+    wavePos: number;//小兵的y坐标
     pool: {
         sand: Array<cc.Node>;
         tree: Array<cc.Node>;
@@ -42,46 +44,74 @@ export default class Game extends IView {
     onLoad() {
         //滚动背景
         let bgNode: cc.Node = this.node.findChild('bg');
-        this.startBg = bgNode.findChild('start');
+        this.bgList = new Array<Array<cc.Sprite>>();
+        for (let i = 0; i < 2; i++) {
+            this.bgList.push(new Array<cc.Sprite>());
+            let node: cc.Node = bgNode.findChild("" + i)
+            for (let j = 0; j < 2; j++) {
+                let spriteNode = new cc.Node('' + j)
+                node.addChild(spriteNode);
+                this.bgList[i].push(spriteNode.addComponent(cc.Sprite));
+                spriteNode.setPosition(0, 1600 * j);
+            }
+        }
+        this.cloud = new cc.Node('cloud');
+        bgNode.findChild('2').addChild(this.cloud);
+        this.cloud.addComponent(cc.Sprite);
 
-        this.bgList.push(bgNode.findChild('0'));
-        this.bgList.push(bgNode.findChild('1'))
+        //角色
+        let roleNode: cc.Node = this.node.findChild('role/hero');
+        this.mineRole = new Array<sp.Skeleton>();
+        this.otherRole = new Array<sp.Skeleton>();
+        //曹操
+        let heroNode = new cc.Node('cc')
+        roleNode.addChild(heroNode);
+        heroNode.scale = GameConfig.roleScale;
+        this.heroAnima = heroNode.addComponent(sp.Skeleton);
+        //我方小兵
+        let soliderNode: cc.Node = this.node.findChild('role/mine')
+        for (let i = 0; i < 10; i++) {
+            let solider = new cc.Node('' + i)
+            soliderNode.addChild(solider);
+            solider.scale = GameConfig.soliderScale;
+            this.mineRole.push(solider.addComponent(sp.Skeleton));
+        }
+        //中立|敌对小兵    
+        soliderNode = this.node.findChild('role/other')
+        for (let i = 0; i < 10; i++) {
+            let solider = new cc.Node('' + i)
+            soliderNode.addChild(solider);
+            solider.scale = GameConfig.soliderScale;
+            this.otherRole.push(solider.addComponent(sp.Skeleton));
+        }
 
-        //装饰物      
-        this.sandParent = this.node.findChild('decorate/sand');
-        this.sandList = new Array<cc.Node>();
-        this.treeParent = this.node.findChild('decorate/tree');
-        this.treeList = new Array<cc.Node>();
-      
         super.onLoad();
-    }  
+    }
 
     register() {
-        let sandNode = new cc.Node("sand");
-        sandNode.addComponent(cc.Sprite);
-        Pool.getInstance().register("sand", sandNode,this.sandParent);
-        let treeNode = new cc.Node("tree");
-        treeNode.addComponent(cc.Sprite);
-        Pool.getInstance().register("tree", treeNode,this.treeParent);
-
-        Event.getInstance().on(EventType.DialogClose,this.node,function(){
-            this.gameState=GameState.Rush;
+        Event.getInstance().on(EventType.DialogClose, this.node, function () {
+            this.gameState = GameState.Rush;
+            this.playHeroAnima(Action.Run);
+            this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.soliderLv);
         }.bind(this))
     }
 
     onShow(params) {
-        this.gameMode=GameMode.Pattern;
-        this.gameState=GameState.Dialog;
+        this.gameMode = GameMode.Pattern;
+        this.gameState = GameState.Dialog;
         this.initBg();
-        UI.getInstance().showUI("Dialog","周公吐哺，天下归心");      
+        this.initRole();
+        this.initWave();
+        UI.getInstance().showUI("Dialog", "周公吐哺，天下归心");
     }
 
     update(dt) {
         switch (this.gameState) {
             case GameState.Rush:
-                this.scrollBg(dt);                
+                this.scrollBg(dt);
+                this.scrollSolider(dt);
                 break;
-        
+
             default:
                 break;
         }
@@ -93,81 +123,194 @@ export default class Game extends IView {
      * @return {*}
      */
     initBg() {
-        this.startBg.y = 0;
-        this.bgList[0].y = 1600;
-        this.bgList[1].y = 3200;
-        this.genDecorate(this.startBg);
-        this.genDecorate(this.bgList[0]);
-        this.genDecorate(this.bgList[1]);
+        for (let i = 0; i < this.bgList.length; i++) {
+            for (let j = 0; j < this.bgList[i].length; j++) {
+                this.bgList[i][j].node.y = 1600 * j;
+                this.switchBgPic(i, this.bgList[i][j]);
+            }
+        }
+        this.cloud.y = Math.random() * 800;
+        this.cloud.getComponent(cc.Sprite).spriteFrame = Res.getInstance().sceneSprite[2][0];
     }
 
     /**
-     * @description: 生成场景装饰物
+     * @description: 初始化地图角色
      * @param {*}
      * @return {*}
      */
-    genDecorate(node) {
-        let num = Math.ceil(Math.random() * 4) + 3
-        let deltaY = 1600 / num;
-        for (let i = 0; i < num; i++) {
-            let sandItem: cc.Node = Pool.getInstance().get("sand")
-            sandItem.active = true;
-            this.sandList.push(sandItem);
-            let sandIdx: number = Math.floor(Math.random() * Res.getInstance().scene_sand.length);
-            sandItem.getComponent(cc.Sprite).spriteFrame = Res.getInstance().scene_sand[sandIdx];
-            sandItem.scale = Math.random() * 2 + 1;
-            sandItem.setPosition((Math.random() < 0.5 ? 1 : -1) * (Math.random() * 100 + 100), Math.random() * deltaY + deltaY * i + node.y)
+    initRole() {
+        this.heroAnima.node.setPosition(0, GameConfig.CCStartPosY);
+        this.playHeroAnima(Action.Idle);
+        this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.soliderLv);
 
-            let treeItem: cc.Node = Pool.getInstance().get("tree");
-            treeItem.active = true;
-            this.treeList.push(treeItem);
-            let treeIdx: number = Math.floor(Math.random() * Res.getInstance().scene_sand.length);
-            treeItem.getComponent(cc.Sprite).spriteFrame = Res.getInstance().scene_tree[treeIdx];
-            treeItem.scale = Math.random() * 1 + 1;
-            treeItem.setPosition((Math.random() < 0.5 ? 1 : -1) * (Math.random() * 100 + 250), sandItem.y + (Math.random() * 50) * (Math.random() > 0.5 ? 1 : -1) + node.y)
+        let pos = this.getMineSoliderPos(Action.Idle, GameConfig.CCStartPosY)
+        for (let i = 0; i < this.mineRole.length; i++) {
+            this.mineRole[i].node.active = true;
+            this.mineRole[i].node.setPosition(pos[i].x, pos[i].y);
         }
+    }
+
+    /**
+     * @description: 初始化中立怪|野怪
+     * @param {*}
+     * @return {*}
+     */
+    initWave() {
+        this.curWave = -1;
+        this.nextWave(GameConfig.WaveStartPosY, GameData.soliderLv);
+    }
+
+    /**
+     * @description: 生成下一波
+     * @param {number} posY
+     * @param {number} lv
+     * @return {*}
+     */
+    nextWave(posY: number, lv: number) {
+        let roleType = RoleType.Neutral;
+        this.curWave++;
+        this.wavePos = posY// GameConfig.WaveStartPosY + 800 + Math.random() * 200
+        let pos = this.getOtherSoliderPos(this.wavePos);
+        for (let i = 0; i < this.otherRole.length; i++) {
+            this.otherRole[i].node.active = true;
+            this.otherRole[i].node.setPosition(pos[i].x, pos[i].y);
+            this.otherRole[i].node.scale = GameConfig.soliderScale;
+            if (roleType == RoleType.Neutral) {
+                this.otherRole[i].node.scale *= GameConfig.zlScaleFactor;
+            }
+        }
+        this.playSoliderAnima(roleType, Action.Idle, lv);
+    }
+
+    /**
+     * @description: 获取其他士兵的站位数组
+     * @param {*}
+     * @return {*}
+     */
+    getOtherSoliderPos(startY: number): Array<any> {
+        let array = new Array()
+        for (let i = 0; i < 10; i++) {
+            let x = (i % 5) * 50 - 100
+            let y = Math.floor(i / 5) * 50 + startY;
+            array.push({ x: x, y: y })
+        }
+
+        return array;
+    }
+
+    /**
+     * @description: 获取我方士兵的站位数组
+     * @param {Action} action
+     * @return {*}
+     */
+    getMineSoliderPos(action: Action, startY: number): Array<any> {
+        let array = new Array()
+
+        switch (action) {
+            case Action.Attack:
+                for (let i = 0; i < 10; i++) {
+                    let x = (i % 5) * 50 - 100;
+                    let y = -Math.floor(i / 5) * 30 - 30 + startY;
+                    array.push({ x: x, y: y });
+                }
+                break;
+            default:
+                for (let i = 0; i < 10; i++) {
+                    let x = (i % 2) * 100 - 50
+                    let y = -Math.floor(i / 2) * 60 - 50 + startY;
+                    array.push({ x: x, y: y })
+                }
+                break;
+        }
+        return array;
     }
 
     /**
      * @description: 背景滚动
      * @param {*} dt
      * @return {*}
-     */    
+     */
     scrollBg(dt) {
-        let speed=600
-        if (this.startBg.active) {
-            this.startBg.y -= dt*speed
-            if (this.startBg.y <= -1600) {
-                this.startBg.active = false;
-                console.log(this.bgList)
+        for (let i = 0; i < this.bgList.length; i++) {
+            for (let j = 0; j < this.bgList[i].length; j++) {
+                this.bgList[i][j].node.y -= GameConfig.BgSpDown * dt
+                if (this.bgList[i][j].node.y < -1600) {
+                    this.bgList[i][j].node.y += 1600 * 2;
+                    this.switchBgPic(i, this.bgList[i][j]);
+                }
             }
         }
-        
-        for(let i=0;i<this.bgList.length;i++){
-            this.bgList[i].y-=dt*speed
-            if(this.bgList[i].y<=-1600){
-                this.bgList[i].y+=3200;
-                this.genDecorate(this.bgList[i]);
-            }
-        }
-        
 
-       for(let i=0;i<this.sandList.length;i++){
-           this.sandList[i].y-=dt*speed
-           if(this.sandList[i].y<-1600-this.sandList[i].height*this.sandList[i].scale){
-                let item=this.sandList.splice(i,1)[0]
-                Pool.getInstance().recycle("sand",item);            
-           }
-       }
-
-       for(let i=0;i<this.treeList.length;i++){
-           this.treeList[i].y-=dt*speed
-            if(this.treeList[i].y<-1600-this.treeList[i].height*this.treeList[i].scale){
-                let item=this.treeList.splice(i,1)[0]
-                Pool.getInstance().recycle("tree",item);            
-            }
+        this.cloud.y -= GameConfig.BgSpUp * dt;
+        if (this.cloud.y < -1600) {
+            this.cloud.y += 3200 + Math.random() * 800;
         }
     }
+
+    /**
+     * @description: 士兵滚动往下走
+     * @param {*} dt
+     * @return {*}
+     */
+    scrollSolider(dt) {
+        for (let i = 0; i < this.otherRole.length; i++) {
+            this.otherRole[i].node.y -= dt * GameConfig.BgSpDown;
+        }
+        this.wavePos -= dt * GameConfig.BgSpDown;
+        if (Math.abs(this.wavePos - this.heroAnima.node.y) <= 100) {
+            this.gameState = GameState.Answer;
+            this.playHeroAnima(Action.Idle);
+            this.playSoliderAnima(RoleType.Neutral, Action.Idle, 1);
+        }
+    }
+
+    /**
+     * @description: 切换背景图片
+     * @param {number} idx
+     * @param {cc} sprite
+     * @return {*}
+     */
+    switchBgPic(idx: number, sprite: cc.Sprite) {
+        let i: number = Math.floor(Math.random() * Res.getInstance().sceneSprite[idx].length);
+        sprite.spriteFrame = Res.getInstance().sceneSprite[idx][i];
+        sprite.node.height = 1600;
+    }
+
+    /**
+     * @description: 播放士兵动画
+     * @param {RoleType} role  士兵类型
+     * @param {string} name 动画名称
+     * @param {number} lv 士兵等级
+     * @return {*}
+     */
+    playSoliderAnima(role: RoleType, name: Action, lv: number) {
+        let array: Array<sp.Skeleton> = null;
+        if (role == RoleType.Mine) {
+            array = this.mineRole;
+        }
+        else {
+            array = this.otherRole;
+        }
+
+        for (let i = 0; i < array.length; i++) {
+            array[i].skeletonData = Res.getInstance().soliderAnima[role][name][lv + 1];
+            array[i].clearTracks();
+            array[i].setAnimation(0, "animation", true);
+        }
+    }
+
+    /**
+     * @description: 播放曹操动画
+     * @param {Action} name
+     * @return {*}
+     */
+    playHeroAnima(name: Action) {
+        this.heroAnima.skeletonData = Res.getInstance().heroAnima[name];
+        this.heroAnima.clearTracks();
+        this.heroAnima.setAnimation(0, "animation", true);
+    }
+
+
 
     onHide(params) { }
 
