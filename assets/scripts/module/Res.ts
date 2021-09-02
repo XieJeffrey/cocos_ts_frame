@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-08-30 16:02:15
+ * @LastEditTime: 2021-09-02 10:25:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -21,6 +21,7 @@ const { ccclass, property } = cc._decorator;
 export default class Res extends IManager {
     spriteBundle: cc.AssetManager.Bundle = null;
     sceneSprite: Array<Array<cc.SpriteFrame>>;
+    cacheSprite: Map<string, cc.SpriteFrame>;
     soliderAnima = {
         zl: {
             zhan: {},
@@ -56,6 +57,7 @@ export default class Res extends IManager {
                 }
             }
 
+            this.cacheSprite = new Map<string, cc.SpriteFrame>();
             //加载图片的bundle
             cc.assetManager.loadBundle("image", function (err, bundle) {
                 if (err) {
@@ -135,16 +137,22 @@ export default class Res extends IManager {
      * @param {string} name
      * @return {*}
      */
-    loadSprite(name: string) {
+    loadSprite(sprite: cc.Sprite, name: string) {
         if (this.spriteBundle) {
-            this.spriteBundle.load(name, cc.SpriteFrame, function (err, spriteFrame) {
-                if (err) {
-                    console.log("[load image fail]:{0}".format(name))
-                    console.error("err")
-                    return null;
-                }
-                return spriteFrame;
-            })
+            if (this.cacheSprite.has(name)) {
+                sprite.spriteFrame = this.cacheSprite.get(name);
+            }
+            else {
+                this.spriteBundle.load("game/" + name, cc.SpriteFrame, function (err, spriteFrame) {
+                    if (err) {
+                        console.log("[load image fail]:{0}".format(name))
+                        console.error("err")
+                        return null;
+                    }
+                    this.cacheSprite.set(name, spriteFrame);
+                    sprite.spriteFrame = this.cacheSprite.get(name);
+                }.bind(this))
+            }
         }
     }
 

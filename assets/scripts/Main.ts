@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:49:06
- * @LastEditTime: 2021-08-26 15:51:00
+ * @LastEditTime: 2021-09-02 17:33:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\Main.ts
@@ -16,6 +16,7 @@
 import App from "./App";
 import Tool from "./common/Tool";
 import UI from "./module/UI";
+import GameData from "./data/GameData";
 const { ccclass, property } = cc._decorator;
 
 @ccclass

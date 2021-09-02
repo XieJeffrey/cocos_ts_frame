@@ -12,7 +12,7 @@
   "height": 124,
   "platformSettings": {},
   "subMetas": {
-    "img_RoutineChest3": {
+    "reward": {
       "ver": "1.0.6",
       "uuid": "55821740-6023-499b-9929-f28efba6ea1c",
       "importer": "sprite-frame",

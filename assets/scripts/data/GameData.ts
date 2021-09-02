@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:26:36
- * @LastEditTime: 2021-08-26 11:10:43
+ * @LastEditTime: 2021-09-02 17:34:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
@@ -17,8 +17,14 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class GameData {
-    public static soliderLv: number = 0;
-    public static endlessRecord: number = 0;
+    //持久化数据块
+    public static soliderLv: number = 0;//士兵等级
+    public static endlessRecord: number = 0;//无尽模式记录    
+    public static maxSoliderNum: number = 0;//剩余兵量的最高记录
+
+    //临时游戏数据
+    public static soliderNum: number = 1000;//士兵数量
+
 
     public static init() { }
 

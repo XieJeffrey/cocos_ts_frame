@@ -3565,7 +3565,7 @@
         "__id__": 101
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 113
@@ -3603,7 +3603,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        114.638,
+        0,
         0,
         0,
         0,

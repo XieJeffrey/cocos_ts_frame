@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-08-26 16:17:46
+ * @LastEditTime: 2021-09-02 11:21:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -93,6 +93,7 @@ export default class Problem extends IView {
     }
 
     onSure() {
+        this.problemPanel.active = false;
         this.resultPanel.active = true;
         if (this.selectAnswerIdx == this.answerIdx) {
             this.resultPanel.findChild('frame/resultTxt').getComponent(cc.Label).string = "回答正确!";
