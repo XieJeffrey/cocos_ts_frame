@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-08-24 14:17:12
+ * @LastEditTime: 2021-09-03 15:41:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -34,6 +34,6 @@ export default class LogicMgr extends IManager {
      */
     saveGameData() { }
 
-
+    downloadGame() { }
     // update (dt) {}
 }

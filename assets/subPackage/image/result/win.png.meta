@@ -12,7 +12,7 @@
   "height": 84,
   "platformSettings": {},
   "subMetas": {
-    "微信图片_20210828162225": {
+    "win": {
       "ver": "1.0.6",
       "uuid": "ac347e1b-8b76-44f0-90fc-f356afb72ebc",
       "importer": "sprite-frame",

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-02 17:31:42
+ * @LastEditTime: 2021-09-03 17:32:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -35,10 +35,14 @@ export default class Game extends IView {
     otherRole: Array<sp.Skeleton>;
     //阴影
     shadow: Array<cc.Node>;
+    //特效
+    bornEffect: Array<sp.Skeleton>;
+    effectParent: cc.Node;
     //拦路小兵
     curWave: number;//当前波数
     wavePos: number;//小兵的y坐标
-    totalUnit: 0;//野怪的单位数量
+    totalUnit: number = 0;//野怪的单位数量
+    curOtherUnit: number = 0;//当前波对面怪的单位数量
 
     pool: {
         sand: Array<cc.Node>;
@@ -72,7 +76,7 @@ export default class Game extends IView {
         //曹操
         let heroNode = new cc.Node('cc')
         roleNode.addChild(heroNode);
-        heroNode.scale = GameConfig.roleScale;
+        heroNode.scale = GameConfig.getInstance().roleScale;
         this.heroAnima = heroNode.addComponent(sp.Skeleton);
         //我方小兵
         this.shadow = new Array<cc.Node>();
@@ -81,7 +85,7 @@ export default class Game extends IView {
         for (let i = 0; i < 10; i++) {
             let solider = new cc.Node('' + i)
             soliderNode.addChild(solider);
-            solider.scale = GameConfig.mineScale;
+            solider.scale = GameConfig.getInstance().mineScale;
             this.mineRole.push(solider.addComponent(sp.Skeleton));
         }
         //中立|敌对小兵    
@@ -89,7 +93,7 @@ export default class Game extends IView {
         for (let i = 0; i < 10; i++) {
             let solider = new cc.Node('' + i)
             soliderNode.addChild(solider);
-            solider.scale = GameConfig.neutralScale;
+            solider.scale = GameConfig.getInstance().neutralScale;
             this.otherRole.push(solider.addComponent(sp.Skeleton));
         }
         //阴影
@@ -100,6 +104,9 @@ export default class Game extends IView {
             shadowNode.addChild(shadow);
             this.shadow.push(shadow);
         }
+        //特效
+        this.bornEffect = new Array<sp.Skeleton>();
+        this.effectParent = this.node.findChild('role/effect');
         this.soliderNumTxt = this.node.findChild('res/txt').getComponent(cc.Label);
         super.onLoad();
     }
@@ -108,7 +115,7 @@ export default class Game extends IView {
         Event.getInstance().on(EventType.DialogClose, this.node, function () {
             this.gameState = GameState.Rush;
             this.playHeroAnima(Action.Run);
-            this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.soliderLv);
+            this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
         }.bind(this))
     }
 
@@ -134,7 +141,7 @@ export default class Game extends IView {
                 break;
         }
         if (this.cloud != null) {
-            this.cloud.y -= GameConfig.BgSpUp * dt;
+            this.cloud.y -= GameConfig.getInstance().BgSpUp * dt;
             if (this.cloud.y < -1600) {
                 this.cloud.y += 3200 + Math.random() * 800;
             }
@@ -165,15 +172,14 @@ export default class Game extends IView {
      * @return {*}
      */
     initRole() {
-        GameData.soliderNum = GameConfig.roundSoliderNum;
+        GameData.getInstance().soliderNum = GameConfig.getInstance().roundSoliderNum;
 
-        this.heroAnima.node.setPosition(0, GameConfig.CCStartPosY);
+        this.heroAnima.node.setPosition(0, GameConfig.getInstance().CCStartPosY);
         this.playHeroAnima(Action.Idle);
-        this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.soliderLv);
+        this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.getInstance().soliderLv);
 
-        let pos = this.getMineSoliderPos(Action.Idle, GameConfig.CCStartPosY)
+        let pos = this.getMineSoliderPos(Action.Idle, GameConfig.getInstance().CCStartPosY)
         let num = this.getMineSoliderUnitNum()
-        console.log(num);
         for (let i = 0; i < this.mineRole.length; i++) {
 
             this.mineRole[i].node.active = i < num;
@@ -188,7 +194,7 @@ export default class Game extends IView {
      */
     initWave() {
         this.curWave = -1;
-        this.nextWave(GameConfig.WaveStartPosY, GameData.soliderLv);
+        this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
     }
 
     /**
@@ -198,18 +204,27 @@ export default class Game extends IView {
      * @return {*}
      */
     nextWave(posY: number, lv: number) {
-        let roleType = RoleType.Neutral;
+        let roleType = null;
         this.curWave++;
-        if (this.isFightWave(this.curWave))
+        if (this.isFightWave(this.curWave)) {
             roleType = RoleType.Enemy
+            this.curOtherUnit = Math.ceil(0.2 + Math.random() * 0.3 * this.totalUnit);
+            this.totalUnit = 0;
+        }
+        else {
+            roleType = RoleType.Neutral;
+            this.curOtherUnit = Math.ceil(Math.random() * 3);
+            this.totalUnit += this.curOtherUnit;
+        }
         this.wavePos = posY// GameConfig.WaveStartPosY + 800 + Math.random() * 200
         let pos = this.getOtherSoliderPos(this.wavePos);
         for (let i = 0; i < this.otherRole.length; i++) {
-            this.otherRole[i].node.active = true;
+            this.otherRole[i].node.opacity = 255;
+            this.otherRole[i].node.active = i < this.curOtherUnit;
             this.otherRole[i].node.setPosition(pos[i].x, pos[i].y);
-            this.otherRole[i].node.scale = GameConfig.enemyScale;
+            this.otherRole[i].node.scale = GameConfig.getInstance().enemyScale;
             if (roleType == RoleType.Neutral) {
-                this.otherRole[i].node.scale = GameConfig.neutralScale;
+                this.otherRole[i].node.scale = GameConfig.getInstance().neutralScale;
             }
             this.otherRole[i].node.runAction(cc.fadeIn(0.5));
         }
@@ -266,16 +281,21 @@ export default class Game extends IView {
      */
     switchSoliderFormat(action: Action, call: Function) {
         let duration = 0.5;
-        let pos = this.getMineSoliderPos(action, GameConfig.CCStartPosY);
+        let pos = this.getMineSoliderPos(action, GameConfig.getInstance().CCStartPosY);
         for (let i = 0; i < this.mineRole.length; i++) {
-            this.mineRole[i].node.stopAllActions();
-            this.mineRole[i].node.runAction(cc.moveTo(duration, cc.v2(pos[i].x, pos[i].y)));
+            if (this.mineRole[i].node.active) {
+                this.mineRole[i].node.stopAllActions();
+                this.mineRole[i].node.runAction(cc.moveTo(duration, cc.v2(pos[i].x, pos[i].y)));
+            }
+            else {
+                this.mineRole[i].node.setPosition(pos[i].x, pos[i].y);
+            }
         }
         this.heroAnima.node.stopAllActions();
         if (action == Action.Attack)
-            this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.CCStartPosY - 100)));
+            this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.getInstance().CCStartPosY - 100)));
         else
-            this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.CCStartPosY)));
+            this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.getInstance().CCStartPosY)));
 
         setTimeout(() => {
             if (call)
@@ -291,7 +311,7 @@ export default class Game extends IView {
     scrollBg(dt) {
         for (let i = 0; i < this.bgList.length; i++) {
             for (let j = 0; j < this.bgList[i].length; j++) {
-                this.bgList[i][j].node.y -= GameConfig.BgSpDown * dt
+                this.bgList[i][j].node.y -= GameConfig.getInstance().BgSpDown * dt
                 if (this.bgList[i][j].node.y < -1600) {
                     this.bgList[i][j].node.y += 1600 * 2;
                     this.switchBgPic(i, this.bgList[i][j]);
@@ -307,9 +327,9 @@ export default class Game extends IView {
      */
     scrollRole(dt) {
         for (let i = 0; i < this.otherRole.length; i++) {
-            this.otherRole[i].node.y -= dt * GameConfig.BgSpDown;
+            this.otherRole[i].node.y -= dt * GameConfig.getInstance().BgSpDown;
         }
-        this.wavePos -= dt * GameConfig.BgSpDown;
+        this.wavePos -= dt * GameConfig.getInstance().BgSpDown;
 
         if (Math.abs(this.wavePos - this.heroAnima.node.y) <= 150) {
             let roleType = RoleType.Neutral;
@@ -330,13 +350,57 @@ export default class Game extends IView {
                 }
                 else {
                     this.switchSoliderFormat(Action.Attack, function () {
-                        this.playHeroAnima(Action.Idle);
-                        this.playSoliderAnima(RoleType.Mine, Action.Attack, 0);
-                        this.playSoliderAnima(RoleType.Enemy, Action.Attack, 0);
+                        this.startFight();
                     }.bind(this))
                 }
             }.bind(this), 500)
         }
+    }
+
+    /**
+     * @description: 战斗
+     * @param {*}
+     * @return {*}
+     */
+    startFight() {
+        this.playHeroAnima(Action.Idle);
+        this.playSoliderAnima(RoleType.Mine, Action.Attack, 0);
+        this.playSoliderAnima(RoleType.Enemy, Action.Attack, 0);
+
+        let timer = setInterval(function () {
+            this.curOtherUnit--;
+            for (let i = 0; i < this.otherRole.length; i++)
+                this.otherRole[i].node.active = i < this.curOtherUnit;
+            GameData.getInstance().soliderNum -= GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]
+            let num = this.getMineSoliderUnitNum()
+            for (let i = 0; i < this.mineRole.length; i++) {
+                this.mineRole[i].node.active = i < num;
+            }
+
+            if (num <= 0) {
+                this.gameState = GameState.Over;
+                clearInterval(timer);
+                UI.getInstance().showUI('Result', false);
+                console.log("GameOver");
+                return;
+            }
+            if (this.curOtherUnit <= 0) {
+                clearInterval(timer);
+                if (this.curWave == 9) {
+                    this.gameState = GameState.Over;
+                    UI.getInstance().showUI('Result', true);
+                    return;
+                }
+                setTimeout(function () {
+                    this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
+                    this.switchSoliderFormat(Action.Run, function () {
+                        this.gameState = GameState.Rush;
+                        this.playHeroAnima(Action.Run);
+                        this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
+                    }.bind(this));
+                }.bind(this), 500);
+            }
+        }.bind(this), 500)
     }
 
     /**
@@ -345,8 +409,25 @@ export default class Game extends IView {
      * @return {*}
      */
     answerResult(result: boolean) {
+        let delay = 550;
         if (result) {
             console.log("答对了");
+            GameData.getInstance().soliderNum += this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
+            let num = this.getMineSoliderUnitNum();
+            for (let i = 0; i < this.mineRole.length; i++) {
+                num--;
+                if (num < 0)
+                    break;
+                if (this.mineRole[i].node.active)
+                    continue;
+                else {
+                    this.mineRole[i].node.active = true;
+                    this.mineRole[i].node.opacity = 0;
+                    this.mineRole[i].node.runAction(cc.fadeIn(0.5));
+                    this.playBornEffect(this.mineRole[i].node.position);
+                }
+            }
+            delay = 1000;
         }
         else {
             console.log("答错了");
@@ -355,9 +436,10 @@ export default class Game extends IView {
             this.otherRole[i].node.runAction(cc.fadeOut(0.5))
         }
         setTimeout(function () {
-            this.nextWave(GameConfig.WaveStartPosY + 400, GameData.soliderLv + 1);
+            this.playHeroAnima(Action.Run);
+            this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
             this.gameState = GameState.Rush;
-        }.bind(this), 550);
+        }.bind(this), delay);
     }
 
     syncShadow() {
@@ -424,7 +506,6 @@ export default class Game extends IView {
      * @return {*}
      */
     isFightWave(idx: number) {
-        return true;
         if (idx == 3 || idx == 6 || idx == 9)
             return true;
         return false;
@@ -436,8 +517,7 @@ export default class Game extends IView {
      * @return {*}
      */
     refreshSoliderNum() {
-        console.log(GameData)
-        this.soliderNumTxt.string = "" + GameData.soliderNum;
+        this.soliderNumTxt.string = "" + GameData.getInstance().soliderNum;
     }
 
     /**
@@ -446,10 +526,39 @@ export default class Game extends IView {
      * @return {*}
      */
     getMineSoliderUnitNum() {
-        return Math.ceil(GameData.soliderNum / GameConfig.lv2Solider[GameData.soliderLv]);
+        return Math.ceil(GameData.getInstance().soliderNum / GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]);
+    }
+
+    /**
+     * @description: 播放获得小兵的特效
+     * @param {*} node
+     * @return {*}
+     */
+    playGetSoliderEffect(node) {
+        node.runAction(cc.fadeOut(0));
+        node.runAction(cc.fadeIn(0.4));
+    }
+
+    /**
+     * @description: 播放士兵的出现动画
+     * @param {*} pos
+     * @return {*}
+     */
+    playBornEffect(pos) {
+        let node = new cc.Node('e');
+        this.effectParent.addChild(node);
+        node.setPosition(pos.x, pos.y);
+        node.active = true;
+        node.addComponent(sp.Skeleton);
+        let spc: sp.Skeleton = node.getComponent(sp.Skeleton);
+        spc.skeletonData = Res.getInstance().bornEffect;
+        spc.loop = false;
+        spc.premultipliedAlpha = false;
+        spc.setAnimation(0, "animation", false);
+        console.log(spc.findAnimation("animation").duration)
+        setTimeout(() => { spc.node.destroy(); }, spc.findAnimation('animation').duration * 1000);
     }
 
     onHide(params) { }
-
 
 }

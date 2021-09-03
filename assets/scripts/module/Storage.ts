@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-08-24 14:26:55
+ * @LastEditTime: 2021-09-03 09:37:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -44,10 +44,10 @@ export default class Storage extends IManager {
     loadGameData() {
         let str: string = cc.sys.localStorage.getItem("gameData" + this.dataKey)
         if (str === "" || str === null) {
-            GameData.init()
+            GameData.getInstance().init()
         }
         else {
-            GameData.load(str);
+            GameData.getInstance().load(str);
         }
     }
 

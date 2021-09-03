@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-08-30 16:02:45
+ * @LastEditTime: 2021-09-03 09:42:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -28,7 +28,7 @@ export default class Menu extends IView {
     downloadBtn: cc.Node;
     infoBtn: cc.Node;
     exchangeBtn: cc.Node;
-    soliderNumTxt: cc.Node;
+    soliderNumTxt: cc.Label;
     endlessRecordTxt: cc.Label;
     soliderIcon: cc.Sprite;
     soliderLvUpBtn: cc.Node;
@@ -89,15 +89,15 @@ export default class Menu extends IView {
         if (this.soliderSpriteList.length == 0)
             return;
 
-        this.soliderIcon.spriteFrame = this.soliderSpriteList[GameData.soliderLv];
+        this.soliderIcon.spriteFrame = this.soliderSpriteList[GameData.getInstance().soliderLv];
     }
 
     refreshRecord() {
-        if (GameData.endlessRecord == 0)
+        if (GameData.getInstance().endlessRecord == 0)
             this.endlessRecordTxt.node.parent.active = false;
         else {
             this.endlessRecordTxt.node.parent.active = true;
-            this.endlessRecordTxt.string = Tool.getInstance().sec2mmss(GameData.endlessRecord);
+            this.endlessRecordTxt.string = Tool.getInstance().sec2mmss(GameData.getInstance().endlessRecord);
         }
     }
 

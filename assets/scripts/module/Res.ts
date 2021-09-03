@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-09-02 10:25:00
+ * @LastEditTime: 2021-09-03 17:02:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -44,12 +44,13 @@ export default class Res extends IManager {
         zhan: null,
         zou: null,
         attack: null,
-    }
+    };
+    bornEffect: sp.SkeletonData;
 
     init() {
         return new Promise((resolve, reject) => {
             let loadNum = 0;
-            let total = 3;
+            let total = 4;
             let checkLoaded = function () {
                 if (loadNum == total) {
                     resolve(1)
@@ -128,6 +129,15 @@ export default class Res extends IManager {
                 }
                 loadNum++;
                 checkLoaded();
+            }.bind(this))
+
+            cc.resources.load('skeleton/effect/chuxian', sp.SkeletonData, function (err, asset) {
+                if (err) {
+                    console.log("[load effect fail]");
+                    console.error(err);
+                    return
+                }
+                this.bornEffect = asset as sp.SkeletonData;
             }.bind(this))
         })
     }

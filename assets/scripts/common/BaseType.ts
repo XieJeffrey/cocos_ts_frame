@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:33:41
- * @LastEditTime: 2021-09-01 11:12:13
+ * @LastEditTime: 2021-09-03 15:45:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\BaseType.ts
@@ -28,6 +28,8 @@ export enum SoundType {
 
 export enum EventType {
     DialogClose = 0,
+    Continue = 1,
+    Retry = 2,
 }
 
 /**

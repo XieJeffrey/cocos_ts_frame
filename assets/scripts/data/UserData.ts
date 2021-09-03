@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:26:36
- * @LastEditTime: 2021-08-24 00:43:31
+ * @LastEditTime: 2021-09-03 09:35:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\UserData.ts
@@ -13,13 +13,12 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
+import IManager from "../base/IManager";
 
-@ccclass
-export default class UserData  {
-  public static  init(){}
-   
-  public static load(data:string){
-      
+export default class UserData extends IManager {
+  public static init() { }
+
+  public static load(data: string) {
+
   }
 }

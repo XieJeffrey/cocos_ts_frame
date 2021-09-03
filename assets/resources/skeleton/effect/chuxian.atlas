@@ -1,0 +1,27 @@
+
+chuxian.png
+size: 512,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+光光
+  rotate: true
+  xy: 2, 2
+  size: 114, 261
+  orig: 114, 261
+  offset: 0, 0
+  index: -1
+光底
+  rotate: false
+  xy: 265, 21
+  size: 125, 95
+  orig: 125, 95
+  offset: 0, 0
+  index: -1
+光条
+  rotate: true
+  xy: 265, 2
+  size: 17, 139
+  orig: 17, 139
+  offset: 0, 0
+  index: -1

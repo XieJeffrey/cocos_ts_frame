@@ -12,7 +12,7 @@
   "height": 52,
   "platformSettings": {},
   "subMetas": {
-    "img_AllianceSearchInputBox": {
+    "frame": {
       "ver": "1.0.6",
       "uuid": "a47d4f51-12f3-48c6-802d-e72067fae2cf",
       "importer": "sprite-frame",
