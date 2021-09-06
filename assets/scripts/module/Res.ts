@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-09-06 16:46:10
+ * @LastEditTime: 2021-09-06 21:42:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -113,7 +113,6 @@ export default class Res extends IManager {
                 }
                 loadNum++;
                 checkLoaded();
-                console.log(this.soliderAnima);
             }.bind(this))
 
             //加载英雄的骨骼动画

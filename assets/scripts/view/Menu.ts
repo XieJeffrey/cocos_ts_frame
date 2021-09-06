@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-06 15:43:10
+ * @LastEditTime: 2021-09-06 21:37:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -120,14 +120,20 @@ export default class Menu extends IView {
     }
 
     onClickStart() {
-        UI.getInstance().showUI("game")
+        UI.getInstance().showUI("game");
     }
 
-    onClickDown() { }
+    onClickDown() {
+        UI.getInstance().showFloatMsg("开始下载");
+    }
 
-    onClickRank() { }
+    onClickRank() {
+        UI.getInstance().showUI("Rank");
+    }
 
-    onClickInfo() { }
+    onClickInfo() {
+        UI.getInstance().showUI("Person");
+    }
 
     onClickLvUp() { }
 

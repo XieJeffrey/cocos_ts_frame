@@ -20,7 +20,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export abstract class IView extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
-    cacheType:ViewType
+    cacheType: ViewType
     onLoad() {
         this.register();
     }

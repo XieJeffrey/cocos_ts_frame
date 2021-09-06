@@ -8,8 +8,8 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
-  "width": 1024,
-  "height": 256,
+  "width": 400,
+  "height": 400,
   "platformSettings": {},
   "subMetas": {
     "cc_zhan": {

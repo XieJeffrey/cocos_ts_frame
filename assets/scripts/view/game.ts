@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-06 17:14:41
+ * @LastEditTime: 2021-09-06 23:23:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -85,7 +85,7 @@ export default class Game extends IView {
         for (let i = 0; i < 10; i++) {
             let solider = new cc.Node('' + i)
             soliderNode.addChild(solider);
-            solider.scale = GameConfig.getInstance().mineScale;
+            solider.scale = GameConfig.getInstance().soliderScale;
             this.mineRole.push(solider.addComponent(sp.Skeleton));
         }
         //中立|敌对小兵    
@@ -93,7 +93,7 @@ export default class Game extends IView {
         for (let i = 0; i < 10; i++) {
             let solider = new cc.Node('' + i)
             soliderNode.addChild(solider);
-            solider.scale = GameConfig.getInstance().neutralScale;
+            solider.scale = GameConfig.getInstance().soliderScale;
             this.otherRole.push(solider.addComponent(sp.Skeleton));
         }
         //阴影
@@ -136,12 +136,6 @@ export default class Game extends IView {
         this.syncShadow();
         this.refreshSoliderNum();
         UI.getInstance().showUI("Dialog", "周公吐哺，天下归心");
-
-        setTimeout(() => {
-            UI.getInstance().showUI('Result', true);
-
-        }, 500);
-
     }
 
     update(dt) {
@@ -155,7 +149,11 @@ export default class Game extends IView {
                 break;
         }
         if (this.cloud != null) {
-            this.cloud.y -= GameConfig.getInstance().BgSpUp * dt;
+            if (this.gameState == GameState.Rush)
+                this.cloud.y -= GameConfig.getInstance().BgSpUp * dt;
+            else
+                this.cloud.y -= GameConfig.getInstance().BgSpUp * dt * 0.1;
+
             if (this.cloud.y < -1600) {
                 this.cloud.y += 3200 + Math.random() * 800;
             }
@@ -222,6 +220,7 @@ export default class Game extends IView {
         if (this.isFightWave(this.curWave)) {
             roleType = RoleType.Enemy
             this.curOtherUnit = Math.ceil(0.2 + Math.random() * 0.3 * this.totalUnit);
+            this.curOtherUnit = 5
             this.totalUnit = 0;
         }
         else {
@@ -235,10 +234,7 @@ export default class Game extends IView {
             this.otherRole[i].node.opacity = 255;
             this.otherRole[i].node.active = i < this.curOtherUnit;
             this.otherRole[i].node.setPosition(pos[i].x, pos[i].y);
-            this.otherRole[i].node.scale = GameConfig.getInstance().enemyScale;
-            if (roleType == RoleType.Neutral) {
-                this.otherRole[i].node.scale = GameConfig.getInstance().neutralScale;
-            }
+            this.otherRole[i].node.scale = GameConfig.getInstance().soliderScale;
             this.otherRole[i].node.runAction(cc.fadeIn(0.5));
         }
         this.playSoliderAnima(roleType, Action.Idle, lv);
@@ -251,12 +247,16 @@ export default class Game extends IView {
      */
     getOtherSoliderPos(startY: number): Array<any> {
         let array = new Array()
-        for (let i = 0; i < 10; i++) {
-            let x = (i % 5) * 50 - 100
-            let y = Math.floor(i / 5) * 50 + startY;
-            array.push({ x: x, y: y })
+        for (let i = 0; i < 6; i++) {
+            let n = i % 3
+            let x = 0 + n * 80
+            let y = startY + Math.floor(i / 3) * 100;
+            array.push({ x: x, y: y });
+            if (n != 0 && n % 3 != 0)
+                array.push({ x: -x, y: y });
         }
 
+        console.log(array);
         return array;
     }
 
@@ -271,8 +271,8 @@ export default class Game extends IView {
         switch (action) {
             case Action.Attack:
                 for (let i = 0; i < 10; i++) {
-                    let x = (i % 5) * 50 - 100;
-                    let y = -Math.floor(i / 5) * 30 + startY;
+                    let x = (i % 5) * 60 - 100;
+                    let y = -Math.floor(i / 5) * 100 + startY - 100;
                     array.push({ x: x, y: y });
                 }
                 break;
@@ -295,6 +295,7 @@ export default class Game extends IView {
     switchSoliderFormat(action: Action, call: Function) {
         let duration = 0.5;
         let pos = this.getMineSoliderPos(action, GameConfig.getInstance().CCStartPosY);
+        this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
         for (let i = 0; i < this.mineRole.length; i++) {
             if (this.mineRole[i].node.active) {
                 this.mineRole[i].node.stopAllActions();
@@ -311,6 +312,7 @@ export default class Game extends IView {
         //     this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.getInstance().CCStartPosY)));
 
         setTimeout(() => {
+            this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.getInstance().soliderLv);
             if (call)
                 call();
         }, duration * 1000 + 50);
@@ -382,12 +384,17 @@ export default class Game extends IView {
 
         let timer = setInterval(function () {
             this.curOtherUnit--;
-            for (let i = 0; i < this.otherRole.length; i++)
-                this.otherRole[i].node.active = i < this.curOtherUnit;
+            console.log(this.curOtherUnit)
+            for (let i = 0; i < this.otherRole.length; i++) {
+                if (this.otherRole[i].node.active && i > this.curOtherUnit) {
+                    this.soliderDead(this.otherRole[i].node)
+                }
+            }
             GameData.getInstance().soliderNum -= GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]
             let num = this.getMineSoliderUnitNum()
             for (let i = 0; i < this.mineRole.length; i++) {
-                this.mineRole[i].node.active = i < num;
+                if (this.mineRole[i].node.active && i > num)
+                    this.soliderDead(this.mineRole[i].node)
             }
 
             if (num <= 0) {
@@ -411,9 +418,9 @@ export default class Game extends IView {
                         this.playHeroAnima(Action.Run);
                         this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
                     }.bind(this));
-                }.bind(this), 500);
+                }.bind(this), 1000);
             }
-        }.bind(this), 500)
+        }.bind(this), 1000)
     }
 
     /**
@@ -459,12 +466,12 @@ export default class Game extends IView {
     syncShadow() {
         this.shadow[0].setPosition(this.heroAnima.node.x, this.heroAnima.node.y + 20);
         for (let i = 0; i < this.mineRole.length; i++) {
-            this.shadow[i + 1].scale = GameConfig.getInstance().mineScale;
+            this.shadow[i + 1].scale = GameConfig.getInstance().soliderScale;
             this.shadow[i + 1].active = this.mineRole[i].node.active;
             this.shadow[i + 1].setPosition(this.mineRole[i].node.x, this.mineRole[i].node.y + 20);
         }
         for (let i = 0; i < this.otherRole.length; i++) {
-            this.shadow[i + 11].scale = GameConfig.getInstance().mineScale;
+            this.shadow[i + 11].scale = GameConfig.getInstance().soliderScale;
             this.shadow[i + 11].active = this.otherRole[i].node.active;
             this.shadow[i + 11].setPosition(this.otherRole[i].node.x, this.otherRole[i].node.y + 20);
         }
@@ -525,6 +532,7 @@ export default class Game extends IView {
      * @return {*}
      */
     isFightWave(idx: number) {
+        return true;
         if (idx == 3 || idx == 6 || idx == 9)
             return true;
         return false;
@@ -545,6 +553,7 @@ export default class Game extends IView {
      * @return {*}
      */
     getMineSoliderUnitNum() {
+        return 6
         return Math.ceil(GameData.getInstance().soliderNum / GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]);
     }
 
@@ -576,6 +585,21 @@ export default class Game extends IView {
         spc.setAnimation(0, "animation", false);
         console.log(spc.findAnimation("animation").duration)
         setTimeout(() => { spc.node.destroy(); }, spc.findAnimation('animation').duration * 1000);
+    }
+
+    /**
+     * @description: 士兵死亡渐渐消失
+     * @param {*} solider
+     * @return {*}
+     */
+    soliderDead(solider: cc.Node) {
+        solider.runAction(cc.sequence(
+            cc.fadeOut(0.5),
+            cc.callFunc(function () {
+                solider.opacity = 255;
+                solider.active = false;
+            }.bind(this))
+        ))
     }
 
     /**
