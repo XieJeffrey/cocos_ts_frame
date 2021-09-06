@@ -1,146 +1,90 @@
 
 zb_1_attack.png
-size: 2048,1024
+size: 408,408
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 1
   rotate: false
-  xy: 2, 570
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-10
-  rotate: false
-  xy: 2, 286
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-11
-  rotate: false
-  xy: 186, 570
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-12
-  rotate: false
-  xy: 2, 2
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-13
-  rotate: false
-  xy: 186, 286
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-14
-  rotate: false
-  xy: 370, 570
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-15
-  rotate: false
-  xy: 186, 2
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-16
-  rotate: false
-  xy: 370, 286
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-2
-  rotate: false
-  xy: 370, 2
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-20
-  rotate: false
-  xy: 554, 570
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-22
-  rotate: false
-  xy: 554, 286
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-23
-  rotate: false
-  xy: 738, 570
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
+  xy: 2, 267
+  size: 122, 137
+  orig: 142, 212
+  offset: 10, 3
   index: -1
 24
   rotate: false
-  xy: 554, 2
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
+  xy: 2, 267
+  size: 122, 137
+  orig: 142, 212
+  offset: 10, 3
+  index: -1
+11
+  rotate: true
+  xy: 126, 215
+  size: 80, 153
+  orig: 142, 212
+  offset: 20, 46
+  index: -1
+14
+  rotate: true
+  xy: 275, 326
+  size: 78, 131
+  orig: 142, 212
+  offset: 29, 3
+  index: -1
+16
+  rotate: true
+  xy: 271, 68
+  size: 79, 127
+  orig: 142, 212
+  offset: 28, 3
+  index: -1
+18
+  rotate: true
+  xy: 281, 239
+  size: 85, 118
+  orig: 142, 212
+  offset: 22, 3
+  index: -1
+20
+  rotate: true
+  xy: 137, 35
+  size: 90, 120
+  orig: 142, 212
+  offset: 17, 3
+  index: -1
+22
+  rotate: true
+  xy: 2, 10
+  size: 107, 133
+  orig: 142, 212
+  offset: 12, 3
   index: -1
 3
-  rotate: false
-  xy: 738, 286
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-4
-  rotate: false
-  xy: 922, 570
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
+  rotate: true
+  xy: 281, 149
+  size: 88, 103
+  orig: 142, 212
+  offset: 43, 7
   index: -1
 5
   rotate: false
-  xy: 738, 2
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-6
-  rotate: false
-  xy: 922, 286
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
+  xy: 2, 119
+  size: 109, 146
+  orig: 142, 212
+  offset: 29, 4
   index: -1
 7
-  rotate: false
-  xy: 1106, 570
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
-  index: -1
-8
-  rotate: false
-  xy: 922, 2
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
+  rotate: true
+  xy: 113, 127
+  size: 86, 156
+  orig: 142, 212
+  offset: 36, 10
   index: -1
 9
-  rotate: false
-  xy: 1106, 286
-  size: 182, 282
-  orig: 182, 282
-  offset: 0, 0
+  rotate: true
+  xy: 126, 297
+  size: 107, 147
+  orig: 142, 212
+  offset: 10, 32
   index: -1

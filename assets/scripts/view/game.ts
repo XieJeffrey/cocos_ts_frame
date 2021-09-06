@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-03 17:32:16
+ * @LastEditTime: 2021-09-06 17:14:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -117,6 +117,14 @@ export default class Game extends IView {
             this.playHeroAnima(Action.Run);
             this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
         }.bind(this))
+
+        Event.getInstance().on(EventType.Continue, this.node, function () {
+            this.onContinue();
+        }.bind(this))
+
+        Event.getInstance().on(EventType.Retry, this.node, function () {
+            this.onRetry();
+        }.bind(this))
     }
 
     onShow(params) {
@@ -128,6 +136,12 @@ export default class Game extends IView {
         this.syncShadow();
         this.refreshSoliderNum();
         UI.getInstance().showUI("Dialog", "周公吐哺，天下归心");
+
+        setTimeout(() => {
+            UI.getInstance().showUI('Result', true);
+
+        }, 500);
+
     }
 
     update(dt) {
@@ -181,7 +195,6 @@ export default class Game extends IView {
         let pos = this.getMineSoliderPos(Action.Idle, GameConfig.getInstance().CCStartPosY)
         let num = this.getMineSoliderUnitNum()
         for (let i = 0; i < this.mineRole.length; i++) {
-
             this.mineRole[i].node.active = i < num;
             this.mineRole[i].node.setPosition(pos[i].x, pos[i].y);
         }
@@ -259,7 +272,7 @@ export default class Game extends IView {
             case Action.Attack:
                 for (let i = 0; i < 10; i++) {
                     let x = (i % 5) * 50 - 100;
-                    let y = -Math.floor(i / 5) * 30 + 80 + startY;
+                    let y = -Math.floor(i / 5) * 30 + startY;
                     array.push({ x: x, y: y });
                 }
                 break;
@@ -291,11 +304,11 @@ export default class Game extends IView {
                 this.mineRole[i].node.setPosition(pos[i].x, pos[i].y);
             }
         }
-        this.heroAnima.node.stopAllActions();
-        if (action == Action.Attack)
-            this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.getInstance().CCStartPosY - 100)));
-        else
-            this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.getInstance().CCStartPosY)));
+        // this.heroAnima.node.stopAllActions();
+        // if (action == Action.Attack)
+        //     this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.getInstance().CCStartPosY - 100)));
+        // else
+        //     this.heroAnima.node.runAction(cc.moveTo(duration, cc.v2(0, GameConfig.getInstance().CCStartPosY)));
 
         setTimeout(() => {
             if (call)
@@ -340,7 +353,7 @@ export default class Game extends IView {
             }
 
             this.playHeroAnima(Action.Idle);
-            this.playSoliderAnima(roleType, Action.Idle, 0);
+            this.playSoliderAnima(RoleType.Mine, Action.Idle, 0);
 
             setTimeout(function () {
                 if (this.gameState == GameState.Answer) {
@@ -363,7 +376,7 @@ export default class Game extends IView {
      * @return {*}
      */
     startFight() {
-        this.playHeroAnima(Action.Idle);
+        this.playHeroAnima(Action.Attack);
         this.playSoliderAnima(RoleType.Mine, Action.Attack, 0);
         this.playSoliderAnima(RoleType.Enemy, Action.Attack, 0);
 
@@ -437,20 +450,23 @@ export default class Game extends IView {
         }
         setTimeout(function () {
             this.playHeroAnima(Action.Run);
+            this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
             this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
             this.gameState = GameState.Rush;
         }.bind(this), delay);
     }
 
     syncShadow() {
-        this.shadow[0].setPosition(this.heroAnima.node.x, this.heroAnima.node.y);
+        this.shadow[0].setPosition(this.heroAnima.node.x, this.heroAnima.node.y + 20);
         for (let i = 0; i < this.mineRole.length; i++) {
+            this.shadow[i + 1].scale = GameConfig.getInstance().mineScale;
             this.shadow[i + 1].active = this.mineRole[i].node.active;
-            this.shadow[i + 1].setPosition(this.mineRole[i].node.x, this.mineRole[i].node.y);
+            this.shadow[i + 1].setPosition(this.mineRole[i].node.x, this.mineRole[i].node.y + 20);
         }
         for (let i = 0; i < this.otherRole.length; i++) {
+            this.shadow[i + 11].scale = GameConfig.getInstance().mineScale;
             this.shadow[i + 11].active = this.otherRole[i].node.active;
-            this.shadow[i + 11].setPosition(this.otherRole[i].node.x, this.otherRole[i].node.y);
+            this.shadow[i + 11].setPosition(this.otherRole[i].node.x, this.otherRole[i].node.y + 20);
         }
     }
 
@@ -484,6 +500,8 @@ export default class Game extends IView {
 
         for (let i = 0; i < array.length; i++) {
             array[i].skeletonData = Res.getInstance().soliderAnima[role][name][lv + 1];
+            array[i].premultipliedAlpha = false;
+
             array[i].clearTracks();
             array[i].setAnimation(0, "animation", true);
         }
@@ -496,6 +514,7 @@ export default class Game extends IView {
      */
     playHeroAnima(name: Action) {
         this.heroAnima.skeletonData = Res.getInstance().heroAnima[name];
+        this.heroAnima.premultipliedAlpha = false;
         this.heroAnima.clearTracks();
         this.heroAnima.setAnimation(0, "animation", true);
     }
@@ -557,6 +576,22 @@ export default class Game extends IView {
         spc.setAnimation(0, "animation", false);
         console.log(spc.findAnimation("animation").duration)
         setTimeout(() => { spc.node.destroy(); }, spc.findAnimation('animation').duration * 1000);
+    }
+
+    /**
+     * @description: 继续游戏，进入无尽模式
+     * @param {*}
+     * @return {*}
+     */
+    onContinue() { }
+
+    /**
+     * @description: 重试
+     * @param {*}
+     * @return {*}
+     */
+    onRetry() {
+        this.onShow({});
     }
 
     onHide(params) { }

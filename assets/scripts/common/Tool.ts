@@ -3,7 +3,7 @@ import IManager from "../base/IManager";
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-09-01 10:45:21
+ * @LastEditTime: 2021-09-06 17:30:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -47,6 +47,19 @@ export default class Tool extends IManager {
                 parent = child;
             }
             return child;
+        }
+
+        cc.Node.prototype.playDuangAnima = function () {
+            this.scale = 0;
+            this.stopAllActions();
+            this.runAction(cc.sequence(
+                cc.scaleTo(0.06, 0.9, 1.13),
+                cc.scaleTo(0.12, 1.05, 0.9),
+                cc.scaleTo(0.07, 0.9, 1.05),
+                cc.scaleTo(0.07, 1.05, 0.95),
+                cc.scaleTo(0.07, 1, 1)
+            ))
+
         }
 
 

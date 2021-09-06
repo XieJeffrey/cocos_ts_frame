@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:33:41
- * @LastEditTime: 2021-09-03 15:45:14
+ * @LastEditTime: 2021-09-06 15:34:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\BaseType.ts
@@ -62,7 +62,7 @@ export enum RoleType {
 }
 
 export enum Action {
-    Run = "zou",
+    Run = "pao",
     Idle = "zhan",
     Attack = "attack"
 }

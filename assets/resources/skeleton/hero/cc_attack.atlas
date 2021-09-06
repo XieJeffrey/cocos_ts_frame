@@ -1,0 +1,83 @@
+
+cc_attack.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+caocao0000
+  rotate: true
+  xy: 187, 256
+  size: 133, 158
+  orig: 133, 158
+  offset: 0, 0
+  index: -1
+caocao0004
+  rotate: true
+  xy: 347, 233
+  size: 113, 149
+  orig: 113, 149
+  offset: 0, 0
+  index: -1
+caocao0008
+  rotate: true
+  xy: 167, 4
+  size: 107, 135
+  orig: 107, 135
+  offset: 0, 0
+  index: -1
+caocao0012
+  rotate: true
+  xy: 187, 391
+  size: 114, 183
+  orig: 114, 183
+  offset: 0, 0
+  index: -1
+caocao0016
+  rotate: true
+  xy: 173, 113
+  size: 141, 148
+  orig: 141, 148
+  offset: 0, 0
+  index: -1
+caocao0020
+  rotate: false
+  xy: 2, 67
+  size: 163, 149
+  orig: 163, 149
+  offset: 0, 0
+  index: -1
+caocao0024
+  rotate: false
+  xy: 2, 366
+  size: 183, 139
+  orig: 183, 139
+  offset: 0, 0
+  index: -1
+caocao0028
+  rotate: false
+  xy: 2, 218
+  size: 169, 146
+  orig: 169, 146
+  offset: 0, 0
+  index: -1
+caocao0032
+  rotate: true
+  xy: 323, 124
+  size: 107, 139
+  orig: 107, 139
+  offset: 0, 0
+  index: -1
+caocao0036
+  rotate: true
+  xy: 323, 2
+  size: 120, 128
+  orig: 120, 128
+  offset: 0, 0
+  index: -1
+caocao0040
+  rotate: false
+  xy: 372, 348
+  size: 134, 157
+  orig: 134, 157
+  offset: 0, 0
+  index: -1

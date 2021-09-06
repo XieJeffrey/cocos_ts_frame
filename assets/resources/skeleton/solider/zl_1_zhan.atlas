@@ -1,76 +1,48 @@
 
 zl_1_zhan.png
-size: 2048,256
+size: 288,288
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-1
+12
   rotate: false
-  xy: 186, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
+  xy: 2, 96
+  size: 107, 93
+  orig: 142, 112
+  offset: 20, 6
   index: -1
-10
+15
   rotate: false
-  xy: 2, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
+  xy: 2, 191
+  size: 107, 93
+  orig: 142, 112
+  offset: 20, 6
   index: -1
-2
+19
   rotate: false
-  xy: 370, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
+  xy: 111, 192
+  size: 107, 92
+  orig: 142, 112
+  offset: 19, 4
+  index: -1
+23
+  rotate: false
+  xy: 111, 4
+  size: 106, 92
+  orig: 142, 112
+  offset: 18, 3
   index: -1
 3
   rotate: false
-  xy: 554, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
-  index: -1
-4
-  rotate: false
-  xy: 738, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
-  index: -1
-5
-  rotate: false
-  xy: 922, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
-  index: -1
-6
-  rotate: false
-  xy: 1106, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
+  xy: 2, 2
+  size: 107, 92
+  orig: 142, 112
+  offset: 18, 3
   index: -1
 7
   rotate: false
-  xy: 1290, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
-  index: -1
-8
-  rotate: false
-  xy: 1474, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
-  index: -1
-9
-  rotate: false
-  xy: 1658, 2
-  size: 182, 182
-  orig: 182, 182
-  offset: 0, 0
+  xy: 111, 98
+  size: 107, 92
+  orig: 142, 112
+  offset: 19, 5
   index: -1

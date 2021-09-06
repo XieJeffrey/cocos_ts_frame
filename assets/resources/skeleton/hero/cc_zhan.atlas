@@ -1,76 +1,48 @@
 
 cc_zhan.png
-size: 1024,256
+size: 400,400
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-1
-  rotate: true
-  xy: 2, 127
-  size: 122, 173
-  orig: 122, 173
-  offset: 0, 0
-  index: -1
-10
-  rotate: true
-  xy: 177, 127
-  size: 122, 173
-  orig: 122, 173
-  offset: 0, 0
-  index: -1
-2
-  rotate: true
-  xy: 180, 2
-  size: 123, 178
-  orig: 123, 178
-  offset: 0, 0
-  index: -1
-3
-  rotate: true
-  xy: 360, 2
-  size: 123, 182
-  orig: 123, 182
-  offset: 0, 0
-  index: -1
-4
-  rotate: true
-  xy: 544, 2
-  size: 123, 182
-  orig: 123, 182
-  offset: 0, 0
-  index: -1
-5
-  rotate: true
-  xy: 352, 127
-  size: 122, 181
-  orig: 122, 181
-  offset: 0, 0
-  index: -1
-6
-  rotate: true
-  xy: 535, 127
-  size: 122, 180
-  orig: 122, 180
-  offset: 0, 0
-  index: -1
-7
-  rotate: true
-  xy: 717, 127
-  size: 122, 179
-  orig: 122, 179
-  offset: 0, 0
-  index: -1
-8
-  rotate: true
-  xy: 2, 3
-  size: 122, 176
-  orig: 122, 176
-  offset: 0, 0
-  index: -1
-9
+caocao0000
   rotate: false
-  xy: 898, 75
-  size: 122, 174
-  orig: 122, 174
-  offset: 0, 0
+  xy: 2, 240
+  size: 132, 155
+  orig: 222, 222
+  offset: 45, 29
+  index: -1
+caocao0008
+  rotate: false
+  xy: 2, 83
+  size: 128, 155
+  orig: 222, 222
+  offset: 48, 29
+  index: -1
+caocao0016
+  rotate: false
+  xy: 132, 86
+  size: 121, 152
+  orig: 222, 222
+  offset: 54, 31
+  index: -1
+caocao0024
+  rotate: false
+  xy: 255, 96
+  size: 121, 148
+  orig: 222, 222
+  offset: 57, 35
+  index: -1
+caocao0032
+  rotate: false
+  xy: 270, 248
+  size: 127, 147
+  orig: 222, 222
+  offset: 55, 36
+  index: -1
+caocao0040
+  rotate: false
+  xy: 136, 246
+  size: 132, 149
+  orig: 222, 222
+  offset: 50, 35
   index: -1

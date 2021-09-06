@@ -1,0 +1,90 @@
+
+cc_pao.png
+size: 612,612
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+caocao0000
+  rotate: true
+  xy: 168, 319
+  size: 144, 161
+  orig: 222, 222
+  offset: 54, 28
+  index: -1
+caocao0002
+  rotate: true
+  xy: 321, 465
+  size: 142, 162
+  orig: 222, 222
+  offset: 51, 24
+  index: -1
+caocao0004
+  rotate: true
+  xy: 2, 175
+  size: 146, 163
+  orig: 222, 222
+  offset: 47, 21
+  index: -1
+caocao0006
+  rotate: true
+  xy: 328, 163
+  size: 154, 161
+  orig: 222, 222
+  offset: 41, 27
+  index: -1
+caocao0008
+  rotate: true
+  xy: 164, 6
+  size: 159, 161
+  orig: 222, 222
+  offset: 36, 29
+  index: -1
+caocao0010
+  rotate: true
+  xy: 327, 2
+  size: 159, 160
+  orig: 222, 222
+  offset: 36, 31
+  index: -1
+caocao0012
+  rotate: true
+  xy: 2, 18
+  size: 155, 160
+  orig: 222, 222
+  offset: 38, 29
+  index: -1
+caocao0014
+  rotate: true
+  xy: 167, 167
+  size: 150, 159
+  orig: 222, 222
+  offset: 42, 27
+  index: -1
+caocao0016
+  rotate: true
+  xy: 162, 467
+  size: 140, 157
+  orig: 222, 222
+  offset: 51, 29
+  index: -1
+caocao0018
+  rotate: true
+  xy: 2, 469
+  size: 138, 158
+  orig: 222, 222
+  offset: 52, 32
+  index: -1
+caocao0020
+  rotate: true
+  xy: 2, 323
+  size: 142, 164
+  orig: 222, 222
+  offset: 53, 28
+  index: -1
+caocao0022
+  rotate: true
+  xy: 331, 319
+  size: 144, 159
+  orig: 222, 222
+  offset: 54, 31
+  index: -1

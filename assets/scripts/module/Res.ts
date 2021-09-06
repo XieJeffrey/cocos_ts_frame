@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-09-03 17:02:21
+ * @LastEditTime: 2021-09-06 16:46:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -22,27 +22,28 @@ export default class Res extends IManager {
     spriteBundle: cc.AssetManager.Bundle = null;
     sceneSprite: Array<Array<cc.SpriteFrame>>;
     cacheSprite: Map<string, cc.SpriteFrame>;
+    resultAnima: sp.SkeletonData = null;
     soliderAnima = {
         zl: {
             zhan: {},
-            zou: {},
+            pao: {},
             attack: {},
         },
 
         zb: {
             zhan: {},
-            zou: {},
+            pao: {},
             attack: {},
         },
         db: {
             zhan: {},
-            zou: {},
+            pao: {},
             attack: {},
         }
     };
     heroAnima = {
         zhan: null,
-        zou: null,
+        pao: null,
         attack: null,
     };
     bornEffect: sp.SkeletonData;
@@ -50,7 +51,7 @@ export default class Res extends IManager {
     init() {
         return new Promise((resolve, reject) => {
             let loadNum = 0;
-            let total = 4;
+            let total = 6;
             let checkLoaded = function () {
                 if (loadNum == total) {
                     resolve(1)
@@ -112,8 +113,10 @@ export default class Res extends IManager {
                 }
                 loadNum++;
                 checkLoaded();
+                console.log(this.soliderAnima);
             }.bind(this))
 
+            //加载英雄的骨骼动画
             cc.resources.loadDir("skeleton/hero", sp.SkeletonData, function (err, asset) {
                 if (err) {
                     console.log("[load hero from res fail]")
@@ -131,6 +134,7 @@ export default class Res extends IManager {
                 checkLoaded();
             }.bind(this))
 
+            //加载士兵的出现特效
             cc.resources.load('skeleton/effect/chuxian', sp.SkeletonData, function (err, asset) {
                 if (err) {
                     console.log("[load effect fail]");
@@ -138,6 +142,20 @@ export default class Res extends IManager {
                     return
                 }
                 this.bornEffect = asset as sp.SkeletonData;
+                loadNum++;
+                checkLoaded();
+            }.bind(this))
+
+            //加载结算的特效
+            cc.resources.load('skeleton/effect/defeated_victory', sp.SkeletonData, function (err, asset) {
+                if (err) {
+                    console.log("[load result effect fail]");
+                    console.error(err);
+                    return;
+                }
+                this.resultAnima = asset as sp.SkeletonData;
+                loadNum++;
+                checkLoaded();
             }.bind(this))
         })
     }

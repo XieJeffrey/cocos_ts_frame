@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-03 09:42:33
+ * @LastEditTime: 2021-09-06 15:43:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -73,6 +73,7 @@ export default class Menu extends IView {
                     return;
                 }
                 this.anima.skeletonData = res;
+                this.anima.premultipliedAlpha = false;
                 this.anima.setAnimation(0, "animation", true);
             }.bind(this))
         }

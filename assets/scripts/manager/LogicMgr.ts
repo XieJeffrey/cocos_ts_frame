@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-03 15:41:25
+ * @LastEditTime: 2021-09-06 11:01:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -34,6 +34,20 @@ export default class LogicMgr extends IManager {
      */
     saveGameData() { }
 
+    /**
+     * @description: 下载万国觉醒
+     * @param {*}
+     * @return {*}
+     */
     downloadGame() { }
     // update (dt) {}
+
+    /**
+     * @description: 上传用户数据
+     * @param {*}
+     * @return {*}
+     */
+    uploadUserData() {
+
+    }
 }

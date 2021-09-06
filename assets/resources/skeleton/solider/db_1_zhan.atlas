@@ -1,76 +1,48 @@
 
 db_1_zhan.png
-size: 1024,256
+size: 384,384
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-图层 1
+11
   rotate: false
-  xy: 2, 2
-  size: 103, 159
-  orig: 103, 159
-  offset: 0, 0
+  xy: 2, 248
+  size: 123, 132
+  orig: 142, 152
+  offset: 12, 8
   index: -1
-图层 10
+15
   rotate: false
-  xy: 2, 2
-  size: 103, 159
-  orig: 103, 159
-  offset: 0, 0
+  xy: 127, 249
+  size: 124, 131
+  orig: 142, 152
+  offset: 9, 8
   index: -1
-图层 2
+19
   rotate: false
-  xy: 107, 2
-  size: 103, 159
-  orig: 103, 159
-  offset: 0, 0
+  xy: 2, 118
+  size: 126, 128
+  orig: 142, 152
+  offset: 7, 8
   index: -1
-图层 3
+23
   rotate: false
-  xy: 317, 3
-  size: 103, 158
-  orig: 103, 158
-  offset: 0, 0
+  xy: 130, 121
+  size: 125, 126
+  orig: 142, 152
+  offset: 8, 8
   index: -1
-图层 4
+3
   rotate: false
-  xy: 422, 3
-  size: 103, 158
-  orig: 103, 158
-  offset: 0, 0
+  xy: 257, 129
+  size: 123, 126
+  orig: 142, 152
+  offset: 11, 8
   index: -1
-图层 5
-  rotate: false
-  xy: 842, 4
-  size: 103, 157
-  orig: 103, 157
-  offset: 0, 0
-  index: -1
-图层 6
-  rotate: false
-  xy: 527, 3
-  size: 103, 158
-  orig: 103, 158
-  offset: 0, 0
-  index: -1
-图层 7
-  rotate: false
-  xy: 632, 3
-  size: 103, 158
-  orig: 103, 158
-  offset: 0, 0
-  index: -1
-图层 8
-  rotate: false
-  xy: 737, 3
-  size: 103, 158
-  orig: 103, 158
-  offset: 0, 0
-  index: -1
-图层 9
-  rotate: false
-  xy: 212, 2
-  size: 103, 159
-  orig: 103, 159
-  offset: 0, 0
+7
+  rotate: true
+  xy: 253, 257
+  size: 123, 129
+  orig: 142, 152
+  offset: 12, 8
   index: -1

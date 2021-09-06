@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:26:36
- * @LastEditTime: 2021-09-03 09:35:11
+ * @LastEditTime: 2021-09-06 11:02:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\UserData.ts
@@ -16,6 +16,12 @@
 import IManager from "../base/IManager";
 
 export default class UserData extends IManager {
+  public GameID: string = "";
+  public Mail: string = "";
+  public Phone: string = "";
+  public Name: string = "";
+  public Address: string = ""
+
   public static init() { }
 
   public static load(data: string) {
