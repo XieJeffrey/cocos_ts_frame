@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-09-06 21:42:21
+ * @LastEditTime: 2021-09-07 17:13:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -47,11 +47,12 @@ export default class Res extends IManager {
         attack: null,
     };
     bornEffect: sp.SkeletonData;
+    commonSprite: Map<string, cc.SpriteFrame> = null;
 
     init() {
         return new Promise((resolve, reject) => {
             let loadNum = 0;
-            let total = 6;
+            let total = 7;
             let checkLoaded = function () {
                 if (loadNum == total) {
                     resolve(1)
@@ -153,6 +154,22 @@ export default class Res extends IManager {
                     return;
                 }
                 this.resultAnima = asset as sp.SkeletonData;
+                loadNum++;
+                checkLoaded();
+            }.bind(this))
+
+            //加载通用图片资源
+            cc.resources.loadDir('common', cc.SpriteFrame, function (err, asset) {
+                if (err) {
+                    console.log("[load common img fail]");
+                    console.error(err);
+                    return;
+                }
+                this.commonSprite = new Map<string, cc.SpriteFrame>();
+                for (let i = 0; i < asset.length; i++) {
+                    let name = asset[i].name;
+                    this.commonSprite.set(name, asset[i])
+                }
                 loadNum++;
                 checkLoaded();
             }.bind(this))

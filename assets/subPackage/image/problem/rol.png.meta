@@ -1,6 +1,6 @@
 {
   "ver": "2.3.7",
-  "uuid": "781eaf1e-9885-42e7-8c21-fd793570b0cb",
+  "uuid": "d8ae4c34-4ee4-44cf-9430-e366ead4fa88",
   "importer": "texture",
   "type": "sprite",
   "wrapMode": "clamp",
@@ -9,14 +9,14 @@
   "genMipmaps": false,
   "packable": true,
   "width": 407,
-  "height": 60,
+  "height": 145,
   "platformSettings": {},
   "subMetas": {
-    "未选中": {
+    "rol": {
       "ver": "1.0.6",
-      "uuid": "09cdad47-e16d-49d9-acb6-d7b71124a5e8",
+      "uuid": "e81e7c2a-ec97-4add-89b2-063c432d539f",
       "importer": "sprite-frame",
-      "rawTextureUuid": "781eaf1e-9885-42e7-8c21-fd793570b0cb",
+      "rawTextureUuid": "d8ae4c34-4ee4-44cf-9430-e366ead4fa88",
       "trimType": "custom",
       "trimThreshold": 1,
       "rotated": false,
@@ -25,11 +25,11 @@
       "trimX": 0,
       "trimY": 0,
       "width": 407,
-      "height": 60,
+      "height": 145,
       "rawWidth": 407,
-      "rawHeight": 60,
-      "borderTop": 0,
-      "borderBottom": 0,
+      "rawHeight": 145,
+      "borderTop": 41,
+      "borderBottom": 63,
       "borderLeft": 0,
       "borderRight": 0,
       "subMetas": {}

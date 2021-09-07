@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-06 23:23:04
+ * @LastEditTime: 2021-09-07 17:29:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -49,7 +49,7 @@ export default class Game extends IView {
         tree: Array<cc.Node>;
     }
     soliderNumTxt: cc.Label;//当前小兵数量
-
+    recordTime: number = 0;//无尽模式的时间记录
 
     onLoad() {
         //滚动背景
@@ -159,6 +159,9 @@ export default class Game extends IView {
             }
             this.syncShadow();
         }
+        if (this.gameMode == GameMode.Endless && this.gameState != GameState.Over) {
+            this.recordTime += dt;
+        }
 
     }
 
@@ -219,8 +222,7 @@ export default class Game extends IView {
         this.curWave++;
         if (this.isFightWave(this.curWave)) {
             roleType = RoleType.Enemy
-            this.curOtherUnit = Math.ceil(0.2 + Math.random() * 0.3 * this.totalUnit);
-            this.curOtherUnit = 5
+            this.curOtherUnit = Math.ceil((0.5 + Math.random() * 0.3) * this.totalUnit);
             this.totalUnit = 0;
         }
         else {
@@ -247,16 +249,27 @@ export default class Game extends IView {
      */
     getOtherSoliderPos(startY: number): Array<any> {
         let array = new Array()
-        for (let i = 0; i < 6; i++) {
-            let n = i % 3
-            let x = 0 + n * 80
-            let y = startY + Math.floor(i / 3) * 100;
-            array.push({ x: x, y: y });
-            if (n != 0 && n % 3 != 0)
-                array.push({ x: -x, y: y });
-        }
+        //第一排
+        array.push({ x: 0, y: startY })
+        array.push({ x: -80, y: startY })
+        array.push({ x: 80, y: startY })
+        array.push({ x: -160, y: startY })
+        array.push({ x: 160, y: startY })
+        //第二排
+        array.push({ x: 0, y: startY - 70 })
+        array.push({ x: -80, y: startY - 70 })
+        array.push({ x: 80, y: startY - 70 })
+        array.push({ x: -160, y: startY - 70 })
+        array.push({ x: 160, y: startY - 70 })
+        // for (let i = 0; i < 6; i++) {
+        //     let n = i % 3
+        //     let x = 0 + n * 80
+        //     let y = startY + Math.floor(i / 3) * 100;
+        //     array.push({ x: x, y: y });
+        //     if (n != 0 && n % 3 != 0)
+        //         array.push({ x: -x, y: y });
+        // }
 
-        console.log(array);
         return array;
     }
 
@@ -270,11 +283,24 @@ export default class Game extends IView {
 
         switch (action) {
             case Action.Attack:
-                for (let i = 0; i < 10; i++) {
-                    let x = (i % 5) * 60 - 100;
-                    let y = -Math.floor(i / 5) * 100 + startY - 100;
-                    array.push({ x: x, y: y });
-                }
+                //第一排：
+                array.push({ x: -80, y: startY })
+                array.push({ x: 80, y: startY })
+                array.push({ x: -160, y: startY })
+                array.push({ x: 160, y: startY })
+                //第二排
+                array.push({ x: -32, y: startY - 70 })
+                array.push({ x: 32, y: startY - 70 })
+                array.push({ x: -96, y: startY - 70 })
+                array.push({ x: 96, y: startY - 70 })
+                array.push({ x: -160, y: startY - 70 })
+                array.push({ x: 160, y: startY - 70 })
+
+                // for (let i = 0; i < 10; i++) {
+                //     let x = (i % 5) * 80 - 160;
+                //     let y = -Math.floor(i / 5) * 100 + startY - 100;
+                //     array.push({ x: x, y: y });
+                // }
                 break;
             default:
                 for (let i = 0; i < 10; i++) {
@@ -382,45 +408,65 @@ export default class Game extends IView {
         this.playSoliderAnima(RoleType.Mine, Action.Attack, 0);
         this.playSoliderAnima(RoleType.Enemy, Action.Attack, 0);
 
-        let timer = setInterval(function () {
-            this.curOtherUnit--;
-            console.log(this.curOtherUnit)
-            for (let i = 0; i < this.otherRole.length; i++) {
-                if (this.otherRole[i].node.active && i > this.curOtherUnit) {
-                    this.soliderDead(this.otherRole[i].node)
+        //做个延时，因为攻击动画有延时
+        setTimeout(function () {
+            let timer = setInterval(function () {
+                this.curOtherUnit--;
+                for (let i = 0; i < this.otherRole.length; i++) {
+                    if (this.otherRole[i].node.active && i >= this.curOtherUnit) {
+                        this.soliderDead(this.otherRole[i].node)
+                    }
                 }
-            }
-            GameData.getInstance().soliderNum -= GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]
-            let num = this.getMineSoliderUnitNum()
-            for (let i = 0; i < this.mineRole.length; i++) {
-                if (this.mineRole[i].node.active && i > num)
-                    this.soliderDead(this.mineRole[i].node)
-            }
+                GameData.getInstance().soliderNum -= GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]
+                this.refreshSoliderNum()
+                let num = this.getMineSoliderUnitNum()
+                for (let i = 0; i < this.mineRole.length; i++) {
+                    if (this.mineRole[i].node.active && i >= num)
+                        this.soliderDead(this.mineRole[i].node)
+                }
 
-            if (num <= 0) {
-                this.gameState = GameState.Over;
-                clearInterval(timer);
-                UI.getInstance().showUI('Result', false);
-                console.log("GameOver");
-                return;
-            }
-            if (this.curOtherUnit <= 0) {
-                clearInterval(timer);
-                if (this.curWave == 9) {
+                if (num <= 0) {
                     this.gameState = GameState.Over;
-                    UI.getInstance().showUI('Result', true);
+                    clearInterval(timer);
+                    this.playHeroAnima(Action.Idle);
+                    this.playSoliderAnima(RoleType.Enemy, Action.Idle, GameData.getInstance().soliderLv);
+                    setTimeout(function () {
+                        if (this.gameMode == GameMode.Pattern) {
+                            UI.getInstance().showUI('Result', false);
+                            console.log("[Pattern Model GameOver]");
+                        }
+                        else {
+                            UI.getInstance().hideUI('Game');
+                            UI.getInstance().showUI('Menu');
+                            UI.getInstance().showUI('Rank');
+                            console.log("[Endless Model GameOver]");
+                        }
+                    }.bind(this), 1000)
                     return;
                 }
-                setTimeout(function () {
-                    this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
-                    this.switchSoliderFormat(Action.Run, function () {
-                        this.gameState = GameState.Rush;
-                        this.playHeroAnima(Action.Run);
-                        this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
-                    }.bind(this));
-                }.bind(this), 1000);
-            }
-        }.bind(this), 1000)
+
+                if (this.curOtherUnit <= 0) {
+                    clearInterval(timer);
+                    this.playHeroAnima(Action.Idle);
+                    this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.getInstance().soliderLv);
+
+                    setTimeout(function () {
+                        if (this.curWave == 9) {
+                            this.gameState = GameState.Over;
+                            UI.getInstance().showUI('Result', true);
+                            return;
+                        }
+                        this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
+                        this.switchSoliderFormat(Action.Run, function () {
+                            this.gameState = GameState.Rush;
+                            this.playHeroAnima(Action.Run);
+                            this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
+                        }.bind(this));
+                    }.bind(this), 1000);
+                }
+            }.bind(this), 1000)
+        }.bind(this), 500);
+
     }
 
     /**
@@ -448,6 +494,7 @@ export default class Game extends IView {
                 }
             }
             delay = 1000;
+            this.refreshSoliderNum();
         }
         else {
             console.log("答错了");
@@ -506,11 +553,20 @@ export default class Game extends IView {
         }
 
         for (let i = 0; i < array.length; i++) {
-            array[i].skeletonData = Res.getInstance().soliderAnima[role][name][lv + 1];
-            array[i].premultipliedAlpha = false;
-
             array[i].clearTracks();
-            array[i].setAnimation(0, "animation", true);
+            if (name == Action.Attack) {
+                setTimeout(function () {
+                    array[i].skeletonData = Res.getInstance().soliderAnima[role][name][lv + 1];
+                    array[i].premultipliedAlpha = false;
+                    array[i].setAnimation(0, "animation", true);
+                }, Math.random() * 500);
+
+            }
+            else {
+                array[i].skeletonData = Res.getInstance().soliderAnima[role][name][lv + 1];
+                array[i].premultipliedAlpha = false;
+                array[i].setAnimation(0, "animation", true);
+            }
         }
     }
 
@@ -532,10 +588,14 @@ export default class Game extends IView {
      * @return {*}
      */
     isFightWave(idx: number) {
-        return true;
-        if (idx == 3 || idx == 6 || idx == 9)
-            return true;
-        return false;
+        if (this.gameMode == GameMode.Pattern) {
+            if (idx == 3 || idx == 6 || idx == 9)
+                return true;
+            return false;
+        }
+        if (this.gameMode == GameMode.Endless) {
+            return Math.random() < 0.4
+        }
     }
 
     /**
@@ -553,7 +613,6 @@ export default class Game extends IView {
      * @return {*}
      */
     getMineSoliderUnitNum() {
-        return 6
         return Math.ceil(GameData.getInstance().soliderNum / GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]);
     }
 
@@ -583,7 +642,6 @@ export default class Game extends IView {
         spc.loop = false;
         spc.premultipliedAlpha = false;
         spc.setAnimation(0, "animation", false);
-        console.log(spc.findAnimation("animation").duration)
         setTimeout(() => { spc.node.destroy(); }, spc.findAnimation('animation').duration * 1000);
     }
 
@@ -607,7 +665,11 @@ export default class Game extends IView {
      * @param {*}
      * @return {*}
      */
-    onContinue() { }
+    onContinue() {
+        this.gameState = GameState.Rush;
+        this.gameMode = GameMode.Endless;
+        this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
+    }
 
     /**
      * @description: 重试

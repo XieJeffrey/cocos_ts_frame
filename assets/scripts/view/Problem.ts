@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-02 11:21:56
+ * @LastEditTime: 2021-09-07 16:53:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -15,6 +15,7 @@
 
 import { IView } from "../base/IView";
 import Question from "../manager/Question";
+import Res from "../module/Res";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -40,7 +41,7 @@ export default class Problem extends IView {
         this.sureBtn = this.node.findChild('problem/sure')
         this.closeBtn = this.node.findChild('result/sure')
 
-        this.question = this.node.findChild('problem/frame/question').getComponent(cc.Label);
+        this.question = this.node.findChild('problem/frame/question/txt').getComponent(cc.Label);
         this.toggleArray.push(this.node.findChild('problem/frame/option/0').getComponent(cc.Toggle));
         this.toggleArray.push(this.node.findChild('problem/frame/option/1').getComponent(cc.Toggle));
         this.toggleArray.push(this.node.findChild('problem/frame/option/2').getComponent(cc.Toggle));
@@ -80,6 +81,10 @@ export default class Problem extends IView {
             if (answerStr == this.answer[i])
                 this.answerIdx = i;
         }
+
+        this.selectAnswerIdx = 0;
+        this.toggleArray[0].check();
+        this.refreshToggleBg();
     }
 
     onHide() {
@@ -90,6 +95,19 @@ export default class Problem extends IView {
         let idx: number = parseInt(event.node.name)
         if (event.isChecked)
             this.selectAnswerIdx = idx;
+
+        this.refreshToggleBg();
+    }
+
+    refreshToggleBg() {
+        for (let i = 0; i < this.toggleArray.length; i++) {
+            if (this.selectAnswerIdx == i) {
+                this.toggleArray[i].getComponent(cc.Sprite).spriteFrame = Res.getInstance().commonSprite.get("select");
+            }
+            else {
+                this.toggleArray[i].getComponent(cc.Sprite).spriteFrame = Res.getInstance().commonSprite.get("noselect");
+            }
+        }
     }
 
     onSure() {
