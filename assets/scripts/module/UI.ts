@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:15:56
- * @LastEditTime: 2021-08-26 16:18:47
+ * @LastEditTime: 2021-09-08 11:38:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\ui .ts
@@ -18,6 +18,7 @@ import { IView } from "../base/IView";
 import { UIConfig } from "../config/UIConfig";
 import Float from "../view/Float";
 import { ViewType } from "../common/BaseType";
+import Loading from "../view/Loading";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -143,15 +144,32 @@ export default class UI extends IManager {
      * @param {string} msg
      * @return {*}
      */
-    public showFloatMsg(msg: string): void {
+    public showFloatMsg(msg: string, duration: number = 1): void {
         if (this.uiList.has("Float")) {
-            (this.uiList.get("Float").script as Float).showFloatMsg(msg);
+            (this.uiList.get("Float").script as Float).showFloatMsg(msg, duration);
         }
         else {
             this.load("Float", function (node) {
                 node.active = true;
-                (this.uiList.get("Float").script as Float).showFloatMsg(msg);
-            })
+                (this.uiList.get("Float").script as Float).showFloatMsg(msg, duration);
+            }.bind(this))
+        }
+    }
+
+    /**
+     * @description: 播放loading界面
+     * @param {number} duration
+     * @param {Function} call
+     * @return {*}
+     */
+    public showLoading(duration: number, call: Function) {
+        if (this.uiList.has("Loading")) {
+            this.showUI("Loading", { duration: duration, call: call });
+        }
+        else {
+            this.load("Loading", function (node) {
+                this.showUI("Loading", { duration: duration, call: call });
+            }.bind(this))
         }
     }
 }

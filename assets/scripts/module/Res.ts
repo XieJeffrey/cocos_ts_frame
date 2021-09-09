@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-09-07 17:13:05
+ * @LastEditTime: 2021-09-09 17:27:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -48,7 +48,8 @@ export default class Res extends IManager {
     };
     bornEffect: sp.SkeletonData;
     commonSprite: Map<string, cc.SpriteFrame> = null;
-
+    npcSprite: Array<cc.SpriteFrame> = null;
+    npcBustSprite: Array<cc.SpriteFrame> = null;
     init() {
         return new Promise((resolve, reject) => {
             let loadNum = 0;

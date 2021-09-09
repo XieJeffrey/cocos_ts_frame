@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-30 14:22:32
- * @LastEditTime: 2021-09-06 22:20:15
+ * @LastEditTime: 2021-09-08 11:20:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\GameConfig.ts
@@ -16,6 +16,10 @@
 import IManager from "../base/IManager";
 
 export default class GameConfig extends IManager {
+    public GameTip: Array<string> = [
+        "帮助村民解答难题，他们将会加入您的队伍，并肩作战"
+    ];
+
     public BgSpDown: number = 200;//底层背景的移动速度
     public BgSpUp: number = 80;//云彩的移动速度
     public roleScale: number = 1;//曹操缩放比例
@@ -24,7 +28,7 @@ export default class GameConfig extends IManager {
     public WaveDelta: number = 1000;//每一波间隔的距离
     public WaveStartPosY: number = 200;//第一波的起始位置
     public CCStartPosY: number = -350;//曹操的起始y坐标
-    public battlePosY: number = -350;// 我方小兵的战斗y坐标
+    public CCTargetPosY: number = -150;//曹操的最终坐标
 
     public roundSoliderNum: number = 1000;//每局开局的小兵数量
 

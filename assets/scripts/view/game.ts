@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-07 17:29:56
+ * @LastEditTime: 2021-09-09 17:31:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -32,7 +32,8 @@ export default class Game extends IView {
     //骨骼动画组件
     heroAnima: sp.Skeleton;
     mineRole: Array<sp.Skeleton>;
-    otherRole: Array<sp.Skeleton>;
+    enemyRole: Array<sp.Skeleton>;
+    npcRole: cc.Node;
     //阴影
     shadow: Array<cc.Node>;
     //特效
@@ -43,7 +44,7 @@ export default class Game extends IView {
     wavePos: number;//小兵的y坐标
     totalUnit: number = 0;//野怪的单位数量
     curOtherUnit: number = 0;//当前波对面怪的单位数量
-
+    npcPosList: Array<{ x: number, y: number }>;
     pool: {
         sand: Array<cc.Node>;
         tree: Array<cc.Node>;
@@ -72,7 +73,7 @@ export default class Game extends IView {
         //角色
         let roleNode: cc.Node = this.node.findChild('role/hero');
         this.mineRole = new Array<sp.Skeleton>();
-        this.otherRole = new Array<sp.Skeleton>();
+        this.enemyRole = new Array<sp.Skeleton>();
         //曹操
         let heroNode = new cc.Node('cc')
         roleNode.addChild(heroNode);
@@ -88,14 +89,19 @@ export default class Game extends IView {
             solider.scale = GameConfig.getInstance().soliderScale;
             this.mineRole.push(solider.addComponent(sp.Skeleton));
         }
-        //中立|敌对小兵    
+        //敌对小兵    
         soliderNode = this.node.findChild('role/other')
         for (let i = 0; i < 10; i++) {
             let solider = new cc.Node('' + i)
             soliderNode.addChild(solider);
             solider.scale = GameConfig.getInstance().soliderScale;
-            this.otherRole.push(solider.addComponent(sp.Skeleton));
+            this.enemyRole.push(solider.addComponent(sp.Skeleton));
         }
+        //中立单位
+        this.npcRole = new cc.Node('npc');
+        this.npcRole.addComponent(cc.Sprite);
+        soliderNode.addChild(this.npcRole);
+
         //阴影
         for (let i = 0; i < 21; i++) {
             let shadow = new cc.Node('s')
@@ -149,10 +155,7 @@ export default class Game extends IView {
                 break;
         }
         if (this.cloud != null) {
-            if (this.gameState == GameState.Rush)
-                this.cloud.y -= GameConfig.getInstance().BgSpUp * dt;
-            else
-                this.cloud.y -= GameConfig.getInstance().BgSpUp * dt * 0.1;
+            this.cloud.y -= GameConfig.getInstance().BgSpUp * dt;
 
             if (this.cloud.y < -1600) {
                 this.cloud.y += 3200 + Math.random() * 800;
@@ -202,6 +205,28 @@ export default class Game extends IView {
     }
 
     /**
+     * @description: 
+     * @param {*}
+     * @return {*}
+     */
+    genNewNpcPos(spriteName: string) {
+        if (this.npcPosList == null)
+            this.npcPosList = new Array();
+        switch (spriteName) {
+            case "bg2-1":
+                this.npcPosList.push({ x: -170, y: 230 });
+                break;
+            case "bg2-2":
+                this.npcPosList.push({ x: 160, y: 30 });
+                break;
+            case "bg2-3":
+                this.npcPosList.push({ x: 150, y: -30 });
+                break;
+        }
+        console.log(this.npcPosList);
+    }
+
+    /**
      * @description: 初始化中立怪|野怪
      * @param {*}
      * @return {*}
@@ -224,22 +249,57 @@ export default class Game extends IView {
             roleType = RoleType.Enemy
             this.curOtherUnit = Math.ceil((0.5 + Math.random() * 0.3) * this.totalUnit);
             this.totalUnit = 0;
+
+            this.wavePos = posY// GameConfig.WaveStartPosY + 800 + Math.random() * 200
+            let pos = this.getEnemySoliderPos(this.wavePos);
+            for (let i = 0; i < this.enemyRole.length; i++) {
+                this.enemyRole[i].node.opacity = 255;
+                this.enemyRole[i].node.active = i < this.curOtherUnit;
+                this.enemyRole[i].node.setPosition(pos[i].x, pos[i].y);
+                this.enemyRole[i].node.scale = GameConfig.getInstance().soliderScale;
+                this.enemyRole[i].node.runAction(cc.fadeIn(0.5));
+            }
+            this.playSoliderAnima(roleType, Action.Idle, lv);
+
         }
         else {
             roleType = RoleType.Neutral;
             this.curOtherUnit = Math.ceil(Math.random() * 3);
             this.totalUnit += this.curOtherUnit;
+            let pos = this.npcPosList.shift();
+            this.genNewNpcPos(pos);
+            console.log(pos)
+            this.enemyRole[0].node.active = true;
+            this.enemyRole[0].node.opacity = 0;
+            this.enemyRole[0].node.runAction(cc.fadeIn(0.5));
+            this.enemyRole[0].node.x = pos.x
+            this.enemyRole[0].node.y = pos.y;
+            this.wavePos = pos.y;
+            for (let i = 1; i < this.enemyRole.length; i++) {
+                this.enemyRole[i].node.opacity = 255;
+                this.enemyRole[i].node.active = false;
+            }
         }
-        this.wavePos = posY// GameConfig.WaveStartPosY + 800 + Math.random() * 200
-        let pos = this.getOtherSoliderPos(this.wavePos);
-        for (let i = 0; i < this.otherRole.length; i++) {
-            this.otherRole[i].node.opacity = 255;
-            this.otherRole[i].node.active = i < this.curOtherUnit;
-            this.otherRole[i].node.setPosition(pos[i].x, pos[i].y);
-            this.otherRole[i].node.scale = GameConfig.getInstance().soliderScale;
-            this.otherRole[i].node.runAction(cc.fadeIn(0.5));
-        }
-        this.playSoliderAnima(roleType, Action.Idle, lv);
+
+    }
+
+    /**
+     * @description: 生成Npc的位置
+     * @param {object} pos 位置
+     * @return {*}
+     */
+    genNpcOnPos(pos) {
+        this.npcRole.active = true;
+        this.npcRole.stopAllActions();
+        this.npcRole.opacity = 255;
+        let idx = Math.ceil(Math.random() * 5);
+        this.npcRole.getComponent(cc.Sprite).spriteFrame = Res.getInstance().npcSprite[idx];
+        this.npcRole.x = pos.x;
+        this.npcRole.y = pos.y;
+        if (pos.x > 0)
+            this.npcRole.scaleX = -1;
+        else
+            this.npcRole.scaleY = 1;
     }
 
     /**
@@ -247,7 +307,7 @@ export default class Game extends IView {
      * @param {*}
      * @return {*}
      */
-    getOtherSoliderPos(startY: number): Array<any> {
+    getEnemySoliderPos(startY: number): Array<any> {
         let array = new Array()
         //第一排
         array.push({ x: 0, y: startY })
@@ -261,15 +321,6 @@ export default class Game extends IView {
         array.push({ x: 80, y: startY - 70 })
         array.push({ x: -160, y: startY - 70 })
         array.push({ x: 160, y: startY - 70 })
-        // for (let i = 0; i < 6; i++) {
-        //     let n = i % 3
-        //     let x = 0 + n * 80
-        //     let y = startY + Math.floor(i / 3) * 100;
-        //     array.push({ x: x, y: y });
-        //     if (n != 0 && n % 3 != 0)
-        //         array.push({ x: -x, y: y });
-        // }
-
         return array;
     }
 
@@ -320,7 +371,7 @@ export default class Game extends IView {
      */
     switchSoliderFormat(action: Action, call: Function) {
         let duration = 0.5;
-        let pos = this.getMineSoliderPos(action, GameConfig.getInstance().CCStartPosY);
+        let pos = this.getMineSoliderPos(action, GameConfig.getInstance().CCTargetPosY);
         this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
         for (let i = 0; i < this.mineRole.length; i++) {
             if (this.mineRole[i].node.active) {
@@ -367,8 +418,25 @@ export default class Game extends IView {
      * @return {*}
      */
     scrollRole(dt) {
-        for (let i = 0; i < this.otherRole.length; i++) {
-            this.otherRole[i].node.y -= dt * GameConfig.getInstance().BgSpDown;
+        if (this.heroAnima.node.y < GameConfig.getInstance().CCTargetPosY) {
+            this.heroAnima.node.y += dt * GameConfig.getInstance().BgSpDown;
+            for (let i = 0; i < this.mineRole.length; i++) {
+                this.mineRole[i].node.y += dt * GameConfig.getInstance().BgSpDown;
+            }
+
+            if (this.heroAnima.node.y > GameConfig.getInstance().CCTargetPosY) {
+                let delta = this.heroAnima.node.y - GameConfig.getInstance().CCTargetPosY;
+                this.heroAnima.node.y = GameConfig.getInstance().CCTargetPosY
+                for (let i = 0; i < this.mineRole.length; i++) {
+                    this.mineRole[i].node.y -= delta;
+                }
+            }
+            this.scrollBg(-dt);
+            return;
+        }
+
+        for (let i = 0; i < this.enemyRole.length; i++) {
+            this.enemyRole[i].node.y -= dt * GameConfig.getInstance().BgSpDown;
         }
         this.wavePos -= dt * GameConfig.getInstance().BgSpDown;
 
@@ -385,9 +453,13 @@ export default class Game extends IView {
 
             setTimeout(function () {
                 if (this.gameState == GameState.Answer) {
-                    UI.getInstance().showUI("Problem", function (result) {
-                        this.answerResult(result);
-                    }.bind(this));
+                    UI.getInstance().showUI("Problem", {
+                        waveIdx: this.curWave + 1,
+                        roleName: "1-1",
+                        call: function (result) {
+                            this.answerResult(result);
+                        }.bind(this)
+                    });
                 }
                 else {
                     this.switchSoliderFormat(Action.Attack, function () {
@@ -412,9 +484,9 @@ export default class Game extends IView {
         setTimeout(function () {
             let timer = setInterval(function () {
                 this.curOtherUnit--;
-                for (let i = 0; i < this.otherRole.length; i++) {
-                    if (this.otherRole[i].node.active && i >= this.curOtherUnit) {
-                        this.soliderDead(this.otherRole[i].node)
+                for (let i = 0; i < this.enemyRole.length; i++) {
+                    if (this.enemyRole[i].node.active && i >= this.curOtherUnit) {
+                        this.soliderDead(this.enemyRole[i].node)
                     }
                 }
                 GameData.getInstance().soliderNum -= GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]
@@ -499,8 +571,8 @@ export default class Game extends IView {
         else {
             console.log("答错了");
         }
-        for (let i = 0; i < this.otherRole.length; i++) {
-            this.otherRole[i].node.runAction(cc.fadeOut(0.5))
+        for (let i = 0; i < this.enemyRole.length; i++) {
+            this.enemyRole[i].node.runAction(cc.fadeOut(0.5))
         }
         setTimeout(function () {
             this.playHeroAnima(Action.Run);
@@ -517,16 +589,16 @@ export default class Game extends IView {
             this.shadow[i + 1].active = this.mineRole[i].node.active;
             this.shadow[i + 1].setPosition(this.mineRole[i].node.x, this.mineRole[i].node.y + 20);
         }
-        for (let i = 0; i < this.otherRole.length; i++) {
+        for (let i = 0; i < this.enemyRole.length; i++) {
             this.shadow[i + 11].scale = GameConfig.getInstance().soliderScale;
-            this.shadow[i + 11].active = this.otherRole[i].node.active;
-            this.shadow[i + 11].setPosition(this.otherRole[i].node.x, this.otherRole[i].node.y + 20);
+            this.shadow[i + 11].active = this.enemyRole[i].node.active;
+            this.shadow[i + 11].setPosition(this.enemyRole[i].node.x, this.enemyRole[i].node.y + 20);
         }
     }
 
     /**
      * @description: 切换背景图片
-     * @param {number} idx
+     * @param {number} idx 0-路面层 1-场景层
      * @param {cc} sprite
      * @return {*}
      */
@@ -534,6 +606,10 @@ export default class Game extends IView {
         let i: number = Math.floor(Math.random() * Res.getInstance().sceneSprite[idx].length);
         sprite.spriteFrame = Res.getInstance().sceneSprite[idx][i];
         sprite.node.height = 1600;
+
+        if (idx == 1) {
+            this.genNewNpcPos(sprite.spriteFrame.name);
+        }
     }
 
     /**
@@ -549,7 +625,7 @@ export default class Game extends IView {
             array = this.mineRole;
         }
         else {
-            array = this.otherRole;
+            array = this.enemyRole;
         }
 
         for (let i = 0; i < array.length; i++) {
