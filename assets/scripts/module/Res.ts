@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-09-09 17:27:52
+ * @LastEditTime: 2021-09-09 20:00:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -53,7 +53,7 @@ export default class Res extends IManager {
     init() {
         return new Promise((resolve, reject) => {
             let loadNum = 0;
-            let total = 7;
+            let total = 9;
             let checkLoaded = function () {
                 if (loadNum == total) {
                     resolve(1)
@@ -170,6 +170,37 @@ export default class Res extends IManager {
                 for (let i = 0; i < asset.length; i++) {
                     let name = asset[i].name;
                     this.commonSprite.set(name, asset[i])
+                }
+                loadNum++;
+                checkLoaded();
+            }.bind(this))
+
+            //加载地图中的村民
+            cc.resources.loadDir('npc', cc.SpriteFrame, function (err, asset) {
+                if (err) {
+                    console.log("[load npc img fail]");
+                    console.error(err);
+                    return;
+                }
+                this.npcSprite = new Array();
+                for (let i = 0; i < asset.length; i++) {
+                    this.npcSprite.push(asset[i]);
+                }
+                loadNum++;
+                checkLoaded();
+            }.bind(this))
+
+
+            //加载问答的村民半身像
+            cc.resources.loadDir('role', cc.SpriteFrame, function (err, asset) {
+                if (err) {
+                    console.log("[load Bust img fail]");
+                    console.error(err);
+                    return;
+                }
+                this.npcBustSprite = new Array();
+                for (let i = 0; i < asset.length; i++) {
+                    this.npcBustSprite.push(asset[i]);
                 }
                 loadNum++;
                 checkLoaded();

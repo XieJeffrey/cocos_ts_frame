@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-09 17:31:02
+ * @LastEditTime: 2021-09-09 22:20:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -51,6 +51,7 @@ export default class Game extends IView {
     }
     soliderNumTxt: cc.Label;//当前小兵数量
     recordTime: number = 0;//无尽模式的时间记录
+    npcId: number = 0;//村名Npc的角色Id
 
     onLoad() {
         //滚动背景
@@ -103,7 +104,7 @@ export default class Game extends IView {
         soliderNode.addChild(this.npcRole);
 
         //阴影
-        for (let i = 0; i < 21; i++) {
+        for (let i = 0; i < 22; i++) {
             let shadow = new cc.Node('s')
             shadow.addComponent(cc.Sprite);
             Res.getInstance().loadSprite(shadow.getComponent(cc.Sprite), "shadow")
@@ -202,6 +203,12 @@ export default class Game extends IView {
             this.mineRole[i].node.active = i < num;
             this.mineRole[i].node.setPosition(pos[i].x, pos[i].y);
         }
+        for (let i = 0; i < this.enemyRole.length; i++) {
+            this.enemyRole[i].node.active = false;
+        }
+
+        //缩小村民的阴影
+        this.shadow[1].scale = 0.8;
     }
 
     /**
@@ -209,18 +216,18 @@ export default class Game extends IView {
      * @param {*}
      * @return {*}
      */
-    genNewNpcPos(spriteName: string) {
+    setNpcPos(spriteName: string, offsetY: number) {
         if (this.npcPosList == null)
             this.npcPosList = new Array();
         switch (spriteName) {
             case "bg2-1":
-                this.npcPosList.push({ x: -170, y: 230 });
+                this.npcPosList.push({ x: -180, y: 330 + offsetY });
                 break;
             case "bg2-2":
-                this.npcPosList.push({ x: 160, y: 30 });
+                this.npcPosList.push({ x: 120, y: 100 + offsetY });
                 break;
             case "bg2-3":
-                this.npcPosList.push({ x: 150, y: -30 });
+                this.npcPosList.push({ x: 120, y: -130 + offsetY });
                 break;
         }
         console.log(this.npcPosList);
@@ -260,25 +267,14 @@ export default class Game extends IView {
                 this.enemyRole[i].node.runAction(cc.fadeIn(0.5));
             }
             this.playSoliderAnima(roleType, Action.Idle, lv);
-
         }
         else {
             roleType = RoleType.Neutral;
             this.curOtherUnit = Math.ceil(Math.random() * 3);
             this.totalUnit += this.curOtherUnit;
             let pos = this.npcPosList.shift();
-            this.genNewNpcPos(pos);
-            console.log(pos)
-            this.enemyRole[0].node.active = true;
-            this.enemyRole[0].node.opacity = 0;
-            this.enemyRole[0].node.runAction(cc.fadeIn(0.5));
-            this.enemyRole[0].node.x = pos.x
-            this.enemyRole[0].node.y = pos.y;
+            this.genNpcOnPos(pos);
             this.wavePos = pos.y;
-            for (let i = 1; i < this.enemyRole.length; i++) {
-                this.enemyRole[i].node.opacity = 255;
-                this.enemyRole[i].node.active = false;
-            }
         }
 
     }
@@ -288,18 +284,19 @@ export default class Game extends IView {
      * @param {object} pos 位置
      * @return {*}
      */
-    genNpcOnPos(pos) {
+    genNpcOnPos(pos: { x: number, y: number }) {
         this.npcRole.active = true;
         this.npcRole.stopAllActions();
         this.npcRole.opacity = 255;
-        let idx = Math.ceil(Math.random() * 5);
+        let idx = Math.floor(Math.random() * 5);
+        this.npcId = idx;
         this.npcRole.getComponent(cc.Sprite).spriteFrame = Res.getInstance().npcSprite[idx];
         this.npcRole.x = pos.x;
         this.npcRole.y = pos.y;
         if (pos.x > 0)
             this.npcRole.scaleX = -1;
         else
-            this.npcRole.scaleY = 1;
+            this.npcRole.scaleX = 1;
     }
 
     /**
@@ -403,12 +400,16 @@ export default class Game extends IView {
     scrollBg(dt) {
         for (let i = 0; i < this.bgList.length; i++) {
             for (let j = 0; j < this.bgList[i].length; j++) {
-                this.bgList[i][j].node.y -= GameConfig.getInstance().BgSpDown * dt
+                this.bgList[i][j].node.y -= GameConfig.getInstance().BgSpDown * dt;
                 if (this.bgList[i][j].node.y < -1600) {
                     this.bgList[i][j].node.y += 1600 * 2;
                     this.switchBgPic(i, this.bgList[i][j]);
                 }
             }
+        }
+
+        for (let i = 0; i < this.npcPosList.length; i++) {
+            this.npcPosList[i].y -= GameConfig.getInstance().BgSpDown * dt;
         }
     }
 
@@ -432,20 +433,20 @@ export default class Game extends IView {
                 }
             }
             this.scrollBg(-dt);
-            return;
+        }
+        else {
+            for (let i = 0; i < this.enemyRole.length; i++) {
+                this.enemyRole[i].node.y -= dt * GameConfig.getInstance().BgSpDown;
+            }
+            this.wavePos -= dt * GameConfig.getInstance().BgSpDown;
+            this.npcRole.y -= dt * GameConfig.getInstance().BgSpDown;
         }
 
-        for (let i = 0; i < this.enemyRole.length; i++) {
-            this.enemyRole[i].node.y -= dt * GameConfig.getInstance().BgSpDown;
-        }
-        this.wavePos -= dt * GameConfig.getInstance().BgSpDown;
 
         if (Math.abs(this.wavePos - this.heroAnima.node.y) <= 150) {
-            let roleType = RoleType.Neutral;
             this.gameState = GameState.Answer;
             if (this.isFightWave(this.curWave)) {
                 this.gameState = GameState.Fight;
-                roleType = RoleType.Enemy;
             }
 
             this.playHeroAnima(Action.Idle);
@@ -455,7 +456,7 @@ export default class Game extends IView {
                 if (this.gameState == GameState.Answer) {
                     UI.getInstance().showUI("Problem", {
                         waveIdx: this.curWave + 1,
-                        roleName: "1-1",
+                        npcId: this.npcId,
                         call: function (result) {
                             this.answerResult(result);
                         }.bind(this)
@@ -550,6 +551,7 @@ export default class Game extends IView {
         let delay = 550;
         if (result) {
             console.log("答对了");
+            this.npcRole.runAction(cc.fadeOut(0.5));
             GameData.getInstance().soliderNum += this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
             let num = this.getMineSoliderUnitNum();
             for (let i = 0; i < this.mineRole.length; i++) {
@@ -582,17 +584,23 @@ export default class Game extends IView {
         }.bind(this), delay);
     }
 
+    /**
+     * @description: 同步影子
+     * @param {*}
+     * @return {*}
+     */
     syncShadow() {
         this.shadow[0].setPosition(this.heroAnima.node.x, this.heroAnima.node.y + 20);
+        this.shadow[1].setPosition(this.npcRole.x, this.npcRole.y - 40);
         for (let i = 0; i < this.mineRole.length; i++) {
-            this.shadow[i + 1].scale = GameConfig.getInstance().soliderScale;
-            this.shadow[i + 1].active = this.mineRole[i].node.active;
-            this.shadow[i + 1].setPosition(this.mineRole[i].node.x, this.mineRole[i].node.y + 20);
+            this.shadow[i + 2].scale = GameConfig.getInstance().soliderScale;
+            this.shadow[i + 2].active = this.mineRole[i].node.active;
+            this.shadow[i + 2].setPosition(this.mineRole[i].node.x, this.mineRole[i].node.y + 20);
         }
         for (let i = 0; i < this.enemyRole.length; i++) {
-            this.shadow[i + 11].scale = GameConfig.getInstance().soliderScale;
-            this.shadow[i + 11].active = this.enemyRole[i].node.active;
-            this.shadow[i + 11].setPosition(this.enemyRole[i].node.x, this.enemyRole[i].node.y + 20);
+            this.shadow[i + 12].scale = GameConfig.getInstance().soliderScale;
+            this.shadow[i + 12].active = this.enemyRole[i].node.active && this.enemyRole[i].skeletonData != null;
+            this.shadow[i + 12].setPosition(this.enemyRole[i].node.x, this.enemyRole[i].node.y + 20);
         }
     }
 
@@ -608,7 +616,7 @@ export default class Game extends IView {
         sprite.node.height = 1600;
 
         if (idx == 1) {
-            this.genNewNpcPos(sprite.spriteFrame.name);
+            this.setNpcPos(sprite.spriteFrame.name, sprite.node.y);
         }
     }
 

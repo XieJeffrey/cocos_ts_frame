@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-09 15:24:46
+ * @LastEditTime: 2021-09-09 20:14:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -64,7 +64,7 @@ export default class Problem extends IView {
 
     onShow(params) {
         this.qusIdxLabel.string = "Q" + params.waveIdx;
-        this.roleSprite.spriteFrame = Res.getInstance().commonSprite.get(params.roleName);
+        this.roleSprite.spriteFrame = Res.getInstance().npcBustSprite[params.npcId];
         if (params.call)
             this.resultCall = params.call;
 
