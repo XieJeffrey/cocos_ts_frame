@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-09 22:20:25
+ * @LastEditTime: 2021-09-10 14:54:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -60,7 +60,10 @@ export default class Game extends IView {
         for (let i = 0; i < 2; i++) {
             this.bgList.push(new Array<cc.Sprite>());
             let node: cc.Node = bgNode.findChild("" + i)
-            for (let j = 0; j < 2; j++) {
+            let num = 2;
+            if (i == 1)
+                num = 3
+            for (let j = 0; j < num; j++) {
                 let spriteNode = new cc.Node('' + j)
                 node.addChild(spriteNode);
                 this.bgList[i].push(spriteNode.addComponent(cc.Sprite));
@@ -267,6 +270,7 @@ export default class Game extends IView {
                 this.enemyRole[i].node.runAction(cc.fadeIn(0.5));
             }
             this.playSoliderAnima(roleType, Action.Idle, lv);
+            this.npcPosList.shift();
         }
         else {
             roleType = RoleType.Neutral;
@@ -288,7 +292,7 @@ export default class Game extends IView {
         this.npcRole.active = true;
         this.npcRole.stopAllActions();
         this.npcRole.opacity = 255;
-        let idx = Math.floor(Math.random() * 5);
+        let idx = Math.floor(Math.random() * Res.getInstance().npcSprite.length);
         this.npcId = idx;
         this.npcRole.getComponent(cc.Sprite).spriteFrame = Res.getInstance().npcSprite[idx];
         this.npcRole.x = pos.x;
@@ -572,6 +576,7 @@ export default class Game extends IView {
         }
         else {
             console.log("答错了");
+            this.npcRole.runAction(cc.fadeOut(0.5));
         }
         for (let i = 0; i < this.enemyRole.length; i++) {
             this.enemyRole[i].node.runAction(cc.fadeOut(0.5))
@@ -592,15 +597,18 @@ export default class Game extends IView {
     syncShadow() {
         this.shadow[0].setPosition(this.heroAnima.node.x, this.heroAnima.node.y + 20);
         this.shadow[1].setPosition(this.npcRole.x, this.npcRole.y - 40);
+        this.shadow[1].opacity = this.npcRole.opacity;
         for (let i = 0; i < this.mineRole.length; i++) {
             this.shadow[i + 2].scale = GameConfig.getInstance().soliderScale;
             this.shadow[i + 2].active = this.mineRole[i].node.active;
             this.shadow[i + 2].setPosition(this.mineRole[i].node.x, this.mineRole[i].node.y + 20);
+            this.shadow[i + 2].opacity = this.mineRole[i].node.opacity;
         }
         for (let i = 0; i < this.enemyRole.length; i++) {
             this.shadow[i + 12].scale = GameConfig.getInstance().soliderScale;
             this.shadow[i + 12].active = this.enemyRole[i].node.active && this.enemyRole[i].skeletonData != null;
             this.shadow[i + 12].setPosition(this.enemyRole[i].node.x, this.enemyRole[i].node.y + 20);
+            this.shadow[i + 12].opacity = this.enemyRole[i].node.opacity;
         }
     }
 
@@ -616,6 +624,7 @@ export default class Game extends IView {
         sprite.node.height = 1600;
 
         if (idx == 1) {
+            console.log(sprite.spriteFrame)
             this.setNpcPos(sprite.spriteFrame.name, sprite.node.y);
         }
     }

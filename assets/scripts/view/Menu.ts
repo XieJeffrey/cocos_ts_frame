@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-08 10:24:09
+ * @LastEditTime: 2021-09-10 16:13:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -24,14 +24,14 @@ const { ccclass, property } = cc._decorator;
 export default class Menu extends IView {
     soliderSpriteList: Array<cc.SpriteFrame> = new Array<cc.SpriteFrame>();
     rankBtn: cc.Node;
+    rankTip: cc.Node;
     startBtn: cc.Node;
     downloadBtn: cc.Node;
     infoBtn: cc.Node;
-    exchangeBtn: cc.Node;
-    soliderNumTxt: cc.Label;
-    endlessRecordTxt: cc.Label;
+    lvUpBtn: cc.Node;
+    soliderLvTxt: cc.Label;
     soliderIcon: cc.Sprite;
-    soliderLvUpBtn: cc.Node;
+    exchangeBtn: cc.Node;
     anima: sp.Skeleton;
 
     onLoad() {
@@ -39,11 +39,10 @@ export default class Menu extends IView {
         this.infoBtn = this.node.findChild('info');
         this.startBtn = this.node.findChild('start');
         this.downloadBtn = this.node.findChild('download');
-        this.exchangeBtn = this.node.findChild('exchange');
-        this.soliderNumTxt = this.node.findChild('soliderValue/txt').getComponent(cc.Label);
-        this.endlessRecordTxt = this.node.findChild('record/txt').getComponent(cc.Label);
+        this.exchangeBtn = this.node.findChild('exchange/btn');
+        this.lvUpBtn = this.node.findChild('solider')
+        this.soliderLvTxt = this.node.findChild('solider/lv').getComponent(cc.Label);
         this.soliderIcon = this.node.findChild('solider/icon').getComponent(cc.Sprite);
-        this.soliderLvUpBtn = this.node.findChild('solider/lvUp')
         this.loadSoliderSprite();
         super.onLoad();
     }
@@ -55,12 +54,11 @@ export default class Menu extends IView {
         this.startBtn.on('click', this.onClickStart, this)
         this.downloadBtn.on('click', this.onClickDown, this)
         this.exchangeBtn.on('click', this.onClickExchange, this)
-        this.soliderLvUpBtn.on('click', this.onClickLvUp, this)
     }
 
     onShow() {
+        this.lvUpBtn.playBreathAnima();
         this.refreshSolider();
-        this.refreshRecord();
         if (this.anima == null) {
             this.anima = new cc.Node('anima').addComponent(sp.Skeleton);
             this.node.addChild(this.anima.node);
@@ -91,15 +89,6 @@ export default class Menu extends IView {
             return;
 
         this.soliderIcon.spriteFrame = this.soliderSpriteList[GameData.getInstance().soliderLv];
-    }
-
-    refreshRecord() {
-        if (GameData.getInstance().endlessRecord == 0)
-            this.endlessRecordTxt.node.parent.active = false;
-        else {
-            this.endlessRecordTxt.node.parent.active = true;
-            this.endlessRecordTxt.string = Tool.getInstance().sec2mmss(GameData.getInstance().endlessRecord);
-        }
     }
 
     /**
@@ -140,4 +129,14 @@ export default class Menu extends IView {
     onClickLvUp() { }
 
     onClickExchange() { }
+
+    lvUpBtnEfc() {
+
+        this.lvUpBtn.stopAllActions();
+        this.lvUpBtn.runAction(cc.repeatForever(
+            cc.sequence(
+                cc.scaleTo(0.2, 1.1)
+            )
+        ))
+    }
 }

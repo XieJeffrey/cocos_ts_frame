@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-29 19:52:14
- * @LastEditTime: 2021-08-29 20:13:12
+ * @LastEditTime: 2021-09-10 14:52:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Dialog.ts
@@ -22,29 +22,28 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Dialog extends IView {
-    dialogTxt:cc.Label;
-    closeBtn:cc.Node;
+    dialogTxt: cc.Label;
+    closeBtn: cc.Node;
 
     onLoad() {
-        this.dialogTxt=this.node.findChild('content/bg/txt').getComponent(cc.Label)
-        this.closeBtn=this.node.findChild('mask')
+        this.dialogTxt = this.node.findChild('content/frame/txt').getComponent(cc.Label)
+        this.closeBtn = this.node.findChild('sure')
         super.onLoad();
     }
 
-    register() { 
-        this.closeBtn.on('click',this.onClose,this)
+    register() {
+        this.closeBtn.on('click', this.onClose, this)
     }
 
-    onShow(text) 
-    {
-        this.dialogTxt.string=text;
-     }
+    onShow(text) {
+        this.dialogTxt.string = text;
+    }
 
-    onHide() { 
-        Event.getInstance().emit(EventType.DialogClose,null);
+    onHide() {
+        Event.getInstance().emit(EventType.DialogClose, null);
     };
 
-    onClose(){
+    onClose() {
         UI.getInstance().hideUI("Dialog");
     }
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:49:06
- * @LastEditTime: 2021-09-03 09:23:41
+ * @LastEditTime: 2021-09-10 10:39:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\Main.ts
@@ -26,13 +26,15 @@ export default class Main extends cc.Component {
     tool = new Tool();
     app: App = new App();
     loadedValue: number = 0;
+    progressTxt: cc.Label;
 
     onLoad() {
         this.tool.init();
 
         this.progressBar = this.node.findChild('start/progressBar').getComponent(cc.ProgressBar);
         this.progressBar.progress = 0;
-
+        this.progressTxt = this.node.findChild('start/progressBar/txt').getComponent(cc.Label);
+        this.updateProgress();
         this.app.init(function (progress) {
             this.loadedValue = progress;
         }.bind(this));
@@ -44,11 +46,15 @@ export default class Main extends cc.Component {
         if (this.progressBar.progress >= this.loadedValue) {
             this.progressBar.progress = this.loadedValue;
         }
+        this.updateProgress();
         if (this.progressBar.progress >= 1) {
             UI.getInstance().showUI("menu");
             this.node.findChild('start').destroy()
             this.enabled = false;
         }
+    }
 
+    updateProgress() {
+        this.progressTxt.string = "加载中 {0}%".format(Math.ceil(this.progressBar.progress * 100));
     }
 }
