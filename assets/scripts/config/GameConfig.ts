@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-30 14:22:32
- * @LastEditTime: 2021-09-08 11:20:15
+ * @LastEditTime: 2021-09-11 21:02:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\GameConfig.ts
@@ -33,4 +33,5 @@ export default class GameConfig extends IManager {
     public roundSoliderNum: number = 1000;//每局开局的小兵数量
 
     public lv2Solider: number[] = [1000, 2000, 3000, 4000, 5000];
+    public isAnswerMuddled: boolean = false;
 }

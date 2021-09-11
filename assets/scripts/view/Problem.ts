@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-09 20:14:01
+ * @LastEditTime: 2021-09-11 21:03:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -16,6 +16,7 @@
 import App from "../App";
 import { IView } from "../base/IView";
 import { SoundType } from "../common/BaseType";
+import GameConfig from "../config/GameConfig";
 import Question from "../manager/Question";
 import Res from "../module/Res";
 import Sound from "../module/Sound";
@@ -78,7 +79,8 @@ export default class Problem extends IView {
         for (let i in qData["option"])
             this.answer.push(qData["option"][i])
         let answerStr = this.answer[0]
-        this.answer.muddled()
+        if (GameConfig.getInstance().isAnswerMuddled)
+            this.answer.muddled()
         this.question.string = qData["cn"];
         for (let i = 0; i < this.answer.length; i++) {
             this.optionArray[i].string = this.answer[i];
