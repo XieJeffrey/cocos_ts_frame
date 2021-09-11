@@ -14,12 +14,13 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { IView } from "../base/IView";
-import { Action, EventType, GameMode, GameState, RoleType } from "../common/BaseType";
+import { Action, BgmType, EventType, GameMode, GameState, RoleType, SoundType } from "../common/BaseType";
 import GameConfig from "../config/GameConfig";
 import Event from "../module/Event";
 import Res from "../module/Res";
 import UI from "../module/UI";
 import GameData from "../data/GameData";
+import Sound from "../module/Sound";
 
 const { ccclass, property } = cc._decorator;
 
@@ -50,6 +51,7 @@ export default class Game extends IView {
         tree: Array<cc.Node>;
     }
     soliderNumTxt: cc.Label;//当前小兵数量
+    soliderNumState: cc.Sprite;//当前小兵的涨跌状态
     recordTime: number = 0;//无尽模式的时间记录
     npcId: number = 0;//村名Npc的角色Id
 
@@ -60,10 +62,7 @@ export default class Game extends IView {
         for (let i = 0; i < 2; i++) {
             this.bgList.push(new Array<cc.Sprite>());
             let node: cc.Node = bgNode.findChild("" + i)
-            let num = 2;
-            if (i == 1)
-                num = 3
-            for (let j = 0; j < num; j++) {
+            for (let j = 0; j < 3; j++) {
                 let spriteNode = new cc.Node('' + j)
                 node.addChild(spriteNode);
                 this.bgList[i].push(spriteNode.addComponent(cc.Sprite));
@@ -118,6 +117,7 @@ export default class Game extends IView {
         this.bornEffect = new Array<sp.Skeleton>();
         this.effectParent = this.node.findChild('role/effect');
         this.soliderNumTxt = this.node.findChild('res/txt').getComponent(cc.Label);
+        this.soliderNumState = this.node.findChild('res/state').getComponent(cc.Sprite);
         super.onLoad();
     }
 
@@ -138,13 +138,14 @@ export default class Game extends IView {
     }
 
     onShow(params) {
+        Sound.getInstance().playBgm(BgmType.FightBgm);
         this.gameMode = GameMode.Pattern;
         this.gameState = GameState.Dialog;
         this.initBg();
         this.initRole();
         this.initWave();
         this.syncShadow();
-        this.refreshSoliderNum();
+        this.refreshSoliderNum(0);
         UI.getInstance().showUI("Dialog", "周公吐哺，天下归心");
     }
 
@@ -260,7 +261,7 @@ export default class Game extends IView {
             this.curOtherUnit = Math.ceil((0.5 + Math.random() * 0.3) * this.totalUnit);
             this.totalUnit = 0;
 
-            this.wavePos = posY// GameConfig.WaveStartPosY + 800 + Math.random() * 200
+            this.wavePos = (this.npcPosList.shift()).y;// GameConfig.WaveStartPosY + 800 + Math.random() * 200
             let pos = this.getEnemySoliderPos(this.wavePos);
             for (let i = 0; i < this.enemyRole.length; i++) {
                 this.enemyRole[i].node.opacity = 255;
@@ -270,7 +271,6 @@ export default class Game extends IView {
                 this.enemyRole[i].node.runAction(cc.fadeIn(0.5));
             }
             this.playSoliderAnima(roleType, Action.Idle, lv);
-            this.npcPosList.shift();
         }
         else {
             roleType = RoleType.Neutral;
@@ -406,7 +406,7 @@ export default class Game extends IView {
             for (let j = 0; j < this.bgList[i].length; j++) {
                 this.bgList[i][j].node.y -= GameConfig.getInstance().BgSpDown * dt;
                 if (this.bgList[i][j].node.y < -1600) {
-                    this.bgList[i][j].node.y += 1600 * 2;
+                    this.bgList[i][j].node.y += 1600 * 3;
                     this.switchBgPic(i, this.bgList[i][j]);
                 }
             }
@@ -448,9 +448,14 @@ export default class Game extends IView {
 
 
         if (Math.abs(this.wavePos - this.heroAnima.node.y) <= 150) {
-            this.gameState = GameState.Answer;
+            this.gameState = null;
             if (this.isFightWave(this.curWave)) {
                 this.gameState = GameState.Fight;
+                Sound.getInstance().playSound(SoundType.MeetEnemy);
+            }
+            else {
+                this.gameState = GameState.Answer;
+                Sound.getInstance().playSound(SoundType.MeetNpc);
             }
 
             this.playHeroAnima(Action.Idle);
@@ -485,6 +490,8 @@ export default class Game extends IView {
         this.playSoliderAnima(RoleType.Mine, Action.Attack, 0);
         this.playSoliderAnima(RoleType.Enemy, Action.Attack, 0);
 
+        Sound.getInstance().playSound(SoundType.Fight, true);
+
         //做个延时，因为攻击动画有延时
         setTimeout(function () {
             let timer = setInterval(function () {
@@ -495,7 +502,7 @@ export default class Game extends IView {
                     }
                 }
                 GameData.getInstance().soliderNum -= GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]
-                this.refreshSoliderNum()
+                this.refreshSoliderNum(-1);
                 let num = this.getMineSoliderUnitNum()
                 for (let i = 0; i < this.mineRole.length; i++) {
                     if (this.mineRole[i].node.active && i >= num)
@@ -507,6 +514,8 @@ export default class Game extends IView {
                     clearInterval(timer);
                     this.playHeroAnima(Action.Idle);
                     this.playSoliderAnima(RoleType.Enemy, Action.Idle, GameData.getInstance().soliderLv);
+                    Sound.getInstance().stopSound(SoundType.Fight);
+                    Sound.getInstance().playSound(SoundType.FigthWin);
                     setTimeout(function () {
                         if (this.gameMode == GameMode.Pattern) {
                             UI.getInstance().showUI('Result', false);
@@ -526,6 +535,7 @@ export default class Game extends IView {
                     clearInterval(timer);
                     this.playHeroAnima(Action.Idle);
                     this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.getInstance().soliderLv);
+                    Sound.getInstance().stopSound(SoundType.Fight);
 
                     setTimeout(function () {
                         if (this.curWave == 9) {
@@ -554,6 +564,7 @@ export default class Game extends IView {
     answerResult(result: boolean) {
         let delay = 550;
         if (result) {
+            Sound.getInstance().playSound(SoundType.AnswerRight);
             console.log("答对了");
             this.npcRole.runAction(cc.fadeOut(0.5));
             GameData.getInstance().soliderNum += this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
@@ -572,12 +583,14 @@ export default class Game extends IView {
                 }
             }
             delay = 1000;
-            this.refreshSoliderNum();
+            this.refreshSoliderNum(1);
         }
         else {
+            Sound.getInstance().playSound(SoundType.AnswerWrong);
             console.log("答错了");
             this.npcRole.runAction(cc.fadeOut(0.5));
         }
+
         for (let i = 0; i < this.enemyRole.length; i++) {
             this.enemyRole[i].node.runAction(cc.fadeOut(0.5))
         }
@@ -624,7 +637,6 @@ export default class Game extends IView {
         sprite.node.height = 1600;
 
         if (idx == 1) {
-            console.log(sprite.spriteFrame)
             this.setNpcPos(sprite.spriteFrame.name, sprite.node.y);
         }
     }
@@ -661,6 +673,10 @@ export default class Game extends IView {
                 array[i].setAnimation(0, "animation", true);
             }
         }
+
+        if (role == RoleType.Mine && name == Action.Run) {
+            Sound.getInstance().playSound(SoundType.SoliderRun);
+        }
     }
 
     /**
@@ -673,6 +689,9 @@ export default class Game extends IView {
         this.heroAnima.premultipliedAlpha = false;
         this.heroAnima.clearTracks();
         this.heroAnima.setAnimation(0, "animation", true);
+
+        if (name == Action.Run)
+            Sound.getInstance().playSound(SoundType.CCRun)
     }
 
     /**
@@ -687,16 +706,25 @@ export default class Game extends IView {
             return false;
         }
         if (this.gameMode == GameMode.Endless) {
-            return Math.random() < 0.4
+            return (idx - 10) % 3 == 0
         }
     }
 
     /**
      * @description:刷新当前小兵的数量
-     * @param {*}
+     * @param {*}-1:down 1:raise 0:equal
      * @return {*}
      */
-    refreshSoliderNum() {
+    refreshSoliderNum(state: number) {
+        if (state == 0)
+            this.soliderNumState.node.active = false;
+        else {
+            this.soliderNumState.node.active = true;
+            if (state == 1)
+                this.soliderNumState.spriteFrame = Res.getInstance().commonSprite.get('up');
+            if (state == -1)
+                this.soliderNumState.spriteFrame = Res.getInstance().commonSprite.get('down');
+        }
         this.soliderNumTxt.string = "" + GameData.getInstance().soliderNum;
     }
 
@@ -759,9 +787,14 @@ export default class Game extends IView {
      * @return {*}
      */
     onContinue() {
-        this.gameState = GameState.Rush;
-        this.gameMode = GameMode.Endless;
-        this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
+        this.switchSoliderFormat(Action.Idle, function () {
+            this.gameState = GameState.Rush;
+            this.gameMode = GameMode.Endless;
+            this.playHeroAnima(Action.Run);
+            this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
+            this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
+        }.bind(this))
+
     }
 
     /**
@@ -773,6 +806,8 @@ export default class Game extends IView {
         this.onShow({});
     }
 
-    onHide(params) { }
+    onHide(params) {
+
+    }
 
 }

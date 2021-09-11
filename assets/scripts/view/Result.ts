@@ -14,46 +14,70 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { IView } from "../base/IView";
-import { EventType } from "../common/BaseType";
+import { EventType, SoundType } from "../common/BaseType";
 import GameData from "../data/GameData";
 import LogicMgr from "../manager/LogicMgr";
 import Event from "../module/Event";
 import Res from "../module/Res";
+import Sound from "../module/Sound";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Result extends IView {
-    winPanel: cc.Node;
-    failPanel: cc.Node;
-    leftNum: cc.Label;
-    exchangeNum: cc.Label;
+    point: cc.Label;
+    height: cc.Label;
     titleAnima: sp.Skeleton;
+    downloadBtn: cc.Node;
+    retryBtn: cc.Node;
+    continueBtn: cc.Node;
+    homeBtn: cc.Node;
+    shareBtn: cc.Node;
+
+    pointPanel: cc.Node;
+    btnPanel: cc.Node;
 
     onLoad() {
-        this.winPanel = this.node.findChild('win');
-        this.failPanel = this.node.findChild('fail')
-        this.leftNum = this.winPanel.findChild('content/left/num').getComponent(cc.Label);
-        this.exchangeNum = this.winPanel.findChild('content/exchange/num').getComponent(cc.Label);
         let animaNode = this.node.findChild('anima');
         animaNode.addComponent(sp.Skeleton);
         this.titleAnima = animaNode.getComponent(sp.Skeleton);
         this.titleAnima.skeletonData = Res.getInstance().resultAnima;
+        this.pointPanel = this.node.findChild('point')
+        this.point = this.node.findChild('point/point').getComponent(cc.Label);
+        this.height = this.node.findChild('point/height').getComponent(cc.Label);
+
+        this.btnPanel = this.node.findChild('btn');
+        this.downloadBtn = this.btnPanel.findChild('download');
+        this.retryBtn = this.btnPanel.findChild('retry');
+        this.continueBtn = this.btnPanel.findChild('continue');
+        this.homeBtn = this.btnPanel.findChild('home')
+        this.shareBtn = this.btnPanel.findChild('share')
+
         super.onLoad();
     }
 
     register() {
-        this.winPanel.findChild('continue').on('click', this.onContinue, this);
-        this.winPanel.findChild('download').on('click', this.onDownload, this);
-        this.failPanel.findChild('retry').on('click', this.onRetry, this);
-        this.failPanel.findChild('download').on('click', this.onDownload, this);
+        this.downloadBtn.on('click', this.onDownload, this);
+        this.retryBtn.on('click', this.onRetry, this);
+        this.continueBtn.on('click', this.onContinue, this);
+        this.homeBtn.on('click', this.onHome, this);
     }
 
     onShow(isWin) {
-        this.winPanel.active = false;
-        this.failPanel.active = false;
         this.playTitleAnima(isWin);
+        this.point.string = "积分 " + (isWin ? GameData.getInstance().point : 0)
+        this.height.string = "历史最高: " + GameData.getInstance().endlessRecord;
+        this.continueBtn.active = isWin;
+        this.shareBtn.active = !isWin;
+
+        this.pointPanel.active = false;
+        this.btnPanel.active = false;
+
+        if (isWin)
+            Sound.getInstance().playSound(SoundType.Win);
+        else
+            Sound.getInstance().playSound(SoundType.Fail);
     }
 
     onHide() { }
@@ -72,6 +96,12 @@ export default class Result extends IView {
         UI.getInstance().hideUI("Result");
     }
 
+    onHome() {
+        UI.getInstance().hideUI('Result');
+        UI.getInstance().hideUI("Game");
+        UI.getInstance().showUI("Menu");
+    }
+
     /**
      * @description: 播放标题动画
      * @param {boolean} isWin
@@ -88,15 +118,25 @@ export default class Result extends IView {
         let duration = this.titleAnima.findAnimation(name).duration;
         this.titleAnima.setAnimation(0, name, false);
         setTimeout(function () {
-            this.winPanel.active = isWin;
-            this.failPanel.active = !isWin;
-            if (isWin)
-                this.winPanel.playDuangAnima();
-            if (!isWin)
-                this.failPanel.playDuangAnima();
-            this.leftNum.string = "" + GameData.getInstance().soliderNum;
-            this.exchangeNum.string = "" + GameData.getInstance().soliderNum;
-        }.bind(this), duration * 1000);
+            this.pointPanel.active = true;
+            this.pointPanel.playDuangAnima();
+        }.bind(this), duration * 1000 + 500)
+
+        setTimeout(function () {
+            this.btnPanel.active = true;
+
+            if (this.continueBtn.active)
+                this.continueBtn.playDuangAnima();
+
+            if (this.shareBtn.active)
+                this.shareBtn.playDuangAnima();
+
+            this.downloadBtn.playDuangAnima();
+            this.homeBtn.playDuangAnima();
+            this.retryBtn.playDuangAnima();
+
+
+        }.bind(this), duration * 1000 + 1500)
     }
 
 }

@@ -19,10 +19,26 @@ export enum ViewType {
 }
 
 export enum BgmType {
-
+    MenuBgm = "MenuBgm",
+    FightBgm = "FightBgm",
 }
 
 export enum SoundType {
+    Click = "Click",
+    PanelOpen = "PanelOpen",
+    PanelClose = "PanelClose",
+    LvUp = "LvUp",
+    MeetNpc = "MeetNpc",
+    CCRun = "CCRun",
+    SoliderRun = "SoliderRun",
+    AnswerRight = "AnswerRight",
+    AnswerWrong = "AnswerWrong",
+    AnswerSelect = "AnswerSelect",
+    MeetEnemy = "MeetEnemy",
+    Win = "Win",
+    Fail = "Fail",
+    Fight = "Fight",
+    FigthWin = "FigthWin",
 
 }
 

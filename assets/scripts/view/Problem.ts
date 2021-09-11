@@ -15,8 +15,10 @@
 
 import App from "../App";
 import { IView } from "../base/IView";
+import { SoundType } from "../common/BaseType";
 import Question from "../manager/Question";
 import Res from "../module/Res";
+import Sound from "../module/Sound";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -93,6 +95,7 @@ export default class Problem extends IView {
     }
 
     onSelectOption(event) {
+        Sound.getInstance().playSound(SoundType.AnswerSelect);
         let idx: number = parseInt(event.node.name)
         if (event.isChecked)
             this.selectAnswerIdx = idx;

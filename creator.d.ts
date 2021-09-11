@@ -3466,7 +3466,6 @@ declare namespace cc {
 	Cocos Creator 场景中的所有节点类。<br/>
 	支持的节点事件，请参阅 {{#crossLink "Node.EventType"}}{{/crossLink}}。 */
 	export class Node extends _BaseNode {
-        [x: string]: (path: string) => Node;		
 		/** !#en
 		Group index of node.<br/>
 		Which Group this node belongs to will resolve that this node's collision components can collide with which other collision componentns.<br/>
@@ -3571,6 +3570,9 @@ declare namespace cc {
 		/** !#en Returns a normalized vector representing the forward direction (Z axis) of the node in world space.
 		!#zh 获取节点正前方（z 轴）面对的方向，返回值为世界坐标系下的归一化向量 */
 		forward: Vec3;		
+        findChild: (path: string) => Node;
+        playDuangAnima: () => void;
+        playBreathAnima: () => void;
 		/**
 		
 		@param name name 

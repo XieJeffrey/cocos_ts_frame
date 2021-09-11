@@ -14,8 +14,10 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { IView } from "../base/IView";
+import { BgmType, SoundType } from "../common/BaseType";
 import Tool from "../common/Tool";
 import GameData from "../data/GameData";
+import Sound from "../module/Sound";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -58,12 +60,15 @@ export default class Menu extends IView {
 
     onShow() {
         this.lvUpBtn.playBreathAnima();
+        this.rankBtnEft();
         this.refreshSolider();
+        Sound.getInstance().playBgm(BgmType.MenuBgm);
         if (this.anima == null) {
             this.anima = new cc.Node('anima').addComponent(sp.Skeleton);
             this.node.addChild(this.anima.node);
             this.anima.node.setSiblingIndex(1);//仅高于背景层
-            this.anima.node.setPosition(0, -135);
+            this.anima.node.scale = 0.8;
+            this.anima.node.setPosition(0, -145);
             this.anima.node.active = true;
             cc.resources.load("skeleton/start/cc-start-zhan", sp.SkeletonData, function (err, res: sp.SkeletonData) {
                 if (err) {
@@ -109,34 +114,43 @@ export default class Menu extends IView {
     }
 
     onClickStart() {
+        //  UI.getInstance().showUI("Result",true);
+        Sound.getInstance().playSound(SoundType.Click);
         UI.getInstance().showLoading(1, function () {
             UI.getInstance().showUI("game");
         }.bind(this))
     }
 
     onClickDown() {
+        Sound.getInstance().playSound(SoundType.Click);
         UI.getInstance().showFloatMsg("开始下载");
     }
 
     onClickRank() {
+        Sound.getInstance().playSound(SoundType.Click);
         UI.getInstance().showUI("Rank");
     }
 
     onClickInfo() {
+        Sound.getInstance().playSound(SoundType.Click);
         UI.getInstance().showUI("Person");
     }
 
-    onClickLvUp() { }
+    onClickLvUp() {
+        Sound.getInstance().playSound(SoundType.Click);
+    }
 
     onClickExchange() { }
 
-    lvUpBtnEfc() {
-
-        this.lvUpBtn.stopAllActions();
-        this.lvUpBtn.runAction(cc.repeatForever(
-            cc.sequence(
-                cc.scaleTo(0.2, 1.1)
-            )
-        ))
+    rankBtnEft() {
+        let tip = this.rankBtn.findChild('tip')
+        tip.stopAllActions();
+        tip.runAction(cc.repeatForever(cc.sequence(
+            cc.scaleTo(0, 0),
+            cc.scaleTo(0.5, -1, 1).easing(cc.easeBackOut()),
+            cc.scaleTo(0.5, -1, 1),
+            cc.scaleTo(0.5, 0),
+            cc.scaleTo(2, 0)
+        )))
     }
 }

@@ -22,7 +22,7 @@ export default class Sound extends IManager {
     musicOn: Boolean;
     bgmCache: Map<string, cc.AudioClip> = new Map<string, cc.AudioClip>();
     soundCache: Map<string, cc.AudioClip> = new Map<string, cc.AudioClip>();
-
+    loopSound: Map<string, number> = new Map<string, number>();
     /**
      * @description: 初始化
      * @param {*}
@@ -31,13 +31,13 @@ export default class Sound extends IManager {
     public init() {
         super.init()
         let promise = new Promise(function (resolve, reject) {
-            var local = cc.sys.localStorage.getItem('Music');
-            if (local === "" || local === null || local === 0)
-                this.musicOn = false;
-            else {
-                this.musicOn = true;
-            }
-
+            // var local = cc.sys.localStorage.getItem('Music');
+            // if (local === "" || local === null || local === 0)
+            //     this.musicOn = false;
+            // else {
+            //     this.musicOn = true;
+            // }
+            this.musicOn = true;
             cc.assetManager.loadBundle('audios', function (err, bundle) {
                 if (err) {
                     console.error(err);
@@ -73,9 +73,11 @@ export default class Sound extends IManager {
      * @return {*}
      */
     public playBgm(name?: string) {
+        console.log("[playBgm:{0}]".format(name))
         if (!this.musicOn)
             return
 
+        this.stopBgm();
         if (this.bgmCache.has(name)) {
             cc.audioEngine.playMusic(this.bgmCache.get(name), true);
         }
@@ -92,6 +94,7 @@ export default class Sound extends IManager {
         }
     }
 
+
     public stopBgm() {
         cc.audioEngine.stopMusic();
     }
@@ -101,7 +104,7 @@ export default class Sound extends IManager {
      * @param {string} name
      * @return {*}
      */
-    public playSound(name: string) {
+    public playSound(name: string, isLoop: boolean = false) {
         if (!this.musicOn)
             return
         if (this.soundCache.has(name)) {
@@ -115,8 +118,20 @@ export default class Sound extends IManager {
                     return;
                 }
                 this.soundCache.set(name, audio);
-                cc.audioEngine.playEffect(audio, false);
+                cc.audioEngine.playEffect(audio, isLoop);
             }.bind(this))
+        }
+    }
+
+    public stopSound(name: string = "") {
+        if (name == "") {
+            cc.audioEngine.stopAllEffects();
+            this.loopSound.clear();
+            return;
+        }
+        if (this.loopSound.has(name)) {
+            cc.audioEngine.stopEffect(this.loopSound.get(name));
+            this.loopSound.delete(name);
         }
     }
 

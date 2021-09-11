@@ -20,9 +20,12 @@ export default class GameData extends IManager {
     public soliderLv: number = 0;//士兵等级
     public endlessRecord: number = 0;//无尽模式记录    
     public maxSoliderNum: number = 0;//剩余兵量的最高记录
+    
 
     //临时游戏数据
     public soliderNum: number = 1000;//士兵数量
+    public point:number=0;//积分
+    
 
     public init() {
         console.log("gameData.init")

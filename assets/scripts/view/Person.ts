@@ -14,8 +14,10 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { IView } from "../base/IView";
+import { SoundType } from "../common/BaseType";
 import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
+import Sound from "../module/Sound";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -57,6 +59,7 @@ export default class Person extends IView {
         this.phoneInput.string = UserData.getInstance().Phone;
         this.nameInput.string = UserData.getInstance().Name;
         this.addressInput.string = UserData.getInstance().Address;
+        Sound.getInstance().playSound(SoundType.PanelOpen);
     }
 
     onHide() { }
@@ -96,6 +99,7 @@ export default class Person extends IView {
     }
 
     onClose() {
+        Sound.getInstance().playSound(SoundType.PanelClose);
         UI.getInstance().hideUI('Person')
     }
 }

@@ -30,7 +30,7 @@
         "__id__": 138
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [],
     "_prefab": {
       "__id__": 144
@@ -313,7 +313,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 590,
-      "height": 650
+      "height": 600
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -325,7 +325,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        124.5,
+        161.675,
         0,
         0,
         0,
@@ -997,7 +997,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -223.133,
+        -162.06,
         0,
         0,
         0,
@@ -1697,7 +1697,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "09cdad47-e16d-49d9-acb6-d7b71124a5e8"
+      "__uuid__": "d364d5f4-053c-4225-80eb-5bfd5e85bb05"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -2411,7 +2411,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "09cdad47-e16d-49d9-acb6-d7b71124a5e8"
+      "__uuid__": "d364d5f4-053c-4225-80eb-5bfd5e85bb05"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -3125,7 +3125,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "09cdad47-e16d-49d9-acb6-d7b71124a5e8"
+      "__uuid__": "d364d5f4-053c-4225-80eb-5bfd5e85bb05"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -3839,7 +3839,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "09cdad47-e16d-49d9-acb6-d7b71124a5e8"
+      "__uuid__": "d364d5f4-053c-4225-80eb-5bfd5e85bb05"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -4553,7 +4553,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "09cdad47-e16d-49d9-acb6-d7b71124a5e8"
+      "__uuid__": "d364d5f4-053c-4225-80eb-5bfd5e85bb05"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -5022,7 +5022,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -118.929,
+        -71.133,
         0,
         0,
         0,
@@ -5094,7 +5094,7 @@
         1,
         1,
         1,
-        1
+        0
       ]
     },
     "_eulerAngles": {

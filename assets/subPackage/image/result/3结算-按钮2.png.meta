@@ -1,0 +1,38 @@
+{
+  "ver": "2.3.7",
+  "uuid": "78bc1af5-391e-43e7-9ff0-ccfbefda4637",
+  "importer": "texture",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 257,
+  "height": 76,
+  "platformSettings": {},
+  "subMetas": {
+    "3结算-按钮2": {
+      "ver": "1.0.6",
+      "uuid": "52a9691a-a92b-42fa-8b47-6895ccbf326b",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "78bc1af5-391e-43e7-9ff0-ccfbefda4637",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 257,
+      "height": 76,
+      "rawWidth": 257,
+      "rawHeight": 76,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

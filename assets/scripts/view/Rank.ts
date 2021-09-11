@@ -14,6 +14,8 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { IView } from "../base/IView";
+import { SoundType } from "../common/BaseType";
+import Sound from "../module/Sound";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -31,11 +33,14 @@ export default class Rank extends IView {
         this.closeBtn.on('click', this.onClose, this);
     }
 
-    onShow() { }
+    onShow() {
+        Sound.getInstance().playSound(SoundType.PanelOpen);
+    }
 
     onHide() { }
 
     onClose() {
+        Sound.getInstance().playSound(SoundType.PanelOpen);
         UI.getInstance().hideUI("Rank");
     }
 }
