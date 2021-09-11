@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-06 17:32:09
+ * @LastEditTime: 2021-09-11 22:25:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -65,6 +65,7 @@ export default class Result extends IView {
     }
 
     onShow(isWin) {
+        Sound.getInstance().stopBgm();
         this.playTitleAnima(isWin);
         this.point.string = "积分 " + (isWin ? GameData.getInstance().point : 0)
         this.height.string = "历史最高: " + GameData.getInstance().endlessRecord;

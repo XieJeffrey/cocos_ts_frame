@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-09-09 20:00:16
+ * @LastEditTime: 2021-09-11 21:59:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -72,6 +72,7 @@ export default class Res extends IManager {
                 }
                 this.spriteBundle = bundle;
                 loadNum++;
+                // console.log("[image res loaded]");
                 checkLoaded();
             }.bind(this))
 
@@ -95,6 +96,7 @@ export default class Res extends IManager {
                 }
 
                 loadNum++;
+                // console.log("[sceneImg loaded]");
                 checkLoaded();
             }.bind(this))
 
@@ -114,6 +116,7 @@ export default class Res extends IManager {
                     this.soliderAnima[camp][action][lv] = asset[i]
                 }
                 loadNum++;
+                // console.log("[solider loaded]");
                 checkLoaded();
             }.bind(this))
 
@@ -132,6 +135,7 @@ export default class Res extends IManager {
                     this.heroAnima[action] = asset[i]
                 }
                 loadNum++;
+                //   console.log("[hero loaded]");
                 checkLoaded();
             }.bind(this))
 
@@ -144,6 +148,7 @@ export default class Res extends IManager {
                 }
                 this.bornEffect = asset as sp.SkeletonData;
                 loadNum++;
+                // console.log("[solider loaded]");
                 checkLoaded();
             }.bind(this))
 
@@ -156,6 +161,7 @@ export default class Res extends IManager {
                 }
                 this.resultAnima = asset as sp.SkeletonData;
                 loadNum++;
+                //console.log("[effect loaded]");
                 checkLoaded();
             }.bind(this))
 
@@ -172,6 +178,7 @@ export default class Res extends IManager {
                     this.commonSprite.set(name, asset[i])
                 }
                 loadNum++;
+                //  console.log("[common loaded]");
                 checkLoaded();
             }.bind(this))
 
@@ -187,6 +194,7 @@ export default class Res extends IManager {
                     this.npcSprite.push(asset[i]);
                 }
                 loadNum++;
+                // console.log("[npc loaded]");
                 checkLoaded();
             }.bind(this))
 
@@ -203,6 +211,7 @@ export default class Res extends IManager {
                     this.npcBustSprite.push(asset[i]);
                 }
                 loadNum++;
+                //console.log("[Bust loaded]");
                 checkLoaded();
             }.bind(this))
         })

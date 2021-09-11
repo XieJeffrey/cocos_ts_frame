@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-10 14:54:47
+ * @LastEditTime: 2021-09-11 22:27:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -112,7 +112,7 @@ export default class Game extends IView {
             Res.getInstance().loadSprite(shadow.getComponent(cc.Sprite), "shadow")
             shadowNode.addChild(shadow);
             this.shadow.push(shadow);
-        }
+        } 1
         //特效
         this.bornEffect = new Array<sp.Skeleton>();
         this.effectParent = this.node.findChild('role/effect');
@@ -787,6 +787,7 @@ export default class Game extends IView {
      * @return {*}
      */
     onContinue() {
+        Sound.getInstance().playBgm(BgmType.FightBgm);
         this.switchSoliderFormat(Action.Idle, function () {
             this.gameState = GameState.Rush;
             this.gameMode = GameMode.Endless;

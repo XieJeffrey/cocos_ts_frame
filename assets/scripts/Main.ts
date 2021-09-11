@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:49:06
- * @LastEditTime: 2021-09-10 10:39:51
+ * @LastEditTime: 2021-09-11 21:54:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\Main.ts
@@ -55,6 +55,6 @@ export default class Main extends cc.Component {
     }
 
     updateProgress() {
-        this.progressTxt.string = "加载中 {0}%".format(Math.ceil(this.progressBar.progress * 100));
+        this.progressTxt.string = "加载中 {0}%".format("" + Math.ceil(this.progressBar.progress * 100));
     }
 }
