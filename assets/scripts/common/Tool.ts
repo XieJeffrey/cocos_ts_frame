@@ -100,4 +100,13 @@ export default class Tool extends IManager {
         var str = (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec);
         return str;
     }
+
+    public static secToCNTime(second: number) {
+        var date: Date = new Date(second);
+        let Y = date.getFullYear();
+        let M = date.getMonth() + 1;
+        let D = date.getDate();
+
+        return ("{0}年{1}月{2}日").format(Y, M, D);
+    }
 }

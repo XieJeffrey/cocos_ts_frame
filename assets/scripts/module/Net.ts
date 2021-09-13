@@ -27,6 +27,8 @@ export default class Net extends IManager {
                     var response = xhr.responseText;
                     resolve(response);
                 }
+                else
+                    reject();
             };
             console.log(url);
             xhr.open("GET", url, true);
@@ -44,6 +46,8 @@ export default class Net extends IManager {
                     var response = xhr.responseText;
                     resolve(JSON.parse(response));
                 }
+                else
+                    reject();
             };
             // console.log('request:' + url + "?" + str);
             xhr.open("POST", url, true);

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-06 12:00:37
+ * @LastEditTime: 2021-09-13 17:08:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -95,7 +95,18 @@ export default class Person extends IView {
             return;
         }
 
-        LogicMgr.getInstance().uploadUserData();
+        if (this.idInput.string == "") {
+            UI.getInstance().showFloatMsg("游戏ID不能为空");
+            return;
+        }
+
+        LogicMgr.getInstance().setUserData({
+            id: this.idInput.string,
+            mail: this.mailInput.string,
+            tel: this.phoneInput.string,
+            name: this.nameInput.string,
+            address: this.addressInput.string,
+        }, function () { });
     }
 
     onClose() {

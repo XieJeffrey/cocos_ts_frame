@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-30 14:22:32
- * @LastEditTime: 2021-09-11 21:02:50
+ * @LastEditTime: 2021-09-13 16:58:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\GameConfig.ts
@@ -16,6 +16,8 @@
 import IManager from "../base/IManager";
 
 export default class GameConfig extends IManager {
+    public url: string = "http://pig2.shaoweiwy.cn:3001";//服务器地址
+
     public GameTip: Array<string> = [
         "帮助村民解答难题，他们将会加入您的队伍，并肩作战"
     ];
@@ -30,8 +32,10 @@ export default class GameConfig extends IManager {
     public CCStartPosY: number = -350;//曹操的起始y坐标
     public CCTargetPosY: number = -150;//曹操的最终坐标
 
-    public roundSoliderNum: number = 1000;//每局开局的小兵数量
+    public roundSoliderNum: number = 0;//每局开局的小兵数量
 
-    public lv2Solider: number[] = [1000, 2000, 3000, 4000, 5000];
+    public lv2Solider: number[] = [500, 1000, 1500, 2000, 2500];
     public isAnswerMuddled: boolean = false;
+    public activityStart: number = 1631462400000;//活动开始时间
+    public activityEndTime: number = 1632067200000;//活动结束时间
 }

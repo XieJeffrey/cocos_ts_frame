@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-11 22:27:18
+ * @LastEditTime: 2021-09-13 17:24:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -480,12 +480,13 @@ export default class Game extends IView {
         }
     }
 
+
     /**
-     * @description: 战斗
-     * @param {*}
+     * @description: 战斗 
+     * @param {*} fightDuration 战斗间隔
      * @return {*}
      */
-    startFight() {
+    startFight(fightDuration = 1000) {
         this.playHeroAnima(Action.Attack);
         this.playSoliderAnima(RoleType.Mine, Action.Attack, 0);
         this.playSoliderAnima(RoleType.Enemy, Action.Attack, 0);
@@ -706,7 +707,7 @@ export default class Game extends IView {
             return false;
         }
         if (this.gameMode == GameMode.Endless) {
-            return (idx - 10) % 3 == 0
+            return true;
         }
     }
 

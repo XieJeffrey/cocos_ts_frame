@@ -20,17 +20,24 @@ export default class GameData extends IManager {
     public soliderLv: number = 0;//士兵等级
     public endlessRecord: number = 0;//无尽模式记录    
     public maxSoliderNum: number = 0;//剩余兵量的最高记录
-    
+
 
     //临时游戏数据
     public soliderNum: number = 1000;//士兵数量
-    public point:number=0;//积分
-    
+    public point: number = 0;//积分
+    public rankData: Array<any>;
+    public myRank: number = null;//我的排名
 
     public init() {
         console.log("gameData.init")
+        this.rankData = new Array();
     }
 
     public load(data: string) { }
+
+    //是否排行版上版
+    public isOnRank(): boolean {
+        return true;
+    }
     // update (dt) {}
 }
