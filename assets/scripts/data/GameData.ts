@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 10:04:07
- * @LastEditTime: 2021-09-03 09:37:23
+ * @LastEditTime: 2021-09-14 17:07:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
@@ -33,7 +33,12 @@ export default class GameData extends IManager {
         this.rankData = new Array();
     }
 
-    public load(data: string) { }
+    public load(data: string) {
+        let obj = JSON.parse(data);
+        this.soliderLv = obj.lv;
+        this.maxSoliderNum = obj.num;
+        this.endlessRecord = obj.record;
+    }
 
     //是否排行版上版
     public isOnRank(): boolean {

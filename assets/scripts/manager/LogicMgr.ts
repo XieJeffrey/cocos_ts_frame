@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-13 17:14:28
+ * @LastEditTime: 2021-09-14 17:05:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -18,6 +18,7 @@ import GameConfig from "../config/GameConfig";
 import GameData from "../data/GameData";
 import UserData from "../data/UserData";
 import Net from "../module/Net";
+import Storage from "../module/Storage";
 import UI from "../module/UI";
 import Game from "../view/Game";
 
@@ -38,7 +39,9 @@ export default class LogicMgr extends IManager {
      * @param {*}
      * @return {*}
      */
-    saveGameData() { }
+    saveGameData() {
+        Storage.getInstance().saveGameData();
+    }
 
     /**
      * @description: 下载万国觉醒

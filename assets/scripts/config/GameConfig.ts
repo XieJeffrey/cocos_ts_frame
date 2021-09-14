@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-30 14:22:32
- * @LastEditTime: 2021-09-13 16:58:32
+ * @LastEditTime: 2021-09-14 16:45:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\GameConfig.ts
@@ -22,8 +22,8 @@ export default class GameConfig extends IManager {
         "帮助村民解答难题，他们将会加入您的队伍，并肩作战"
     ];
 
-    public BgSpDown: number = 200;//底层背景的移动速度
-    public BgSpUp: number = 80;//云彩的移动速度
+    public BgSpDown: number = 300;//底层背景的移动速度
+    public BgSpUp: number = 120;//云彩的移动速度
     public roleScale: number = 1;//曹操缩放比例
     public soliderScale: number = 0.8;//士兵的缩放比例 
     public TotalWave: number = 10;//总波数
@@ -38,4 +38,5 @@ export default class GameConfig extends IManager {
     public isAnswerMuddled: boolean = false;
     public activityStart: number = 1631462400000;//活动开始时间
     public activityEndTime: number = 1632067200000;//活动结束时间
+    public solider2Point = 1;//兵力跟积分的兑换比例
 }

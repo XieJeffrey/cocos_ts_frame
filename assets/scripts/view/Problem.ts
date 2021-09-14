@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-11 21:03:15
+ * @LastEditTime: 2021-09-14 15:59:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -38,12 +38,15 @@ export default class Problem extends IView {
     resultCall: Function = null;
     sureBtn: cc.Node;
     roleSprite: cc.Sprite;
+    duration: number = 0;
+    countDown: cc.Label = null;
 
     onLoad() {
         this.problemPanel = this.node.findChild('problem')
         this.sureBtn = this.node.findChild('problem/sure')
         this.qusIdxLabel = this.node.findChild('problem/question/title/txt').getComponent(cc.Label);
         this.roleSprite = this.node.findChild("problem/role/role").getComponent(cc.Sprite);
+        this.countDown = this.node.findChild("problem/countDown").getComponent(cc.Label);
 
         this.question = this.node.findChild('problem/question/txt').getComponent(cc.Label);
         this.toggleArray.push(this.node.findChild('problem/option/0').getComponent(cc.Toggle));
@@ -64,6 +67,15 @@ export default class Problem extends IView {
         this.sureBtn.on("click", this.onSure, this)
     }
 
+    update(dt) {
+        this.duration -= dt;
+        this.refreshCountDown();
+        if (this.duration <= 0) {
+            if (this.resultCall)
+                this.resultCall(false);
+        }
+    }
+
 
     onShow(params) {
         this.qusIdxLabel.string = "Q" + params.waveIdx;
@@ -71,7 +83,10 @@ export default class Problem extends IView {
         if (params.call)
             this.resultCall = params.call;
 
+        this.duration = params.duration;
+        this.refreshCountDown();
         this.problemPanel.active = true;
+        this.countDown.node.active = !(this.duration == Infinity)
 
         let queStr: string = Question.getInstance().getQuestion();
         console.log("queStr:{0}".format(queStr));
@@ -94,6 +109,7 @@ export default class Problem extends IView {
 
     onHide() {
         this.resultCall = null;
+        this.duration = Infinity;
     }
 
     onSelectOption(event) {
@@ -106,18 +122,18 @@ export default class Problem extends IView {
 
     onSure() {
         this.problemPanel.active = false;
-        if (this.selectAnswerIdx == this.answerIdx) {
-            UI.getInstance().showFloatMsg("回答正确，村民加入了你的队伍");
-        }
-        else {
-            UI.getInstance().showFloatMsg("回答错误，村民失望的离开了");
-        }
 
         setTimeout(function () {
             if (this.resultCall)
                 this.resultCall(this.selectAnswerIdx == this.answerIdx)
             UI.getInstance().hideUI("Problem")
         }.bind(this), 600)
+    }
 
+    refreshCountDown() {
+        if (this.duration == Infinity)
+            return
+
+        this.countDown.string = "{0}秒".format(Math.ceil(this.duration));
     }
 }

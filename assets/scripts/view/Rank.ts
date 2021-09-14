@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 21:23:50
- * @LastEditTime: 2021-09-13 17:21:19
+ * @LastEditTime: 2021-09-14 16:30:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Rank.ts
@@ -30,15 +30,19 @@ export default class Rank extends IView {
     ruleTitleTxt: cc.Label;
     onRankItem: cc.Node;
     outRankItem: cc.Node;
+    registBtn: cc.Node;
+
     onLoad() {
         this.closeBtn = this.node.findChild('decorate/close');
         this.ruleTitleTxt = this.node.findChild('rule/title').getComponent(cc.Label);
         this.onRankItem = this.node.findChild('content/onRank');
         this.outRankItem = this.node.findChild('content/outRank');
+        this.registBtn = this.outRankItem.findChild('register');
         super.onLoad();
     }
 
     register() {
+        this.registBtn.on('click', this.onRegister, this);
         this.closeBtn.on('click', this.onClose, this);
     }
 
@@ -75,6 +79,10 @@ export default class Rank extends IView {
     onClose() {
         Sound.getInstance().playSound(SoundType.PanelOpen);
         UI.getInstance().hideUI("Rank");
+    }
+
+    onRegister() {
+        UI.getInstance().showUI("Person");
     }
 
     refreshRankItemData(data: any, item: cc.Node) {

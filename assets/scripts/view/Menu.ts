@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-11 22:23:45
+ * @LastEditTime: 2021-09-14 17:26:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -16,6 +16,7 @@
 import { IView } from "../base/IView";
 import { BgmType, SoundType } from "../common/BaseType";
 import Tool from "../common/Tool";
+import GameConfig from "../config/GameConfig";
 import GameData from "../data/GameData";
 import Sound from "../module/Sound";
 import UI from "../module/UI";
@@ -35,6 +36,7 @@ export default class Menu extends IView {
     soliderIcon: cc.Sprite;
     exchangeBtn: cc.Node;
     anima: sp.Skeleton;
+    pointTxt: cc.Label;
 
     onLoad() {
         this.rankBtn = this.node.findChild('rank');
@@ -45,6 +47,7 @@ export default class Menu extends IView {
         this.lvUpBtn = this.node.findChild('solider')
         this.soliderLvTxt = this.node.findChild('solider/lv').getComponent(cc.Label);
         this.soliderIcon = this.node.findChild('solider/icon').getComponent(cc.Sprite);
+        this.pointTxt = this.node.findChild('exchange/point').getComponent(cc.Label);
         this.loadSoliderSprite();
         super.onLoad();
     }
@@ -62,6 +65,7 @@ export default class Menu extends IView {
         this.lvUpBtn.playBreathAnima();
         this.rankBtnEft();
         this.refreshSolider();
+        this.refreshPoint();
         Sound.getInstance().playBgm(BgmType.MenuBgm);
         if (this.anima == null) {
             this.anima = new cc.Node('anima').addComponent(sp.Skeleton);
@@ -94,6 +98,15 @@ export default class Menu extends IView {
             return;
 
         this.soliderIcon.spriteFrame = this.soliderSpriteList[GameData.getInstance().soliderLv];
+    }
+
+    /**
+     * @description: 刷新积分
+     * @param {*}
+     * @return {*}
+     */
+    refreshPoint() {
+        this.pointTxt.string = "积分 " + GameData.getInstance().endlessRecord * GameConfig.getInstance().solider2Point;
     }
 
     /**
@@ -140,7 +153,9 @@ export default class Menu extends IView {
         Sound.getInstance().playSound(SoundType.Click);
     }
 
-    onClickExchange() { }
+    onClickExchange() {
+        console.log("打开兑换界面");
+    }
 
     rankBtnEft() {
         let tip = this.rankBtn.findChild('tip')

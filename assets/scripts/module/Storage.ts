@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-03 09:37:36
+ * @LastEditTime: 2021-09-14 17:07:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -37,7 +37,15 @@ export default class Storage extends IManager {
         }.bind(this))
     }
 
-    saveGameData() { }
+    saveGameData() {
+        let json = {
+            lv: GameData.getInstance().soliderLv,
+            num: GameData.getInstance().maxSoliderNum,
+            record: GameData.getInstance().endlessRecord
+        }
+        let str = JSON.stringify(json);
+        cc.sys.localStorage.setItem('gameData' + this.dataKey);
+    }
 
     saveUserData() { }
 

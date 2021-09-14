@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-13 17:24:06
+ * @LastEditTime: 2021-09-14 16:38:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -21,6 +21,7 @@ import Res from "../module/Res";
 import UI from "../module/UI";
 import GameData from "../data/GameData";
 import Sound from "../module/Sound";
+import LogicMgr from "../manager/LogicMgr";
 
 const { ccclass, property } = cc._decorator;
 
@@ -45,6 +46,7 @@ export default class Game extends IView {
     wavePos: number;//小兵的y坐标
     totalUnit: number = 0;//野怪的单位数量
     curOtherUnit: number = 0;//当前波对面怪的单位数量
+    curEnemyNum: number = 0;//当前对面敌兵的兵力
     npcPosList: Array<{ x: number, y: number }>;
     pool: {
         sand: Array<cc.Node>;
@@ -52,8 +54,11 @@ export default class Game extends IView {
     }
     soliderNumTxt: cc.Label;//当前小兵数量
     soliderNumState: cc.Sprite;//当前小兵的涨跌状态
-    recordTime: number = 0;//无尽模式的时间记录
+    record: number = 0;//无尽模式的时间记录
     npcId: number = 0;//村名Npc的角色Id
+    fightTimer: number = 0;//战斗计时器
+    recordNode: cc.Node = null;//破釜沉舟模式记录
+    recordTxt: cc.Label = null;
 
     onLoad() {
         //滚动背景
@@ -112,12 +117,16 @@ export default class Game extends IView {
             Res.getInstance().loadSprite(shadow.getComponent(cc.Sprite), "shadow")
             shadowNode.addChild(shadow);
             this.shadow.push(shadow);
-        } 1
+        }
         //特效
         this.bornEffect = new Array<sp.Skeleton>();
         this.effectParent = this.node.findChild('role/effect');
         this.soliderNumTxt = this.node.findChild('res/txt').getComponent(cc.Label);
         this.soliderNumState = this.node.findChild('res/state').getComponent(cc.Sprite);
+        //破釜沉舟
+        this.recordNode = this.node.findChild('record');
+        this.recordTxt = this.recordNode.findChild('num').getComponent(cc.Label);
+
         super.onLoad();
     }
 
@@ -147,6 +156,8 @@ export default class Game extends IView {
         this.syncShadow();
         this.refreshSoliderNum(0);
         UI.getInstance().showUI("Dialog", "周公吐哺，天下归心");
+        this.recordNode.active = false;
+        this.record = 0;
     }
 
     update(dt) {
@@ -167,9 +178,6 @@ export default class Game extends IView {
             }
             this.syncShadow();
         }
-        if (this.gameMode == GameMode.Endless && this.gameState != GameState.Over) {
-            this.recordTime += dt;
-        }
 
     }
 
@@ -187,6 +195,13 @@ export default class Game extends IView {
         }
         this.cloud.y = Math.random() * 800;
         this.cloud.getComponent(cc.Sprite).spriteFrame = Res.getInstance().sceneSprite[2][0];
+
+        for (let i = 0; i < this.npcPosList.length; i++) {
+            if (this.npcPosList[i].y == -340) {
+                this.npcPosList.splice(i, 1)
+                break;
+            }
+        }
     }
 
     /**
@@ -225,16 +240,19 @@ export default class Game extends IView {
             this.npcPosList = new Array();
         switch (spriteName) {
             case "bg2-1":
+                this.npcPosList.push({ x: 150, y: -270 + offsetY });
                 this.npcPosList.push({ x: -180, y: 330 + offsetY });
                 break;
             case "bg2-2":
+                this.npcPosList.push({ x: -160, y: -340 + offsetY });
                 this.npcPosList.push({ x: 120, y: 100 + offsetY });
                 break;
             case "bg2-3":
                 this.npcPosList.push({ x: 120, y: -130 + offsetY });
+                this.npcPosList.push({ x: 180, y: 600 + offsetY });
+
                 break;
         }
-        console.log(this.npcPosList);
     }
 
     /**
@@ -258,12 +276,20 @@ export default class Game extends IView {
         this.curWave++;
         if (this.isFightWave(this.curWave)) {
             roleType = RoleType.Enemy
-            this.curOtherUnit = Math.ceil((0.5 + Math.random() * 0.3) * this.totalUnit);
+            if (this.gameMode == GameMode.Endless) {
+                this.curOtherUnit = 10;
+                this.curEnemyNum = 10 * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
+            }
+            else {
+                this.curOtherUnit = Math.ceil((0.5 + Math.random() * 0.3) * this.totalUnit);
+                this.curEnemyNum = this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
+            }
             this.totalUnit = 0;
 
             this.wavePos = (this.npcPosList.shift()).y;// GameConfig.WaveStartPosY + 800 + Math.random() * 200
             let pos = this.getEnemySoliderPos(this.wavePos);
             for (let i = 0; i < this.enemyRole.length; i++) {
+                this.enemyRole[i].node.stopAllActions();
                 this.enemyRole[i].node.opacity = 255;
                 this.enemyRole[i].node.active = i < this.curOtherUnit;
                 this.enemyRole[i].node.setPosition(pos[i].x, pos[i].y);
@@ -462,18 +488,34 @@ export default class Game extends IView {
             this.playSoliderAnima(RoleType.Mine, Action.Idle, 0);
 
             setTimeout(function () {
-                if (this.gameState == GameState.Answer) {
-                    UI.getInstance().showUI("Problem", {
-                        waveIdx: this.curWave + 1,
-                        npcId: this.npcId,
-                        call: function (result) {
-                            this.answerResult(result);
-                        }.bind(this)
-                    });
+                if (this.gameMode == GameMode.Pattern) {
+                    if (this.gameState == GameState.Answer) {
+                        UI.getInstance().showUI("Problem", {
+                            waveIdx: this.curWave + 1,
+                            npcId: this.npcId,
+                            call: function (result) {
+                                this.answerResult(result);
+                            }.bind(this),
+                            duration: Infinity
+                        });
+                    }
+                    else {
+                        this.switchSoliderFormat(Action.Attack, function () {
+                            this.startFight();
+                        }.bind(this))
+                    }
                 }
                 else {
                     this.switchSoliderFormat(Action.Attack, function () {
-                        this.startFight();
+                        this.startFight(500, 50);
+                        UI.getInstance().showUI("Problem", {
+                            waveIdx: this.waveIdx + 1,
+                            npcId: Math.floor(Math.random() * Res.getInstance().npcSprite.length),
+                            call: function (result) {
+                                this.answerResult(result);
+                            }.bind(this),
+                            duration: 10,
+                        })
                     }.bind(this))
                 }
             }.bind(this), 500)
@@ -486,7 +528,8 @@ export default class Game extends IView {
      * @param {*} fightDuration 战斗间隔
      * @return {*}
      */
-    startFight(fightDuration = 1000) {
+    startFight(fightDuration = 1000, soliderLoss = GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]) {
+        console.log("soliderLoss:" + soliderLoss);
         this.playHeroAnima(Action.Attack);
         this.playSoliderAnima(RoleType.Mine, Action.Attack, 0);
         this.playSoliderAnima(RoleType.Enemy, Action.Attack, 0);
@@ -495,14 +538,15 @@ export default class Game extends IView {
 
         //做个延时，因为攻击动画有延时
         setTimeout(function () {
-            let timer = setInterval(function () {
-                this.curOtherUnit--;
+            this.fightTimer = setInterval(function () {
+                this.curEnemyNum -= soliderLoss;
+                this.curOtherUnit = Math.ceil(this.curEnemyNum / GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]);
                 for (let i = 0; i < this.enemyRole.length; i++) {
                     if (this.enemyRole[i].node.active && i >= this.curOtherUnit) {
                         this.soliderDead(this.enemyRole[i].node)
                     }
                 }
-                GameData.getInstance().soliderNum -= GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]
+                GameData.getInstance().soliderNum -= soliderLoss;
                 this.refreshSoliderNum(-1);
                 let num = this.getMineSoliderUnitNum()
                 for (let i = 0; i < this.mineRole.length; i++) {
@@ -512,7 +556,7 @@ export default class Game extends IView {
 
                 if (num <= 0) {
                     this.gameState = GameState.Over;
-                    clearInterval(timer);
+                    clearInterval(this.fightTimer);
                     this.playHeroAnima(Action.Idle);
                     this.playSoliderAnima(RoleType.Enemy, Action.Idle, GameData.getInstance().soliderLv);
                     Sound.getInstance().stopSound(SoundType.Fight);
@@ -523,17 +567,18 @@ export default class Game extends IView {
                             console.log("[Pattern Model GameOver]");
                         }
                         else {
-                            UI.getInstance().hideUI('Game');
-                            UI.getInstance().showUI('Menu');
+                            UI.getInstance().hideUI("Problem");
                             UI.getInstance().showUI('Rank');
                             console.log("[Endless Model GameOver]");
+                            GameData.getInstance().endlessRecord = this.record;
+                            LogicMgr.getInstance().saveGameData();
                         }
                     }.bind(this), 1000)
                     return;
                 }
 
                 if (this.curOtherUnit <= 0) {
-                    clearInterval(timer);
+                    clearInterval(this.fightTimer);
                     this.playHeroAnima(Action.Idle);
                     this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.getInstance().soliderLv);
                     Sound.getInstance().stopSound(SoundType.Fight);
@@ -552,9 +597,8 @@ export default class Game extends IView {
                         }.bind(this));
                     }.bind(this), 1000);
                 }
-            }.bind(this), 1000)
+            }.bind(this), fightDuration)
         }.bind(this), 500);
-
     }
 
     /**
@@ -564,43 +608,85 @@ export default class Game extends IView {
      */
     answerResult(result: boolean) {
         let delay = 550;
-        if (result) {
-            Sound.getInstance().playSound(SoundType.AnswerRight);
-            console.log("答对了");
-            this.npcRole.runAction(cc.fadeOut(0.5));
-            GameData.getInstance().soliderNum += this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
-            let num = this.getMineSoliderUnitNum();
-            for (let i = 0; i < this.mineRole.length; i++) {
-                num--;
-                if (num < 0)
-                    break;
-                if (this.mineRole[i].node.active)
-                    continue;
-                else {
-                    this.mineRole[i].node.active = true;
-                    this.mineRole[i].node.opacity = 0;
-                    this.mineRole[i].node.runAction(cc.fadeIn(0.5));
-                    this.playBornEffect(this.mineRole[i].node.position);
+
+        if (this.gameMode == GameMode.Pattern) {
+            if (result) {
+                UI.getInstance().showFloatMsg("回答正确，村民加入了你的队伍");
+                Sound.getInstance().playSound(SoundType.AnswerRight);
+                console.log("答对了");
+                this.npcRole.runAction(cc.fadeOut(0.5));
+                GameData.getInstance().soliderNum += this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
+                let num = this.getMineSoliderUnitNum();
+                for (let i = 0; i < this.mineRole.length; i++) {
+                    num--;
+                    if (num < 0)
+                        break;
+                    if (this.mineRole[i].node.active)
+                        continue;
+                    else {
+                        this.mineRole[i].node.active = true;
+                        this.mineRole[i].node.opacity = 0;
+                        this.mineRole[i].node.runAction(cc.fadeIn(0.5));
+                        this.playBornEffect(this.mineRole[i].node.position);
+                    }
                 }
+                delay = 1000;
+                this.refreshSoliderNum(1);
             }
-            delay = 1000;
-            this.refreshSoliderNum(1);
+            else {
+                UI.getInstance().showFloatMsg("回答错误，村民失望的离开了");
+                Sound.getInstance().playSound(SoundType.AnswerWrong);
+                console.log("答错了");
+                this.npcRole.runAction(cc.fadeOut(0.5));
+            }
+
+            for (let i = 0; i < this.enemyRole.length; i++) {
+                this.enemyRole[i].node.runAction(cc.fadeOut(0.5))
+            }
+            setTimeout(function () {
+                this.playHeroAnima(Action.Run);
+                this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
+                this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
+                this.gameState = GameState.Rush;
+            }.bind(this), delay);
         }
         else {
-            Sound.getInstance().playSound(SoundType.AnswerWrong);
-            console.log("答错了");
-            this.npcRole.runAction(cc.fadeOut(0.5));
-        }
+            if (result) {
+                this.record++;
+                this.refreshRecord();
+            }
+            else {
+                GameData.getInstance().soliderNum -= 1000;
+                this.refreshSoliderNum(-1);
+                let num = this.getMineSoliderUnitNum();
+                for (let i = 0; i < this.mineRole.length; i++) {
+                    if (this.mineRole[i].node.active && i >= num) {
+                        this.soliderDead(this.mineRole[i].node);
+                    }
+                }
+            }
 
-        for (let i = 0; i < this.enemyRole.length; i++) {
-            this.enemyRole[i].node.runAction(cc.fadeOut(0.5))
+            if (this.fightTimer != 0) {
+                clearInterval(this.fightTimer);
+                this.fightTimer = 0;
+            }
+
+            for (let i = 0; i < this.enemyRole.length; i++) {
+                if (this.enemyRole[i].node.active) {
+                    this.soliderDead(this.enemyRole[i].node);
+                }
+            }
+
+            this.switchSoliderFormat(Action.Idle, function () {
+                setTimeout(function () {
+                    this.playHeroAnima(Action.Run);
+                    this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
+                    this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
+                    this.gameState = GameState.Rush;
+                }.bind(this), delay);
+            }.bind(this))
+
         }
-        setTimeout(function () {
-            this.playHeroAnima(Action.Run);
-            this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
-            this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
-            this.gameState = GameState.Rush;
-        }.bind(this), delay);
     }
 
     /**
@@ -730,6 +816,15 @@ export default class Game extends IView {
     }
 
     /**
+     * @description: 刷新破釜沉舟模式的记录
+     * @param {*}
+     * @return {*}
+     */
+    refreshRecord() {
+        this.recordTxt.string = "{0}题".format(this.record);
+    }
+
+    /**
      * @description: 获取我方小兵单位数量
      * @param {*}
      * @return {*}
@@ -790,13 +885,16 @@ export default class Game extends IView {
     onContinue() {
         Sound.getInstance().playBgm(BgmType.FightBgm);
         this.switchSoliderFormat(Action.Idle, function () {
+            this.recordNode.active = true;
+            this.record = 0;
+            this.refreshRecord();
+
             this.gameState = GameState.Rush;
             this.gameMode = GameMode.Endless;
             this.playHeroAnima(Action.Run);
             this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
             this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
         }.bind(this))
-
     }
 
     /**

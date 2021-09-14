@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-11 22:25:51
+ * @LastEditTime: 2021-09-14 17:23:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -15,11 +15,13 @@
 
 import { IView } from "../base/IView";
 import { EventType, SoundType } from "../common/BaseType";
+import GameConfig from "../config/GameConfig";
 import GameData from "../data/GameData";
 import LogicMgr from "../manager/LogicMgr";
 import Event from "../module/Event";
 import Res from "../module/Res";
 import Sound from "../module/Sound";
+import Storage from "../module/Storage";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -67,16 +69,21 @@ export default class Result extends IView {
     onShow(isWin) {
         Sound.getInstance().stopBgm();
         this.playTitleAnima(isWin);
-        this.point.string = "积分 " + (isWin ? GameData.getInstance().point : 0)
-        this.height.string = "历史最高: " + GameData.getInstance().endlessRecord;
+        this.point.string = "积分 " + (isWin ? GameData.getInstance().soliderNum * GameConfig.getInstance().solider2Point : 0)
+        this.height.string = "历史最高: " + GameData.getInstance().maxSoliderNum * GameConfig.getInstance().solider2Point;
         this.continueBtn.active = isWin;
         this.shareBtn.active = !isWin;
 
         this.pointPanel.active = false;
         this.btnPanel.active = false;
 
-        if (isWin)
+        if (isWin) {
+            if (GameData.getInstance().maxSoliderNum < GameData.getInstance().soliderNum) {
+                GameData.getInstance().maxSoliderNum = GameData.getInstance().soliderNum;
+                Storage.getInstance().saveGameData();
+            }
             Sound.getInstance().playSound(SoundType.Win);
+        }
         else
             Sound.getInstance().playSound(SoundType.Fail);
     }
