@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 10:04:07
- * @LastEditTime: 2021-09-14 17:07:05
+ * @LastEditTime: 2021-09-15 11:32:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
@@ -20,7 +20,7 @@ export default class GameData extends IManager {
     public soliderLv: number = 0;//士兵等级
     public endlessRecord: number = 0;//无尽模式记录    
     public maxSoliderNum: number = 0;//剩余兵量的最高记录
-
+    public soliderType: number = 0;//兑换兵种
 
     //临时游戏数据
     public soliderNum: number = 1000;//士兵数量
@@ -38,6 +38,7 @@ export default class GameData extends IManager {
         this.soliderLv = obj.lv;
         this.maxSoliderNum = obj.num;
         this.endlessRecord = obj.record;
+        this.soliderType = obj.type;
     }
 
     //是否排行版上版

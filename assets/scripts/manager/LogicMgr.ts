@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-14 17:05:07
+ * @LastEditTime: 2021-09-15 13:51:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -27,6 +27,12 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class LogicMgr extends IManager {
 
+    init() {
+        return new Promise(function (resolve, reject) {
+            this.getUserData();
+        }.bind(this))
+    }
+
     /**
      * @description: 保存用户数据
      * @param {*}
@@ -49,17 +55,7 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     downloadGame() { }
-    // update (dt) {}
-
-    /**
-     * @description: 上传用户数据
-     * @param {*}
-     * @return {*}
-     */
-    uploadUserData() {
-
-    }
-
+    // update (dt) {}   
     /**
      * @description: 获取排行榜数据
      * @param {*} func
@@ -87,18 +83,19 @@ export default class LogicMgr extends IManager {
      */
     setUserData(data, func) {
         let url = GameConfig.getInstance().url + "/api/saveUser?";
-        let param = "openid={0}&mail={1}&tel={2}&name={3}&address={4}&roud={5}&troops={6}&level={7}".format(
-            data.id,
-            data.mail,
-            data.tel,
-            data.name,
-            data.address,
-            "" + GameData.getInstance().endlessRecord,
-            "" + GameData.getInstance().soliderNum,
-            "" + GameData.getInstance().soliderLv,
-        )
-        url += param;
-        Net.getInstance().get(url).then(function (data) {
+        let param = {
+            openid: data.id,
+            mail: data.mail,
+            tel: data.tel,
+            name: data.name,
+            address: data.address,
+            round: GameData.getInstance().endlessRecord,
+            troops: GameData.getInstance().soliderNum,
+            level: GameData.getInstance().soliderLv,
+
+        }
+
+        Net.getInstance().post(url, param).then(function (data) {
             console.log(data);
             if (func)
                 func()
@@ -141,13 +138,89 @@ export default class LogicMgr extends IManager {
             return;
         }
         let url = GameConfig.getInstance().url + "/api/upload";
-        let param = "openid={0}&round={1}".format(UserData.getInstance().GameID, GameData.getInstance().endlessRecord);
-        url += param;
-        Net.getInstance().get(url).then(function (data: string) {
+        let param = {
+            openid: UserData.getInstance().GameID,
+            round: GameData.getInstance().endlessRecord,
+        }
+
+        Net.getInstance().post(url, param).then(function (data: string) {
             if (func)
                 func();
         }, function () {
             UI.getInstance().showFloatMsg("上传破釜沉舟成绩失败");
+        })
+    }
+
+    /**
+     * @description: 设置兵种
+     * @param {*} func
+     * @return {*}
+     */
+    setSoliderType(func) {
+        if (UserData.getInstance().GameID == "") {
+            UI.getInstance().showFloatMsg("未设置用户信息,无法兑换");
+            return;
+        }
+
+        let url = GameConfig.getInstance().url + "/api/setTroopsType";
+        let param = {
+            openid: UserData.getInstance().GameID,
+            type: GameData.getInstance().soliderType,
+        }
+
+        Net.getInstance().post(url, param).then(function () {
+            Storage.getInstance().saveGameData();
+            if (func)
+                func()
+        }, function () {
+            UI.getInstance().showFloatMsg("设置兵种类型失败");
+        })
+    }
+
+    /**
+     * @description: 统计分享次数
+     * @param {*} func
+     * @return {*}
+     */
+    countShare(func) {
+        if (UserData.getInstance().GameID == "") {
+            console.log("用户Id未设置，不计入分享次数的统计")
+            return;
+        }
+        let url = GameConfig.getInstance().url + "/api/shareOut";
+        let param = "?openid=" + UserData.getInstance().GameID;
+
+        url += param;
+        Net.getInstance().get(url).then(function () {
+            if (func)
+                func()
+        }, function () {
+            UI.getInstance().showFloatMsg("统计分享次数失败");
+        })
+    }
+
+    /**
+     * @description: 邀请助力
+     * @param {string} inviter
+     * @return {*}
+     */
+    invite(inviter: string) {
+        let url = GameConfig.getInstance().url + "/api/inviteln";
+        let param = {
+            openid: UserData.getInstance().GameID,
+            inviter: inviter
+        }
+
+        Net.getInstance().post(url, param).then(function (obj) {
+            let data = JSON.parse(obj);
+            if (data.errCode) {
+                UI.getInstance().showFloatMsg(data.errMsg);
+                return;
+            }
+            GameData.getInstance().soliderLv = data.level;
+            Storage.getInstance().saveGameData();
+        }, function () {
+            UI.getInstance().showFloatMsg("升级助力失败");
         })
     }
 

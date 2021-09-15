@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-14 16:38:39
+ * @LastEditTime: 2021-09-15 17:54:40
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -47,6 +47,7 @@ export default class Game extends IView {
     totalUnit: number = 0;//野怪的单位数量
     curOtherUnit: number = 0;//当前波对面怪的单位数量
     curEnemyNum: number = 0;//当前对面敌兵的兵力
+    originSoliderNum: number = 0;//破釜沉舟模式遇敌前的兵力
     npcPosList: Array<{ x: number, y: number }>;
     pool: {
         sand: Array<cc.Node>;
@@ -281,7 +282,8 @@ export default class Game extends IView {
                 this.curEnemyNum = 10 * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
             }
             else {
-                this.curOtherUnit = Math.ceil((0.5 + Math.random() * 0.3) * this.totalUnit);
+
+                this.curOtherUnit = Math.ceil((0.3 + Math.random() * 0.3) * this.totalUnit);
                 this.curEnemyNum = this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
             }
             this.totalUnit = 0;
@@ -507,9 +509,10 @@ export default class Game extends IView {
                 }
                 else {
                     this.switchSoliderFormat(Action.Attack, function () {
+                        this.originSoliderNum = GameData.getInstance().soliderNum;
                         this.startFight(500, 50);
                         UI.getInstance().showUI("Problem", {
-                            waveIdx: this.waveIdx + 1,
+                            waveIdx: this.curWave + 1,
                             npcId: Math.floor(Math.random() * Res.getInstance().npcSprite.length),
                             call: function (result) {
                                 this.answerResult(result);
@@ -568,10 +571,8 @@ export default class Game extends IView {
                         }
                         else {
                             UI.getInstance().hideUI("Problem");
-                            UI.getInstance().showUI('Rank');
+                            UI.getInstance().showUI("Record", { record: this.record })
                             console.log("[Endless Model GameOver]");
-                            GameData.getInstance().endlessRecord = this.record;
-                            LogicMgr.getInstance().saveGameData();
                         }
                     }.bind(this), 1000)
                     return;
@@ -651,25 +652,37 @@ export default class Game extends IView {
             }.bind(this), delay);
         }
         else {
+            if (this.fightTimer != 0) {
+                clearInterval(this.fightTimer);
+                this.fightTimer = 0;
+            }
+
             if (result) {
                 this.record++;
                 this.refreshRecord();
             }
             else {
-                GameData.getInstance().soliderNum -= 1000;
+                GameData.getInstance().soliderNum = this.originSoliderNum - 1000;
+                if (GameData.getInstance().soliderNum <= 0)
+                    GameData.getInstance().soliderNum = 0;
                 this.refreshSoliderNum(-1);
                 let num = this.getMineSoliderUnitNum();
+                console.log("num:" + num)
                 for (let i = 0; i < this.mineRole.length; i++) {
                     if (this.mineRole[i].node.active && i >= num) {
                         this.soliderDead(this.mineRole[i].node);
                     }
                 }
+
+                if (GameData.getInstance().soliderNum <= 0) {
+                    this.gameState = GameState.Over;
+                    Sound.getInstance().stopSound(SoundType.Fight);
+                    UI.getInstance().showUI("Record", { record: this.record })
+                    return;
+                }
             }
 
-            if (this.fightTimer != 0) {
-                clearInterval(this.fightTimer);
-                this.fightTimer = 0;
-            }
+
 
             for (let i = 0; i < this.enemyRole.length; i++) {
                 if (this.enemyRole[i].node.active) {
@@ -677,14 +690,16 @@ export default class Game extends IView {
                 }
             }
 
-            this.switchSoliderFormat(Action.Idle, function () {
-                setTimeout(function () {
+
+
+            setTimeout(function () {
+                this.switchSoliderFormat(Action.Idle, function () {
                     this.playHeroAnima(Action.Run);
                     this.playSoliderAnima(RoleType.Mine, Action.Run, GameData.getInstance().soliderLv);
                     this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
                     this.gameState = GameState.Rush;
-                }.bind(this), delay);
-            }.bind(this))
+                }.bind(this));
+            }.bind(this), delay)
 
         }
     }
@@ -868,8 +883,9 @@ export default class Game extends IView {
      * @return {*}
      */
     soliderDead(solider: cc.Node) {
+        solider.stopAllActions();
         solider.runAction(cc.sequence(
-            cc.fadeOut(0.5),
+            cc.fadeOut(0.4),
             cc.callFunc(function () {
                 solider.opacity = 255;
                 solider.active = false;

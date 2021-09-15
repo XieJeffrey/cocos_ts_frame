@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-13 17:08:25
+ * @LastEditTime: 2021-09-15 11:15:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -18,6 +18,7 @@ import { SoundType } from "../common/BaseType";
 import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
 import Sound from "../module/Sound";
+import Storage from "../module/Storage";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -106,7 +107,15 @@ export default class Person extends IView {
             tel: this.phoneInput.string,
             name: this.nameInput.string,
             address: this.addressInput.string,
-        }, function () { });
+        }, function () {
+            UI.getInstance().showFloatMsg("信息更新成功")
+            UserData.getInstance().GameID = this.idInput.string;
+            UserData.getInstance().Mail = this.mailInput.string;
+            UserData.getInstance().Phone = this.phoneInput.string;
+            UserData.getInstance().Name = this.nameInput.string;
+            UserData.getInstance().Address = this.addressInput.string;
+            Storage.getInstance().saveUserData();
+        });
     }
 
     onClose() {

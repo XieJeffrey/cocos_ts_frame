@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-14 15:59:03
+ * @LastEditTime: 2021-09-15 17:40:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -73,6 +73,7 @@ export default class Problem extends IView {
         if (this.duration <= 0) {
             if (this.resultCall)
                 this.resultCall(false);
+            this.duration = Infinity;
         }
     }
 

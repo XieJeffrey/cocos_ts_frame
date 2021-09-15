@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-14 17:07:30
+ * @LastEditTime: 2021-09-15 11:33:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -37,17 +37,38 @@ export default class Storage extends IManager {
         }.bind(this))
     }
 
+    /**
+     * @description: 保存游戏数据到本地
+     * @param {*}
+     * @return {*}
+     */
     saveGameData() {
         let json = {
             lv: GameData.getInstance().soliderLv,
             num: GameData.getInstance().maxSoliderNum,
-            record: GameData.getInstance().endlessRecord
+            record: GameData.getInstance().endlessRecord,
+            type: GameData.getInstance().soliderType,
         }
         let str = JSON.stringify(json);
-        cc.sys.localStorage.setItem('gameData' + this.dataKey);
+        cc.sys.localStorage.setItem('gameData' + this.dataKey, str);
     }
 
-    saveUserData() { }
+    /**
+     * @description: 保存用户数据到本地
+     * @param {*}
+     * @return {*}
+     */
+    saveUserData() {
+        let json = {
+            id: UserData.getInstance().GameID,
+            name: UserData.getInstance().Name,
+            tel: UserData.getInstance().Phone,
+            address: UserData.getInstance().Address,
+            mail: UserData.getInstance().Mail,
+        }
+        let str = JSON.stringify(json);
+        cc.sys.localStorage.setItem('userData' + this.dataKey, str);
+    }
 
     loadGameData() {
         let str: string = cc.sys.localStorage.getItem("gameData" + this.dataKey)
@@ -62,10 +83,10 @@ export default class Storage extends IManager {
     loadUserData() {
         let str: string = cc.sys.localStorage.getItem("userData" + this.dataKey)
         if (str === "" || str === null) {
-            UserData.init()
+            UserData.getInstance().init()
         }
         else {
-            UserData.load(str);
+            UserData.getInstance().load(str);
         }
     }
 }
