@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-15 17:54:40
+ * @LastEditTime: 2021-09-15 21:21:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -49,10 +49,7 @@ export default class Game extends IView {
     curEnemyNum: number = 0;//当前对面敌兵的兵力
     originSoliderNum: number = 0;//破釜沉舟模式遇敌前的兵力
     npcPosList: Array<{ x: number, y: number }>;
-    pool: {
-        sand: Array<cc.Node>;
-        tree: Array<cc.Node>;
-    }
+
     soliderNumTxt: cc.Label;//当前小兵数量
     soliderNumState: cc.Sprite;//当前小兵的涨跌状态
     record: number = 0;//无尽模式的时间记录
@@ -188,6 +185,7 @@ export default class Game extends IView {
      * @return {*}
      */
     initBg() {
+        this.npcPosList = new Array();
         for (let i = 0; i < this.bgList.length; i++) {
             for (let j = 0; j < this.bgList[i].length; j++) {
                 this.bgList[i][j].node.y = 1600 * j;
@@ -283,7 +281,7 @@ export default class Game extends IView {
             }
             else {
 
-                this.curOtherUnit = Math.ceil((0.3 + Math.random() * 0.3) * this.totalUnit);
+                this.curOtherUnit = Math.ceil((Math.random() * 0.4) * this.totalUnit);
                 this.curEnemyNum = this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
             }
             this.totalUnit = 0;
@@ -565,6 +563,8 @@ export default class Game extends IView {
                     Sound.getInstance().stopSound(SoundType.Fight);
                     Sound.getInstance().playSound(SoundType.FigthWin);
                     setTimeout(function () {
+                        if (this.gameState == GameState.Over)
+                            return;
                         if (this.gameMode == GameMode.Pattern) {
                             UI.getInstance().showUI('Result', false);
                             console.log("[Pattern Model GameOver]");
@@ -608,6 +608,8 @@ export default class Game extends IView {
      * @return {*}
      */
     answerResult(result: boolean) {
+        if (this.gameState == GameState.Over)
+            return;
         let delay = 550;
 
         if (this.gameMode == GameMode.Pattern) {
@@ -660,8 +662,10 @@ export default class Game extends IView {
             if (result) {
                 this.record++;
                 this.refreshRecord();
+                UI.getInstance().showFloatMsg("回答争取,再闯一关");
             }
             else {
+                UI.getInstance().showFloatMsg("回答错误,军心动摇")
                 GameData.getInstance().soliderNum = this.originSoliderNum - 1000;
                 if (GameData.getInstance().soliderNum <= 0)
                     GameData.getInstance().soliderNum = 0;
@@ -683,14 +687,11 @@ export default class Game extends IView {
             }
 
 
-
             for (let i = 0; i < this.enemyRole.length; i++) {
                 if (this.enemyRole[i].node.active) {
                     this.soliderDead(this.enemyRole[i].node);
                 }
             }
-
-
 
             setTimeout(function () {
                 this.switchSoliderFormat(Action.Idle, function () {

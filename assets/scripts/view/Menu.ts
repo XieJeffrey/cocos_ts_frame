@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-14 17:26:13
+ * @LastEditTime: 2021-09-15 21:57:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -106,7 +106,7 @@ export default class Menu extends IView {
      * @return {*}
      */
     refreshPoint() {
-        this.pointTxt.string = "积分 " + GameData.getInstance().endlessRecord * GameConfig.getInstance().solider2Point;
+        this.pointTxt.string = "积分 " + GameData.getInstance().point;
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 10:04:07
- * @LastEditTime: 2021-09-15 11:32:08
+ * @LastEditTime: 2021-09-15 21:56:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
@@ -21,10 +21,10 @@ export default class GameData extends IManager {
     public endlessRecord: number = 0;//无尽模式记录    
     public maxSoliderNum: number = 0;//剩余兵量的最高记录
     public soliderType: number = 0;//兑换兵种
+    public point: number = 0;//积分
 
     //临时游戏数据
     public soliderNum: number = 1000;//士兵数量
-    public point: number = 0;//积分
     public rankData: Array<any>;
     public myRank: number = null;//我的排名
 
@@ -39,6 +39,7 @@ export default class GameData extends IManager {
         this.maxSoliderNum = obj.num;
         this.endlessRecord = obj.record;
         this.soliderType = obj.type;
+        this.point = obj.point;
     }
 
     //是否排行版上版
