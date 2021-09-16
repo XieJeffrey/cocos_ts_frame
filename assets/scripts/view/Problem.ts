@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-16 11:05:53
+ * @LastEditTime: 2021-09-16 21:45:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -124,7 +124,7 @@ export default class Problem extends IView {
     }
 
     onSure() {
-        if (this.selectAnswerIdx = -1) {
+        if (this.selectAnswerIdx == -1) {
             UI.getInstance().showFloatMsg("请选择一个选项作答");
             return;
         }

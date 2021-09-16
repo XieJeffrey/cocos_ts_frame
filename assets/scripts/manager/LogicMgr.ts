@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-15 13:51:39
+ * @LastEditTime: 2021-09-16 23:20:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -222,6 +222,10 @@ export default class LogicMgr extends IManager {
         }, function () {
             UI.getInstance().showFloatMsg("升级助力失败");
         })
+    }
+
+    exchangeSolider(point, lv, call) {
+
     }
 
 }

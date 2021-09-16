@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-16 10:26:28
+ * @LastEditTime: 2021-09-16 22:57:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -49,6 +49,7 @@ export default class Storage extends IManager {
             record: GameData.getInstance().endlessRecord,
             type: GameData.getInstance().soliderType,
             point: GameData.getInstance().point,
+            payPoint: GameData.getInstance().payPoint,
         }
         let str = JSON.stringify(json);
         str = str.encode();

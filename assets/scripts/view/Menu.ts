@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-15 21:57:21
+ * @LastEditTime: 2021-09-16 21:51:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -129,6 +129,7 @@ export default class Menu extends IView {
     onClickStart() {
         //  UI.getInstance().showUI("Result",true);
         Sound.getInstance().playSound(SoundType.Click);
+        UI.getInstance().hideUI("Menu");
         UI.getInstance().showLoading(1, function () {
             UI.getInstance().showUI("game");
         }.bind(this))

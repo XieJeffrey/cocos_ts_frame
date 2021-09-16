@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-30 14:22:32
- * @LastEditTime: 2021-09-16 16:43:19
+ * @LastEditTime: 2021-09-16 23:41:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\GameConfig.ts
@@ -41,4 +41,5 @@ export default class GameConfig extends IManager {
     public solider2Point = 1;//兵力跟积分的兑换比例
 
     public maxPoint2Lv: number[] = [1000, 2000, 4000, 6000, 10000];//积分上限跟兵力的关系
+    public troops2lv: number[] = [10, 6, 4, 2, 1];//积分兑换各个等级的兵的关系
 }
