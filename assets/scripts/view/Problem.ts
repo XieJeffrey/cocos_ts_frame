@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-15 17:40:13
+ * @LastEditTime: 2021-09-16 11:05:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -104,8 +104,10 @@ export default class Problem extends IView {
                 this.answerIdx = i;
         }
 
-        this.selectAnswerIdx = 0;
-        this.toggleArray[0].check();
+        this.selectAnswerIdx = -1;
+        for (let i = 0; i < this.toggleArray.length; i++) {
+            this.toggleArray[i].uncheck()
+        }
     }
 
     onHide() {
@@ -122,6 +124,11 @@ export default class Problem extends IView {
     }
 
     onSure() {
+        if (this.selectAnswerIdx = -1) {
+            UI.getInstance().showFloatMsg("请选择一个选项作答");
+            return;
+        }
+
         this.problemPanel.active = false;
 
         setTimeout(function () {

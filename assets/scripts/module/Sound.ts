@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 21:10:42
- * @LastEditTime: 2021-08-24 11:29:21
+ * @LastEditTime: 2021-09-16 10:53:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Sound.ts
@@ -118,7 +118,11 @@ export default class Sound extends IManager {
                     return;
                 }
                 this.soundCache.set(name, audio);
-                cc.audioEngine.playEffect(audio, isLoop);
+                if (isLoop)
+                    this.loopSound.set(name, cc.audioEngine.playEffect(audio, true));
+                else
+                    cc.audioEngine.playEffect(audio, false);
+
             }.bind(this))
         }
     }

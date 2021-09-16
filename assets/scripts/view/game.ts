@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-15 21:21:03
+ * @LastEditTime: 2021-09-16 15:43:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -49,6 +49,9 @@ export default class Game extends IView {
     curEnemyNum: number = 0;//当前对面敌兵的兵力
     originSoliderNum: number = 0;//破釜沉舟模式遇敌前的兵力
     npcPosList: Array<{ x: number, y: number }>;
+    neutralPool: Array<number> = new Array();
+    enemyPool: Array<number> = new Array();
+
 
     soliderNumTxt: cc.Label;//当前小兵数量
     soliderNumState: cc.Sprite;//当前小兵的涨跌状态
@@ -262,6 +265,11 @@ export default class Game extends IView {
     initWave() {
         this.curWave = -1;
         this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
+
+        this.neutralPool = [2, 2, 2, 2, 2, 1, 1];
+        this.enemyPool = [1, 2, 3];
+        this.neutralPool.muddled();
+        this.enemyPool.muddled();
     }
 
     /**
@@ -280,8 +288,10 @@ export default class Game extends IView {
                 this.curEnemyNum = 10 * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
             }
             else {
-
-                this.curOtherUnit = Math.ceil((Math.random() * 0.4) * this.totalUnit);
+                if (this.enemyPool.length > 0)
+                    this.curOtherUnit = this.enemyPool.pop();
+                else
+                    this.curOtherUnit = Math.ceil(Math.random() * 2);
                 this.curEnemyNum = this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
             }
             this.totalUnit = 0;
@@ -300,7 +310,10 @@ export default class Game extends IView {
         }
         else {
             roleType = RoleType.Neutral;
-            this.curOtherUnit = Math.ceil(Math.random() * 3);
+            if (this.neutralPool.length > 0)
+                this.curOtherUnit = this.neutralPool.pop();
+            else
+                this.curOtherUnit = Math.ceil(Math.random() * 2);
             this.totalUnit += this.curOtherUnit;
             let pos = this.npcPosList.shift();
             this.genNpcOnPos(pos);

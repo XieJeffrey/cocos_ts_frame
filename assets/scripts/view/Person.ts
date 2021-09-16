@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-15 11:15:32
+ * @LastEditTime: 2021-09-16 10:21:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -115,7 +115,7 @@ export default class Person extends IView {
             UserData.getInstance().Name = this.nameInput.string;
             UserData.getInstance().Address = this.addressInput.string;
             Storage.getInstance().saveUserData();
-        });
+        }.bind(this));
     }
 
     onClose() {

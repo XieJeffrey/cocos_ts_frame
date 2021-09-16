@@ -3,7 +3,7 @@ import IManager from "../base/IManager";
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-09-10 16:18:32
+ * @LastEditTime: 2021-09-16 10:25:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -37,6 +37,31 @@ export default class Tool extends IManager {
         String.prototype.capitalize = function () {
             return this[0].toUpperCase() + this.substring(1, this.length);
         }
+
+        /**
+         * @description: 加密字符串
+         * @param {*}
+         * @return {*}
+         */
+        String.prototype.encode = function () {
+            let c = String.fromCharCode(this.charCodeAt(0) + this.length)
+            for (let i = 1; i < this.length; i++) {
+                c += String.fromCharCode(this.charCodeAt(i) + this.charCodeAt(i - 1));
+            }
+
+            return encodeURIComponent(c);
+        }
+
+        //解密字符串
+        String.prototype.decode = function () {
+            let str = decodeURIComponent(this);
+            var c = String.fromCharCode(str.charCodeAt(0) - str.length)
+            for (let i = 1; i < str.length; i++) {
+                c += String.fromCharCode(str.charCodeAt(i) - c.charCodeAt(i - 1));
+            }
+            return c;
+        }
+
 
         cc.Node.prototype.findChild = function (path: string): cc.Node {
             var paths = path.split("/");
@@ -85,6 +110,7 @@ export default class Tool extends IManager {
                 return (0.5 - Math.random());
             })
         }
+
 
         console.log("Tool constructor!!");
     }

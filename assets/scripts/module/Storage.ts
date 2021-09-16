@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-15 22:01:50
+ * @LastEditTime: 2021-09-16 10:26:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -21,7 +21,7 @@ const { ccclass, property } = cc._decorator;
 const localStorage = true;
 @ccclass
 export default class Storage extends IManager {
-    dataKey: string = "debug_key_1";
+    dataKey: string = "debug_key_2";
 
     init() {
         return new Promise(function (resolve, reject) {
@@ -51,6 +51,7 @@ export default class Storage extends IManager {
             point: GameData.getInstance().point,
         }
         let str = JSON.stringify(json);
+        str = str.encode();
         cc.sys.localStorage.setItem('gameData' + this.dataKey, str);
     }
 
@@ -68,6 +69,8 @@ export default class Storage extends IManager {
             mail: UserData.getInstance().Mail,
         }
         let str = JSON.stringify(json);
+        str = str.encode();
+        console.log(str);
         cc.sys.localStorage.setItem('userData' + this.dataKey, str);
     }
 
@@ -77,7 +80,7 @@ export default class Storage extends IManager {
             GameData.getInstance().init()
         }
         else {
-            GameData.getInstance().load(str);
+            GameData.getInstance().load(str.decode());
         }
     }
 
@@ -87,7 +90,7 @@ export default class Storage extends IManager {
             UserData.getInstance().init()
         }
         else {
-            UserData.getInstance().load(str);
+            UserData.getInstance().load(str.decode());
         }
     }
 }

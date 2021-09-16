@@ -1,0 +1,38 @@
+{
+  "ver": "2.3.7",
+  "uuid": "dbbabc16-244f-421f-ae15-1c80ab7770cf",
+  "importer": "texture",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 37,
+  "height": 38,
+  "platformSettings": {},
+  "subMetas": {
+    "1主界面-兑换兵种未选中": {
+      "ver": "1.0.6",
+      "uuid": "118c4b6e-f4a7-4b0a-acc5-fbd0a2ed63af",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "dbbabc16-244f-421f-ae15-1c80ab7770cf",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 37,
+      "height": 38,
+      "rawWidth": 37,
+      "rawHeight": 38,
+      "borderTop": 16,
+      "borderBottom": 15,
+      "borderLeft": 15,
+      "borderRight": 14,
+      "subMetas": {}
+    }
+  }
+}

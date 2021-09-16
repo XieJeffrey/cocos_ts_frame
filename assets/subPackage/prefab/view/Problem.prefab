@@ -24,7 +24,7 @@
         "__id__": 5
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [],
     "_prefab": {
       "__id__": 102
@@ -3130,7 +3130,7 @@
       "__id__": 17
     },
     "_enabled": true,
-    "allowSwitchOff": false,
+    "allowSwitchOff": true,
     "checkEvents": [],
     "_id": ""
   },
@@ -3312,7 +3312,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 35,
-      "height": 25.2
+      "height": 20
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
