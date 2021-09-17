@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:56:09
- * @LastEditTime: 2021-08-26 11:43:50
+ * @LastEditTime: 2021-09-17 13:47:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\App.ts
@@ -21,6 +21,7 @@ import IManager from "./base/IManager";
 import Storage from "./module/Storage";
 import Res from "./module/Res";
 import Question from "./manager/Question";
+import LogicMgr from "./manager/LogicMgr";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -32,13 +33,16 @@ export default class App {
     storage: Storage = Storage.getInstance() as Storage;
     res: Res = Res.getInstance() as Res;
     question: Question = Question.getInstance() as Question;
+    logicMgr: LogicMgr = LogicMgr.getInstance() as LogicMgr;
 
     curInited: number = 0;
+    total: number = 6;
     initCall: Function = null;
 
     public init(call: Function) {
         this.initCall = call;
 
+        this.logicMgr.init().then(function () { this.inited() }.bind(this));
         this.sound.init().then(function () { this.inited() }.bind(this));
         this.storage.init().then(function () { this.inited() }.bind(this));
         this.res.init().then(function () { this.inited() }.bind(this));
@@ -48,8 +52,8 @@ export default class App {
 
     inited() {
         if (this.initCall) {
-            this.curInited += 1 / 5;
-            this.initCall(this.curInited)
+            this.curInited++;
+            this.initCall({ cur: this.curInited, total: this.total })
         }
     }
 }

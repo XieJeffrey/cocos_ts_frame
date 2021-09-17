@@ -2200,7 +2200,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        0,
+        -29.884,
         476,
         0,
         0,
@@ -2780,7 +2780,7 @@
         "__id__": 72
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [],
     "_prefab": {
       "__id__": 75
@@ -2807,8 +2807,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -267.629,
-        -73.125,
+        8.093,
+        546.03,
         0,
         0,
         0,
@@ -2859,8 +2859,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 136,
-      "height": 61
+      "width": 558,
+      "height": 137
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2878,8 +2878,8 @@
         0,
         0,
         1,
-        1,
-        1,
+        0.6,
+        0.6,
         1
       ]
     },
@@ -2911,7 +2911,9 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": null,
+    "_spriteFrame": {
+      "__uuid__": "5a875a6e-1a99-4e51-9a00-b4c0f8874923"
+    },
     "_type": 0,
     "_sizeMode": 1,
     "_fillType": 0,
@@ -2957,14 +2959,14 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 112,
+      "g": 69,
+      "b": 10,
       "a": 255
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 120,
+      "width": 250,
       "height": 40
     },
     "_anchorPoint": {
@@ -2977,7 +2979,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -11.19,
+        11.487,
         0,
         0,
         0,
@@ -3016,16 +3018,16 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "60:00",
-    "_N$string": "60:00",
-    "_fontSize": 30,
-    "_lineHeight": 40,
+    "_string": "最高得分:1000",
+    "_N$string": "最高得分:1000",
+    "_fontSize": 25,
+    "_lineHeight": 25,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_batchAsBitmap": false,
-    "_styleFlags": 0,
+    "_styleFlags": 1,
     "_underlineHeight": 0,
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,

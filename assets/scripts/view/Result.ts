@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-15 22:07:42
+ * @LastEditTime: 2021-09-17 10:46:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -70,18 +70,25 @@ export default class Result extends IView {
         Sound.getInstance().stopBgm();
         this.playTitleAnima(isWin);
 
+
+        let getPoint = GameData.getInstance().soliderNum * GameConfig.getInstance().solider2Point;;
+
         if (isWin) {
             if (GameData.getInstance().maxSoliderNum < GameData.getInstance().soliderNum) {
                 GameData.getInstance().maxSoliderNum = GameData.getInstance().soliderNum;
-                GameData.getInstance().point += GameData.getInstance().soliderNum * GameConfig.getInstance().solider2Point;
-                Storage.getInstance().saveGameData();
+
+                LogicMgr.getInstance().setTroops(getPoint, function () {
+                    GameData.getInstance().point += getPoint;
+                    Storage.getInstance().saveGameData();
+                    this.height.string = "累计积分: " + GameData.getInstance().point;
+                }.bind(this))
             }
             Sound.getInstance().playSound(SoundType.Win);
         }
         else
             Sound.getInstance().playSound(SoundType.Fail);
 
-        this.point.string = "积分 " + (isWin ? GameData.getInstance().soliderNum * GameConfig.getInstance().solider2Point : 0)
+        this.point.string = "积分 " + (isWin ? getPoint : 0)
         this.height.string = "累计积分: " + GameData.getInstance().point;
         this.continueBtn.active = isWin;
         this.shareBtn.active = !isWin;

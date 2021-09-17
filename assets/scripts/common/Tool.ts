@@ -3,7 +3,7 @@ import IManager from "../base/IManager";
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-09-16 10:25:35
+ * @LastEditTime: 2021-09-17 14:07:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -127,6 +127,11 @@ export default class Tool extends IManager {
         return str;
     }
 
+    /**
+     * @description: 时间戳转成 YYYY年MM月DD日
+     * @param {number} second
+     * @return {*}
+     */
     public static secToCNTime(second: number) {
         var date: Date = new Date(second);
         let Y = date.getFullYear();
@@ -134,5 +139,16 @@ export default class Tool extends IManager {
         let D = date.getDate();
 
         return ("{0}年{1}月{2}日").format(Y, M, D);
+    }
+
+    /**
+     * @description: "yyyy-mm-dd hh:mm:ss 格式的时间字符串转化成时间戳"
+     * @param {string} str
+     * @return {*}
+     */
+    public static timeStrToStamp(str: string) {
+        let date = str.replace('-', '/');
+        var timeStamp = new Date(date).getTime();
+        return timeStamp;
     }
 }

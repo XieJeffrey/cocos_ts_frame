@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-15 15:29:34
- * @LastEditTime: 2021-09-15 17:49:00
+ * @LastEditTime: 2021-09-17 16:23:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Record.ts
@@ -16,10 +16,12 @@
 import { IView } from "../base/IView";
 import { EventType, SoundType } from "../common/BaseType";
 import GameData from "../data/GameData";
+import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
 import Event from "../module/Event";
 import Res from "../module/Res";
 import Sound from "../module/Sound";
+import Storage from "../module/Storage";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -58,11 +60,24 @@ export default class Record extends IView {
         Sound.getInstance().playSound(SoundType.Win);
         let record = param.record;
         this.recordTxt.string = "{0}关!".format(record);
-        this.newTip.active = record > GameData.getInstance().endlessRecord;
-        GameData.getInstance().endlessRecord = record;
+        this.newTip.active = false;
         this.anima.premultipliedAlpha = false;
         this.anima.setAnimation(0, "victory", false);
-        LogicMgr.getInstance().saveGameData();
+
+        if (GameData.getInstance().endlessRecord < record) {
+            this.newTip.active = true;
+            //未注册时在本地保存泼妇沉舟的记录
+            if (UserData.getInstance().GameID != "") {
+                LogicMgr.getInstance().updateRank(record, function () {
+                    GameData.getInstance().endlessRecord = record;
+                    Storage.getInstance().saveGameData();
+                })
+            }
+            else {
+                GameData.getInstance().endlessRecord = record;
+                Storage.getInstance().saveGameData();
+            }
+        }
     }
 
     onHide() { }

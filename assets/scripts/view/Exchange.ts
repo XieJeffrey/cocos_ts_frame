@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-16 23:51:08
+ * @LastEditTime: 2021-09-17 10:03:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -50,11 +50,13 @@ export default class Exchange extends IView {
         this.exchangePanel = this.node.findChild('exchange');
         this.exchangeBtn = this.node.findChild('exchangeBtn');
 
-        this.soliderImg = this.node.findChild('item/img').getComponent(cc.Sprite);
+        this.soliderImg = this.exchangePanel.findChild('item/img').getComponent(cc.Sprite);
         this.soliderNumTxt = this.exchangePanel.findChild('item/mark/txt').getComponent(cc.Label);
         this.soliderTypeName = this.exchangePanel.findChild('item/txt').getComponent(cc.Label);
         this.GameIDTxt = this.exchangePanel.findChild('Id/txt').getComponent(cc.Label);
         this.exchangedNum = this.exchangePanel.findChild('done/txt').getComponent(cc.Label);
+
+        super.onLoad();
     }
 
     register() {
@@ -72,7 +74,7 @@ export default class Exchange extends IView {
 
         this.selectPanel.active = GameData.getInstance().soliderType == 0;
         this.exchangePanel.active = GameData.getInstance().soliderType != 0;
-        this.exchangeBtn.active = false;
+        this.exchangeBtn.active = true;
 
         if (this.selectPanel.active)
             this.refreshSelectPanel();
@@ -98,14 +100,19 @@ export default class Exchange extends IView {
     }
 
     onExchange() {
+        if (UserData.getInstance().GameID == "") {
+            UI.getInstance().showFloatMsg("请先完善游戏关联账号");
+            UI.getInstance().showUI("Person");
+            return;
+        }
+
         if (GameData.getInstance().soliderType == 0) {
             UI.getInstance().showFloatMsg("请先选择兑换兵种");
             return
         }
 
-        if (UserData.getInstance().GameID == "") {
-            UI.getInstance().showFloatMsg("请先完善游戏关联账号");
-            UI.getInstance().showUI("Person");
+        if (GameData.getInstance().point <= 0) {
+            UI.getInstance().showFloatMsg("兑换积分不足");
             return;
         }
 

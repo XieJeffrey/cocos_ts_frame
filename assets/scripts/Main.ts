@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:49:06
- * @LastEditTime: 2021-09-14 11:44:55
+ * @LastEditTime: 2021-09-17 13:48:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\Main.ts
@@ -35,8 +35,10 @@ export default class Main extends cc.Component {
         this.progressBar.progress = 0;
         this.progressTxt = this.node.findChild('start/progressBar/txt').getComponent(cc.Label);
         this.updateProgress();
-        this.app.init(function (progress) {
-            this.loadedValue = progress;
+        this.app.init(function (param: any) {
+            this.loadedValue = param.cur / param.total;
+            if (param.cur == param.total)
+                this.loadedValue = 1;
         }.bind(this));
     }
 
@@ -48,7 +50,7 @@ export default class Main extends cc.Component {
         }
         this.updateProgress();
         if (this.progressBar.progress >= 1) {
-            UI.getInstance().showUI("menu");
+            UI.getInstance().showUI("Menu");
             this.node.findChild('start').destroy()
             this.enabled = false;
         }

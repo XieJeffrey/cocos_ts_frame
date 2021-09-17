@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-16 10:21:37
+ * @LastEditTime: 2021-09-17 16:18:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -14,9 +14,10 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { IView } from "../base/IView";
-import { SoundType } from "../common/BaseType";
+import { EventType, SoundType } from "../common/BaseType";
 import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
+import Event from "../module/Event";
 import Sound from "../module/Sound";
 import Storage from "../module/Storage";
 import UI from "../module/UI";
@@ -101,7 +102,7 @@ export default class Person extends IView {
             return;
         }
 
-        LogicMgr.getInstance().setUserData({
+        LogicMgr.getInstance().setUserInfo({
             id: this.idInput.string,
             mail: this.mailInput.string,
             tel: this.phoneInput.string,
@@ -115,6 +116,7 @@ export default class Person extends IView {
             UserData.getInstance().Name = this.nameInput.string;
             UserData.getInstance().Address = this.addressInput.string;
             Storage.getInstance().saveUserData();
+            Event.getInstance().emit(EventType.Regist, {});
         }.bind(this));
     }
 

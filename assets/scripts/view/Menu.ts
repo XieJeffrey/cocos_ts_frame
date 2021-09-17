@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-16 21:51:46
+ * @LastEditTime: 2021-09-17 14:41:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -37,6 +37,7 @@ export default class Menu extends IView {
     exchangeBtn: cc.Node;
     anima: sp.Skeleton;
     pointTxt: cc.Label;
+    recordTxt: cc.Label;
 
     onLoad() {
         this.rankBtn = this.node.findChild('rank');
@@ -48,6 +49,7 @@ export default class Menu extends IView {
         this.soliderLvTxt = this.node.findChild('solider/lv').getComponent(cc.Label);
         this.soliderIcon = this.node.findChild('solider/icon').getComponent(cc.Sprite);
         this.pointTxt = this.node.findChild('exchange/point').getComponent(cc.Label);
+        this.recordTxt = this.node.findChild('record/txt').getComponent(cc.Label);
         this.loadSoliderSprite();
         super.onLoad();
     }
@@ -66,6 +68,7 @@ export default class Menu extends IView {
         this.rankBtnEft();
         this.refreshSolider();
         this.refreshPoint();
+        this.refreshRecord();
         Sound.getInstance().playBgm(BgmType.MenuBgm);
         if (this.anima == null) {
             this.anima = new cc.Node('anima').addComponent(sp.Skeleton);
@@ -110,6 +113,15 @@ export default class Menu extends IView {
     }
 
     /**
+     * @description: 刷新最高得分
+     * @param {*}
+     * @return {*}
+     */
+    refreshRecord() {
+        this.recordTxt.string = "最高得分: " + GameData.getInstance().maxSoliderNum;
+    }
+
+    /**
      * @description: 加载5级士兵的资源
      * @param {*}
      * @return {*}
@@ -127,6 +139,10 @@ export default class Menu extends IView {
     }
 
     onClickStart() {
+        if (GameData.getInstance().isActiviyOpen == false) {
+            UI.getInstance().showFloatMsg("活动已结束")
+            return;
+        }
         //  UI.getInstance().showUI("Result",true);
         Sound.getInstance().playSound(SoundType.Click);
         UI.getInstance().hideUI("Menu");
@@ -155,7 +171,13 @@ export default class Menu extends IView {
     }
 
     onClickExchange() {
+        if (GameData.getInstance().isExchangeOpen == false) {
+            UI.getInstance().showFloatMsg("兑换未开启")
+            return;
+        }
         console.log("打开兑换界面");
+        Sound.getInstance().playSound(SoundType.Click);
+        UI.getInstance().showUI("Exchange");
     }
 
     rankBtnEft() {

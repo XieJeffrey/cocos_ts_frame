@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 23:55:12
- * @LastEditTime: 2021-08-24 14:29:37
+ * @LastEditTime: 2021-09-17 12:08:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Net.ts
@@ -23,12 +23,10 @@ export default class Net extends IManager {
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 400)) {
-                    var response = xhr.responseText;
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
                     resolve(response);
                 }
-                else
-                    reject();
             };
             console.log(url);
             xhr.open("GET", url, true);
@@ -49,7 +47,7 @@ export default class Net extends IManager {
                 else
                     reject();
             };
-            // console.log('request:' + url + "?" + str);
+            console.log('request:' + url + "?" + str);
             xhr.open("POST", url, true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.send(str);

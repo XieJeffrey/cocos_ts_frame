@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:33:41
- * @LastEditTime: 2021-09-06 15:34:11
+ * @LastEditTime: 2021-09-17 16:18:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\BaseType.ts
@@ -46,6 +46,7 @@ export enum EventType {
     DialogClose = 0,
     Continue = 1,
     Retry = 2,
+    Regist = 3,
 }
 
 /**
