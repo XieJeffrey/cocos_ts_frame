@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-17 10:03:16
+ * @LastEditTime: 2021-09-17 21:47:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -165,7 +165,7 @@ export default class Exchange extends IView {
         if (event.isChecked)
             GameData.getInstance().soliderType = idx;
         else
-            this.toggleTypeNode.findChild('idx').getComponent(cc.Toggle).check();
+            this.toggleTypeNode.findChild('' + idx).getComponent(cc.Toggle).check();
     }
 
 

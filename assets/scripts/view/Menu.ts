@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-17 14:41:14
+ * @LastEditTime: 2021-09-17 23:11:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -65,7 +65,7 @@ export default class Menu extends IView {
 
     onShow() {
         this.lvUpBtn.playBreathAnima();
-        this.rankBtnEft();
+        this.soliderBtnEft();
         this.refreshSolider();
         this.refreshPoint();
         this.refreshRecord();
@@ -109,7 +109,7 @@ export default class Menu extends IView {
      * @return {*}
      */
     refreshPoint() {
-        this.pointTxt.string = "积分 " + GameData.getInstance().point;
+        this.pointTxt.string = "积分  " + GameData.getInstance().point;
     }
 
     /**
@@ -180,13 +180,13 @@ export default class Menu extends IView {
         UI.getInstance().showUI("Exchange");
     }
 
-    rankBtnEft() {
+    soliderBtnEft() {
         let tip = this.rankBtn.findChild('tip')
         tip.stopAllActions();
         tip.runAction(cc.repeatForever(cc.sequence(
             cc.scaleTo(0, 0),
-            cc.scaleTo(0.5, -1, 1).easing(cc.easeBackOut()),
-            cc.scaleTo(0.5, -1, 1),
+            cc.scaleTo(0.5, 1, 1).easing(cc.easeBackOut()),
+            cc.scaleTo(0.5, 1, 1),
             cc.scaleTo(0.5, 0),
             cc.scaleTo(2, 0)
         )))

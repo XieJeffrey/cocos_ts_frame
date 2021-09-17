@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-16 15:43:42
+ * @LastEditTime: 2021-09-17 22:33:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -569,7 +569,6 @@ export default class Game extends IView {
                 }
 
                 if (num <= 0) {
-                    this.gameState = GameState.Over;
                     clearInterval(this.fightTimer);
                     this.playHeroAnima(Action.Idle);
                     this.playSoliderAnima(RoleType.Enemy, Action.Idle, GameData.getInstance().soliderLv);
@@ -578,6 +577,8 @@ export default class Game extends IView {
                     setTimeout(function () {
                         if (this.gameState == GameState.Over)
                             return;
+                        this.gameState = GameState.Over;
+
                         if (this.gameMode == GameMode.Pattern) {
                             UI.getInstance().showUI('Result', false);
                             console.log("[Pattern Model GameOver]");
@@ -621,8 +622,8 @@ export default class Game extends IView {
      * @return {*}
      */
     answerResult(result: boolean) {
-        if (this.gameState == GameState.Over)
-            return;
+        // if (this.gameState == GameState.Over)
+        //     return;
         let delay = 550;
 
         if (this.gameMode == GameMode.Pattern) {

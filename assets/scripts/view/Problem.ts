@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-16 21:45:35
+ * @LastEditTime: 2021-09-17 23:33:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -88,6 +88,7 @@ export default class Problem extends IView {
         this.refreshCountDown();
         this.problemPanel.active = true;
         this.countDown.node.active = !(this.duration == Infinity)
+        this.qusIdxLabel.node.active = (this.duration == Infinity)
 
         let queStr: string = Question.getInstance().getQuestion();
         console.log("queStr:{0}".format(queStr));
@@ -108,11 +109,19 @@ export default class Problem extends IView {
         for (let i = 0; i < this.toggleArray.length; i++) {
             this.toggleArray[i].uncheck()
         }
+        this.sureBtn.active = false;
+
+        if (this.duration != Infinity) {
+            this.schedule(function () {
+                this.playCountDownEft();
+            }.bind(this), 1, 10);
+        }
     }
 
     onHide() {
         this.resultCall = null;
         this.duration = Infinity;
+        this.unscheduleAllCallbacks();
     }
 
     onSelectOption(event) {
@@ -120,7 +129,10 @@ export default class Problem extends IView {
         let idx: number = parseInt(event.node.name)
         if (event.isChecked)
             this.selectAnswerIdx = idx;
+        else
+            this.toggleArray[idx].check();
 
+        this.sureBtn.active = true;
     }
 
     onSure() {
@@ -142,6 +154,16 @@ export default class Problem extends IView {
         if (this.duration == Infinity)
             return
 
-        this.countDown.string = "{0}秒".format(Math.ceil(this.duration));
+        this.countDown.string = "{0}".format(Math.ceil(this.duration));
+    }
+
+    playCountDownEft() {
+        this.countDown.node.scale = 1.5;
+        this.countDown.node.opacity = 122;
+        this.countDown.node.stopAllActions();
+        this.countDown.node.runAction(cc.spawn(
+            cc.scaleTo(0.4, 1, 1),
+            cc.fadeIn(0.4)
+        ))
     }
 }
