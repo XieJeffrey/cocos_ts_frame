@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-17 10:46:48
+ * @LastEditTime: 2021-09-18 17:19:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -64,6 +64,7 @@ export default class Result extends IView {
         this.retryBtn.on('click', this.onRetry, this);
         this.continueBtn.on('click', this.onContinue, this);
         this.homeBtn.on('click', this.onHome, this);
+        this.shareBtn.on('click', this.shareRelive, this);
     }
 
     onShow(isWin) {
@@ -165,6 +166,11 @@ export default class Result extends IView {
 
 
         }.bind(this), duration * 1000 + 1500)
+    }
+
+    shareRelive() {
+        console.log(wx)
+        LogicMgr.getInstance().shareRelive();
     }
 
 }

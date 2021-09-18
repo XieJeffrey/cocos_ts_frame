@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-18 10:02:10
+ * @LastEditTime: 2021-09-18 11:51:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -59,7 +59,9 @@ export default class Game extends IView {
     npcId: number = 0;//村名Npc的角色Id
     fightTimer: number = 0;//战斗计时器
     recordNode: cc.Node = null;//破釜沉舟模式记录
-    recordTxt: cc.Label = null;
+    recordTxt: cc.Label = null;//当前闯过？关
+    recordShadowTxt: cc.Label = null;//文字阴影
+    recordHistoryTxt: cc.Label = null;//历史最高
 
     onLoad() {
         //滚动背景
@@ -126,7 +128,9 @@ export default class Game extends IView {
         this.soliderNumState = this.node.findChild('res/state').getComponent(cc.Sprite);
         //破釜沉舟
         this.recordNode = this.node.findChild('record');
-        this.recordTxt = this.recordNode.findChild('num').getComponent(cc.Label);
+        this.recordHistoryTxt = this.recordNode.findChild('height').getComponent(cc.Label);
+        this.recordTxt = this.recordNode.findChild('cur').getComponent(cc.Label);
+        this.recordShadowTxt = this.recordNode.findChild('cur/shadow').getComponent(cc.Label);
 
         super.onLoad();
     }
@@ -513,6 +517,7 @@ export default class Game extends IView {
                         });
                     }
                     else {
+                        this.originSoliderNum = GameData.getInstance().soliderNum;
                         this.switchSoliderFormat(Action.Attack, function () {
                             this.startFight();
                         }.bind(this))
@@ -574,6 +579,7 @@ export default class Game extends IView {
                     this.playSoliderAnima(RoleType.Enemy, Action.Idle, GameData.getInstance().soliderLv);
                     Sound.getInstance().stopSound(SoundType.Fight);
                     Sound.getInstance().playSound(SoundType.FigthWin);
+
                     setTimeout(function () {
                         if (this.gameState == GameState.Over)
                             return;
@@ -597,7 +603,7 @@ export default class Game extends IView {
                     this.playHeroAnima(Action.Idle);
                     this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.getInstance().soliderLv);
                     Sound.getInstance().stopSound(SoundType.Fight);
-
+                    UI.getInstance().showFloatMsg("本次战斗消耗了你{0}兵力".format(this.originSoliderNum - GameData.getInstance().soliderNum));
                     setTimeout(function () {
                         if (this.curWave == 9) {
                             this.gameState = GameState.Over;
@@ -622,8 +628,8 @@ export default class Game extends IView {
      * @return {*}
      */
     answerResult(result: boolean) {
-        // if (this.gameState == GameState.Over)
-        //     return;
+        if (this.gameState == GameState.Over)
+            return;
         let delay = 550;
 
         if (this.gameMode == GameMode.Pattern) {
@@ -851,7 +857,8 @@ export default class Game extends IView {
      * @return {*}
      */
     refreshRecord() {
-        this.recordTxt.string = "{0}题".format(this.record);
+        this.recordTxt.string = "已成功闯过{0}关".format(this.record);
+        this.recordShadowTxt.string = this.recordTxt.string;
     }
 
     /**
@@ -917,6 +924,7 @@ export default class Game extends IView {
         Sound.getInstance().playBgm(BgmType.FightBgm);
         this.switchSoliderFormat(Action.Idle, function () {
             this.recordNode.active = true;
+            this.recordHistoryTxt.string = "*最高记录：成功闯过{0}关".format(GameData.getInstance().endlessRecord);
             this.record = 0;
             this.refreshRecord();
 

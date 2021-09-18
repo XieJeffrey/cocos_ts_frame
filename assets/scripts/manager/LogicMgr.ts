@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-17 17:24:43
+ * @LastEditTime: 2021-09-18 17:26:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -154,11 +154,12 @@ export default class LogicMgr extends IManager {
                     resolve(1);
                 return;
             }
-            let url = GameConfig.getInstance().url + "/api/getUser";
+            let url = GameConfig.getInstance().url + "/api/getUser?";
             let param = "openid={0}".format(UserData.getInstance().GameID);
             url += param;
-            Net.getInstance().get(url).then(function (data: string) {
-                let obj = JSON.parse(data);
+            Net.getInstance().get(url).then(function (data: any) {
+                let obj = data.data
+                console.log(obj);
                 GameData.getInstance().endlessRecord = parseInt(obj.round);
                 GameData.getInstance().soliderNum = obj.trpops;
                 GameData.getInstance().soliderLv = obj.level;
@@ -271,7 +272,7 @@ export default class LogicMgr extends IManager {
     }
 
     exchangeSolider(point, lv, call) {
-        let url = GameConfig.getInstance().url;
+        let url = GameConfig.getInstance().url + "/api/exchange";
         let param = {
             openid: UserData.getInstance().GameID,
             level: lv,
@@ -323,4 +324,8 @@ export default class LogicMgr extends IManager {
         })
     }
 
+    shareRelive() {
+        console.log(wx)
+        wx && wx.miniProgram.navigateTo({ url: "../pages/index?cmd=0" })
+    }
 }

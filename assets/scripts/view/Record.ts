@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-15 15:29:34
- * @LastEditTime: 2021-09-17 16:23:22
+ * @LastEditTime: 2021-09-18 10:22:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Record.ts
@@ -33,13 +33,15 @@ export default class Record extends IView {
     home: cc.Node = null;
     retry: cc.Node = null;
     recordTxt: cc.Label = null;
+    heightTxt: cc.Label = null;
     newTip: cc.Node = null;
 
     onLoad() {
         this.download = this.node.findChild('btn/download');
         this.retry = this.node.findChild('btn/retry');
         this.home = this.node.findChild('btn/home');
-        this.recordTxt = this.node.findChild('record/num').getComponent(cc.Label);
+        this.recordTxt = this.node.findChild('result').getComponent(cc.Label);
+        this.heightTxt = this.node.findChild("height").getComponent(cc.Label);
         this.newTip = this.node.findChild('newTip')
 
         let animaNode = this.node.findChild('anima');
@@ -59,7 +61,7 @@ export default class Record extends IView {
         Sound.getInstance().stopBgm();
         Sound.getInstance().playSound(SoundType.Win);
         let record = param.record;
-        this.recordTxt.string = "{0}关!".format(record);
+        this.recordTxt.string = "本轮成功闯过{0}关！".format(record);
         this.newTip.active = false;
         this.anima.premultipliedAlpha = false;
         this.anima.setAnimation(0, "victory", false);
@@ -78,6 +80,8 @@ export default class Record extends IView {
                 Storage.getInstance().saveGameData();
             }
         }
+
+        this.heightTxt.string = "*最高记录：成功闯过{0}关".format(GameData.getInstance().endlessRecord);
     }
 
     onHide() { }

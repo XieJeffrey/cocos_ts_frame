@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 23:55:12
- * @LastEditTime: 2021-09-17 12:08:47
+ * @LastEditTime: 2021-09-18 11:46:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Net.ts
@@ -42,6 +42,7 @@ export default class Net extends IManager {
                 if (xhr.readyState !== 4) return;//忽略未完成的请求
                 if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 400)) {
                     var response = xhr.responseText;
+                    console.log(JSON.parse(response));
                     resolve(JSON.parse(response));
                 }
                 else

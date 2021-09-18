@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-17 23:11:28
+ * @LastEditTime: 2021-09-18 17:22:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -139,6 +139,8 @@ export default class Menu extends IView {
     }
 
     onClickStart() {
+        UI.getInstance().showUI("Result", false);
+        return
         if (GameData.getInstance().isActiviyOpen == false) {
             UI.getInstance().showFloatMsg("活动已结束")
             return;

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-18 09:48:32
+ * @LastEditTime: 2021-09-18 10:24:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -31,6 +31,7 @@ export default class Problem extends IView {
     optionArray: Array<cc.Label> = new Array<cc.Label>();
     toggleArray: Array<cc.Toggle> = new Array<cc.Toggle>();
     qusIdxLabel: cc.Label;
+    qusNode: cc.Node;
 
     answer: Array<string> = new Array<string>();
     answerIdx: number = 0;
@@ -44,7 +45,8 @@ export default class Problem extends IView {
     onLoad() {
         this.problemPanel = this.node.findChild('problem')
         this.sureBtn = this.node.findChild('problem/sure')
-        this.qusIdxLabel = this.node.findChild('problem/question/title/txt').getComponent(cc.Label);
+        this.qusNode = this.node.findChild('problem/question/title');
+        this.qusIdxLabel = this.qusNode.findChild('txt').getComponent(cc.Label);
         this.roleSprite = this.node.findChild("problem/role/role").getComponent(cc.Sprite);
         this.countDown = this.node.findChild("problem/countDown").getComponent(cc.Label);
 
@@ -122,6 +124,9 @@ export default class Problem extends IView {
     onHide() {
         this.resultCall = null;
         this.duration = Infinity;
+        this.qusNode.scale = 1;
+        this.qusNode.opacity = 255;
+        this.qusNode.stopAllActions();
         this.unscheduleAllCallbacks();
     }
 
@@ -159,10 +164,10 @@ export default class Problem extends IView {
     }
 
     playCountDownEft() {
-        this.countDown.node.scale = 1.5;
-        this.countDown.node.opacity = 122;
-        this.countDown.node.stopAllActions();
-        this.countDown.node.runAction(cc.spawn(
+        this.qusNode.scale = 1.5;
+        this.qusNode.opacity = 122;
+        this.qusNode.stopAllActions();
+        this.qusNode.runAction(cc.spawn(
             cc.scaleTo(0.4, 1, 1),
             cc.fadeIn(0.4)
         ))
