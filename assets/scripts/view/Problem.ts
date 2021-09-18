@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-17 23:33:53
+ * @LastEditTime: 2021-09-18 09:48:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -114,6 +114,7 @@ export default class Problem extends IView {
         if (this.duration != Infinity) {
             this.schedule(function () {
                 this.playCountDownEft();
+                Sound.getInstance().playSound(SoundType.CountDown);
             }.bind(this), 1, 10);
         }
     }

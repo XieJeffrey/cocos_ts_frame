@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-17 22:33:18
+ * @LastEditTime: 2021-09-18 10:02:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -628,7 +628,7 @@ export default class Game extends IView {
 
         if (this.gameMode == GameMode.Pattern) {
             if (result) {
-                UI.getInstance().showFloatMsg("回答正确，村民加入了你的队伍");
+                UI.getInstance().showFloatMsg("回答正确，有{0}村民加入了你".format(this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]));
                 Sound.getInstance().playSound(SoundType.AnswerRight);
                 console.log("答对了");
                 this.npcRole.runAction(cc.fadeOut(0.5));
@@ -651,7 +651,7 @@ export default class Game extends IView {
                 this.refreshSoliderNum(1);
             }
             else {
-                UI.getInstance().showFloatMsg("回答错误，村民失望的离开了");
+                UI.getInstance().showFloatMsg("回答错误，村民不愿意加入你的队伍");
                 Sound.getInstance().playSound(SoundType.AnswerWrong);
                 console.log("答错了");
                 this.npcRole.runAction(cc.fadeOut(0.5));
@@ -676,10 +676,10 @@ export default class Game extends IView {
             if (result) {
                 this.record++;
                 this.refreshRecord();
-                UI.getInstance().showFloatMsg("回答争取,再闯一关");
+                UI.getInstance().showFloatMsg("回答正确,本次战斗消耗了你{0}兵力".format(this.originSoliderNum - GameData.getInstance().soliderNum));
             }
             else {
-                UI.getInstance().showFloatMsg("回答错误,军心动摇")
+                UI.getInstance().showFloatMsg("回答错误,本次战斗消耗了你{0}兵力".format(1000));
                 GameData.getInstance().soliderNum = this.originSoliderNum - 1000;
                 if (GameData.getInstance().soliderNum <= 0)
                     GameData.getInstance().soliderNum = 0;

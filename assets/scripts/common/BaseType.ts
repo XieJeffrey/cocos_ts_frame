@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:33:41
- * @LastEditTime: 2021-09-17 16:18:07
+ * @LastEditTime: 2021-09-18 09:47:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\BaseType.ts
@@ -39,6 +39,7 @@ export enum SoundType {
     Fail = "Fail",
     Fight = "Fight",
     FigthWin = "FigthWin",
+    CountDown = "countDown"
 
 }
 
