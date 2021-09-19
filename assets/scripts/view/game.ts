@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-18 11:51:58
+ * @LastEditTime: 2021-09-19 21:01:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -558,7 +558,8 @@ export default class Game extends IView {
         //做个延时，因为攻击动画有延时
         setTimeout(function () {
             this.fightTimer = setInterval(function () {
-                this.curEnemyNum -= soliderLoss;
+                if (GameData.getInstance().soliderNum > 0)
+                    this.curEnemyNum -= soliderLoss;
                 this.curOtherUnit = Math.ceil(this.curEnemyNum / GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]);
                 for (let i = 0; i < this.enemyRole.length; i++) {
                     if (this.enemyRole[i].node.active && i >= this.curOtherUnit) {
@@ -566,6 +567,8 @@ export default class Game extends IView {
                     }
                 }
                 GameData.getInstance().soliderNum -= soliderLoss;
+                if (GameData.getInstance().soliderNum < 0)
+                    GameData.getInstance().soliderNum = 0;
                 this.refreshSoliderNum(-1);
                 let num = this.getMineSoliderUnitNum()
                 for (let i = 0; i < this.mineRole.length; i++) {

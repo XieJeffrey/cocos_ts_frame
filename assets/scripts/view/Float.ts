@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 11:51:32
- * @LastEditTime: 2021-09-08 11:51:22
+ * @LastEditTime: 2021-09-19 21:00:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Float.ts
@@ -42,6 +42,9 @@ export default class Float extends IView {
      * @return {*}
      */
     public showFloatMsg(msg: string, duration) {
+        this.content.string = msg;
+        this.playAnima(duration);
+        return;
         if (!this.isPlaying) {
             this.content.string = msg;
             this.playAnima(duration);

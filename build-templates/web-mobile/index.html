@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-09-18 17:09:03
- * @LastEditTime: 2021-09-18 17:09:33
- * @LastEditors: your name
+ * @LastEditTime: 2021-09-19 22:40:49
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\build-templates\web-mobile\index.html
 -->
@@ -62,11 +62,36 @@
 <script src="main.js" charset="utf-8"></script>
 
 <script type="text/javascript">
+  function GetRequest(){
+    var url=location.search;
+    console.log("getRequest:"+url)
+    var obj=new Object();
+    if(url.indexOf("?")!=-1){
+        var str=url.substr(1);
+        let strs=str.split("&");
+        for(let i=0;i<strs.length;i++){
+          let key=strs[i].split("=")[0];
+          let value=strs[i].split("=")[1];
+            obj[key]=value;
+        }
+
+        console.log("保存参数到本地")
+        localStorage.setItem("withParam","1");
+        localStorage.setItem("urlParam",JSON.stringify(obj));
+    }
+  }
+</script>
+
+<script type="text/javascript">
 (function () {
+    var url=document.URL;
+    console.log(document.URL);
+
     // open web debugger console
     if (typeof VConsole !== 'undefined') {
         window.vConsole = new VConsole();
     }
+    GetRequest();
 
     var debug = window._CCSettings.debug;
     var splash = document.getElementById('splash');

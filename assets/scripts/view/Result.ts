@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-18 17:19:53
+ * @LastEditTime: 2021-09-19 10:49:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -169,7 +169,6 @@ export default class Result extends IView {
     }
 
     shareRelive() {
-        console.log(wx)
         LogicMgr.getInstance().shareRelive();
     }
 

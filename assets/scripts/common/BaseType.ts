@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:33:41
- * @LastEditTime: 2021-09-18 09:47:41
+ * @LastEditTime: 2021-09-20 00:24:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\BaseType.ts
@@ -48,6 +48,8 @@ export enum EventType {
     Continue = 1,
     Retry = 2,
     Regist = 3,
+    Relive = 4,
+    LvUp = 5,
 }
 
 /**

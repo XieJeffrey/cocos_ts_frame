@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-18 11:53:27
+ * @LastEditTime: 2021-09-19 22:46:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -21,13 +21,14 @@ const { ccclass, property } = cc._decorator;
 const localStorage = true;
 @ccclass
 export default class Storage extends IManager {
-    dataKey: string = "debug_key_4";
+    dataKey: string = "debug_key_5";
 
     init() {
         return new Promise(function (resolve, reject) {
             if (localStorage) {
-                this.loadGameData()
-                this.loadUserData()
+                this.loadGameData();
+                this.loadUserData();
+                this.loadLaunchData();
                 console.log("[storage inited]")
                 resolve(1)
             }
@@ -92,6 +93,19 @@ export default class Storage extends IManager {
         }
         else {
             UserData.getInstance().load(str.decode());
+        }
+    }
+
+    loadLaunchData() {
+        let str = cc.sys.localStorage.getItem("withParam");
+        console.log("luanchData:" + str);
+        if (str != "" && str != null) {
+            cc.sys.localStorage.removeItem("withParam");
+            str = cc.sys.localStorage.getItem("urlParam");
+            cc.sys.localStorage.removeItem("urlParam");
+            GameData.getInstance().launchData = JSON.parse(str);
+            console.log("cc_启动参数:");
+            console.log(GameData.getInstance().launchData);
         }
     }
 }

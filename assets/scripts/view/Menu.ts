@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-18 17:22:10
+ * @LastEditTime: 2021-09-20 01:02:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -14,10 +14,13 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { IView } from "../base/IView";
-import { BgmType, SoundType } from "../common/BaseType";
+import { BgmType, EventType, SoundType } from "../common/BaseType";
 import Tool from "../common/Tool";
 import GameConfig from "../config/GameConfig";
 import GameData from "../data/GameData";
+import UserData from "../data/UserData";
+import LogicMgr from "../manager/LogicMgr";
+import Event from "../module/Event";
 import Sound from "../module/Sound";
 import UI from "../module/UI";
 
@@ -61,6 +64,9 @@ export default class Menu extends IView {
         this.startBtn.on('click', this.onClickStart, this)
         this.downloadBtn.on('click', this.onClickDown, this)
         this.exchangeBtn.on('click', this.onClickExchange, this)
+        this.lvUpBtn.on('click', this.onClickLvUp, this)
+
+        Event.getInstance().on(EventType.LvUp, this.node, this.refreshSolider);
     }
 
     onShow() {
@@ -139,8 +145,6 @@ export default class Menu extends IView {
     }
 
     onClickStart() {
-        UI.getInstance().showUI("Result", false);
-        return
         if (GameData.getInstance().isActiviyOpen == false) {
             UI.getInstance().showFloatMsg("活动已结束")
             return;
@@ -155,7 +159,7 @@ export default class Menu extends IView {
 
     onClickDown() {
         Sound.getInstance().playSound(SoundType.Click);
-        UI.getInstance().showFloatMsg("开始下载");
+        LogicMgr.getInstance().downloadGame();
     }
 
     onClickRank() {
@@ -169,6 +173,13 @@ export default class Menu extends IView {
     }
 
     onClickLvUp() {
+        UserData.getInstance().GameID = "10100";
+
+        if (UserData.getInstance().GameID == "") {
+            UI.getInstance().showFloatMsg("请先完善个人信息");
+            return;
+        }
+        LogicMgr.getInstance().shareLvup();
         Sound.getInstance().playSound(SoundType.Click);
     }
 
@@ -192,5 +203,16 @@ export default class Menu extends IView {
             cc.scaleTo(0.5, 0),
             cc.scaleTo(2, 0)
         )))
+    }
+
+    /**
+     * @description: 检查是否助力升级
+     * @param {*}
+     * @return {*}
+     */
+    checkInviteParam() {
+        if (GameData.getInstance().launchData != null) {
+            LogicMgr.getInstance().invite(GameData.getInstance().launchData.inviter);
+        }
     }
 }

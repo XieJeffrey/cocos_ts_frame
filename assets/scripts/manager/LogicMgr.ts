@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-18 17:26:15
+ * @LastEditTime: 2021-09-20 01:01:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -14,10 +14,12 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import IManager from "../base/IManager";
+import { EventType } from "../common/BaseType";
 import Tool from "../common/Tool";
 import GameConfig from "../config/GameConfig";
 import GameData from "../data/GameData";
 import UserData from "../data/UserData";
+import Event from "../module/Event";
 import Net from "../module/Net";
 import Storage from "../module/Storage";
 import UI from "../module/UI";
@@ -26,8 +28,35 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class LogicMgr extends IManager {
+    shareCall: Function = null;
+    shareTime: number = null;
+    isShare: boolean = false;
 
     init() {
+        cc.game.on(cc.game.EVENT_SHOW, function () {
+            console.log("cc_game_onshow:" + this.isShare);
+            if (this.isShare) {
+                let now = new Date().getTime();
+                if (now - this.shareTime >= 5000) {
+                    console.log("分享成功")
+                    if (this.shareCall)
+                        this.shareCall();
+                }
+                else {
+                    if (Math.random() < 0.5) {
+                        UI.getInstance().showFloatMsg("请分享到群");
+                    }
+                    else {
+                        UI.getInstance().showFloatMsg("分享失败");
+                    }
+                }
+
+                this.isShare = false;
+                this.shareCall = null;
+            }
+        }.bind(this), this)
+
+
         return new Promise(function (resolve, reject) {
             this.getUserData()
                 .then(function () { return this.initActivity() }.bind(this))
@@ -37,6 +66,7 @@ export default class LogicMgr extends IManager {
                         resolve(1);
                 }.bind(this))
         }.bind(this))
+
     }
 
     /**
@@ -44,7 +74,9 @@ export default class LogicMgr extends IManager {
      * @param {*}
      * @return {*}
      */
-    downloadGame() { }
+    downloadGame() {
+        wx && wx.miniProgram.navigateTo({ url: '../down/down' })
+    }
     // update (dt) {}   
     /**
      * @description: 获取排行榜数据
@@ -252,7 +284,7 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     invite(inviter: string) {
-        let url = GameConfig.getInstance().url + "/api/inviteln";
+        let url = GameConfig.getInstance().url + "/api/inviteIn";
         let param = {
             openid: UserData.getInstance().GameID,
             inviter: inviter
@@ -266,6 +298,7 @@ export default class LogicMgr extends IManager {
             }
             GameData.getInstance().soliderLv = data.level;
             Storage.getInstance().saveGameData();
+            Event.getInstance().emit(EventType.LvUp, {});
         }, function () {
             UI.getInstance().showFloatMsg("升级助力失败");
         })
@@ -324,8 +357,54 @@ export default class LogicMgr extends IManager {
         })
     }
 
+
+    /**
+     * @description: 获取用户的等级
+     * @param {*}
+     * @return {*}
+     */
+    getUserlv(func: Function) {
+        let url = GameConfig.getInstance().url + "/api/getLv";
+        Net.getInstance().get(url).then(function (data: any) {
+            let obj = data.data;
+            if (func)
+                func(obj.level);
+        })
+    }
+
+    //分享复活
     shareRelive() {
-        console.log(wx)
-        wx && wx.miniProgram.navigateTo({ url: "../pages/index?cmd=0" })
+        let url = "../share/share?cmd=0"
+        console.log(url)
+
+        this.shareCall = function () {
+            Event.getInstance().emit(EventType.Relive, {});
+        }
+        this.shareTime = new Date().getTime();
+        this.isShare = true;
+        wx && wx.miniProgram.navigateTo({ url: url })
+    }
+
+    shareLvup() {
+        let url = "../share/share?cmd=1&inviter={0}&lv={1}".format(UserData.getInstance().GameID, GameData.getInstance().soliderLv);
+        console.log(url)
+        wx & wx.miniProgram.navigateTo({ url: url });
+
+        if (GameData.getInstance().lvUpTimer != -1) {
+            clearInterval(GameData.getInstance().lvUpTimer);
+            GameData.getInstance().lvUpTimer = -1;
+        }
+
+        GameData.getInstance().lvUpTimer = setInterval(function () {
+            this.getUserlv(function (lv) {
+                if (GameData.getInstance().soliderLv != lv) {
+                    GameData.getInstance().soliderLv = lv;
+                    Storage.getInstance().saveGameData();
+                    Event.getInstance().emit(EventType.LvUp, {});
+                    clearInterval(GameData.getInstance().lvUpTimer);
+                    GameData.getInstance().lvUpTimer = -1;
+                }
+            }.bind(this))
+        }.bind(this), 60 * 1000);
     }
 }
