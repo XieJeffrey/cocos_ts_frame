@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-30 14:22:32
- * @LastEditTime: 2021-09-17 14:02:12
+ * @LastEditTime: 2021-09-20 17:51:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\GameConfig.ts
@@ -16,7 +16,7 @@
 import IManager from "../base/IManager";
 
 export default class GameConfig extends IManager {
-    public url: string = "http://pig2.shaoweiwy.cn:3001";//服务器地址
+    public url: string = "https://pig2.shaoweiwy.cn:3001";//服务器地址
     public download: string = "https://vda.lilisi.com/tracking?dap_code=c05828ae83f8f47f3c7c39c1e81cfab7";//下载链接
     public GameTip: Array<string> = [
         "帮助村民解答难题，他们将会加入您的队伍，并肩作战"
@@ -35,7 +35,7 @@ export default class GameConfig extends IManager {
     public roundSoliderNum: number = 0;//每局开局的小兵数量
 
     public lv2Solider: number[] = [100, 200, 400, 600, 1000];
-    public isAnswerMuddled: boolean = false;
+    public isAnswerMuddled: boolean = true;//是否打乱答案顺序
     public activityStart: number = 0;//活动开始时间
     public activityEndTime: number = 0;//活动结束时间
 
@@ -44,5 +44,5 @@ export default class GameConfig extends IManager {
     public solider2Point = 1;//兵力跟积分的兑换比例
 
     public maxPoint2Lv: number[] = [1000, 2000, 4000, 6000, 10000];//积分上限跟兵力的关系
-    public troops2lv: number[] = [10, 6, 4, 2, 1];//积分兑换各个等级的兵的关系
+    public troops2lv: number[] = [1, 0.6, 0.4, 0.2, 0.1];//积分兑换各个等级的兵的关系
 }

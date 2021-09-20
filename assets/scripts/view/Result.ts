@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-19 10:49:50
+ * @LastEditTime: 2021-09-20 17:26:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -17,6 +17,7 @@ import { IView } from "../base/IView";
 import { EventType, SoundType } from "../common/BaseType";
 import GameConfig from "../config/GameConfig";
 import GameData from "../data/GameData";
+import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
 import Event from "../module/Event";
 import Res from "../module/Res";
@@ -75,14 +76,20 @@ export default class Result extends IView {
         let getPoint = GameData.getInstance().soliderNum * GameConfig.getInstance().solider2Point;;
 
         if (isWin) {
-            if (GameData.getInstance().maxSoliderNum < GameData.getInstance().soliderNum) {
-                GameData.getInstance().maxSoliderNum = GameData.getInstance().soliderNum;
-
+            if (UserData.getInstance().GameID != "") {
                 LogicMgr.getInstance().setTroops(getPoint, function () {
                     GameData.getInstance().point += getPoint;
                     Storage.getInstance().saveGameData();
                     this.height.string = "累计积分: " + GameData.getInstance().point;
                 }.bind(this))
+            }
+            else {
+                GameData.getInstance().point += getPoint;
+                Storage.getInstance().saveGameData();
+                this.height.string = "累计积分: " + GameData.getInstance().point;
+            }
+            if (GameData.getInstance().maxSoliderNum < GameData.getInstance().soliderNum) {
+                GameData.getInstance().maxSoliderNum = GameData.getInstance().soliderNum;
             }
             Sound.getInstance().playSound(SoundType.Win);
         }
@@ -169,6 +176,8 @@ export default class Result extends IView {
     }
 
     shareRelive() {
+        Event.getInstance().emit(EventType.Relive, {});
+        return;
         LogicMgr.getInstance().shareRelive();
     }
 

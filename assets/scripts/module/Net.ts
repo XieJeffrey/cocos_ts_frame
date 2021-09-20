@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 23:55:12
- * @LastEditTime: 2021-09-18 11:46:27
+ * @LastEditTime: 2021-09-20 13:28:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Net.ts
@@ -25,6 +25,7 @@ export default class Net extends IManager {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     var response = JSON.parse(xhr.responseText);
+                    console.log(response);
                     resolve(response);
                 }
             };

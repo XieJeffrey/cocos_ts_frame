@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-17 16:18:49
+ * @LastEditTime: 2021-09-20 15:51:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -15,6 +15,7 @@
 
 import { IView } from "../base/IView";
 import { EventType, SoundType } from "../common/BaseType";
+import GameData from "../data/GameData";
 import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
 import Event from "../module/Event";
@@ -109,6 +110,7 @@ export default class Person extends IView {
             name: this.nameInput.string,
             address: this.addressInput.string,
         }, function () {
+            this.isModify = false;
             UI.getInstance().showFloatMsg("信息更新成功")
             UserData.getInstance().GameID = this.idInput.string;
             UserData.getInstance().Mail = this.mailInput.string;
@@ -116,7 +118,10 @@ export default class Person extends IView {
             UserData.getInstance().Name = this.nameInput.string;
             UserData.getInstance().Address = this.addressInput.string;
             Storage.getInstance().saveUserData();
-            Event.getInstance().emit(EventType.Regist, {});
+            LogicMgr.getInstance().setUserGameData(null);
+            LogicMgr.getInstance().updateRank(GameData.getInstance().endlessRecord, function () {
+                Event.getInstance().emit(EventType.Regist, {});
+            }.bind(this));
         }.bind(this));
     }
 

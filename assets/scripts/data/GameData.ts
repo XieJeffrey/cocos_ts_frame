@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 10:04:07
- * @LastEditTime: 2021-09-20 00:53:45
+ * @LastEditTime: 2021-09-20 14:22:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
@@ -26,7 +26,7 @@ export default class GameData extends IManager {
 
     //临时游戏数据
     public soliderNum: number = 1000;//士兵数量
-    public rankData: Array<{ openid: string, round: number }>;
+    public rankData: Array<{ openid: string, round: number }> = null;
     public myRank: number = 10000000;//我的排名
     public lvUpTimer: number = -1;//升级助力监听器
 

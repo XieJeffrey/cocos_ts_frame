@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-20 01:01:31
+ * @LastEditTime: 2021-09-20 14:52:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -41,6 +41,7 @@ export default class LogicMgr extends IManager {
                     console.log("分享成功")
                     if (this.shareCall)
                         this.shareCall();
+                    this.countShare();
                 }
                 else {
                     if (Math.random() < 0.5) {
@@ -134,10 +135,10 @@ export default class LogicMgr extends IManager {
      * @param {*} func
      * @return {*}
      */
-    setUserGameData(data, func) {
+    setUserGameData(func) {
         let url = GameConfig.getInstance().url + "/api/saveUser?";
         let param = {
-            openid: data.id,
+            openid: UserData.getInstance().GameID,
             round: GameData.getInstance().endlessRecord,
             troops: GameData.getInstance().soliderNum,
             level: GameData.getInstance().soliderLv,
@@ -271,10 +272,10 @@ export default class LogicMgr extends IManager {
 
         url += param;
         Net.getInstance().get(url).then(function () {
-            if (func)
-                func()
+            // if (func)
+            //     func()
         }, function () {
-            UI.getInstance().showFloatMsg("统计分享次数失败");
+            // UI.getInstance().showFloatMsg("统计分享次数失败");
         })
     }
 
@@ -304,7 +305,7 @@ export default class LogicMgr extends IManager {
         })
     }
 
-    exchangeSolider(point, lv, call) {
+    exchangeSolider(lv, point, call) {
         let url = GameConfig.getInstance().url + "/api/exchange";
         let param = {
             openid: UserData.getInstance().GameID,
@@ -364,9 +365,11 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     getUserlv(func: Function) {
-        let url = GameConfig.getInstance().url + "/api/getLv";
+        let url = GameConfig.getInstance().url + "/api/getUser?";
+        let param = "openid={0}".format(UserData.getInstance().GameID);
+        url += param;
         Net.getInstance().get(url).then(function (data: any) {
-            let obj = data.data;
+            let obj = data.data
             if (func)
                 func(obj.level);
         })
@@ -406,5 +409,14 @@ export default class LogicMgr extends IManager {
                 }
             }.bind(this))
         }.bind(this), 60 * 1000);
+    }
+
+    userLogin() {
+        if (UserData.getInstance().GameID == "")
+            return;
+        let url = GameConfig.getInstance().url + "/api/launch";
+        let param = "?openid=" + UserData.getInstance().GameID;
+        Net.getInstance().get(url + param);
+
     }
 }

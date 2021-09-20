@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-19 21:01:22
+ * @LastEditTime: 2021-09-20 17:32:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -148,6 +148,10 @@ export default class Game extends IView {
 
         Event.getInstance().on(EventType.Retry, this.node, function () {
             this.onRetry();
+        }.bind(this))
+
+        Event.getInstance().on(EventType.Relive, this.node, function () {
+            this.onRelive();
         }.bind(this))
     }
 
@@ -526,7 +530,7 @@ export default class Game extends IView {
                 else {
                     this.switchSoliderFormat(Action.Attack, function () {
                         this.originSoliderNum = GameData.getInstance().soliderNum;
-                        this.startFight(500, 50);
+                        this.startFight(500, 10);
                         UI.getInstance().showUI("Problem", {
                             waveIdx: this.curWave + 1,
                             npcId: Math.floor(Math.random() * Res.getInstance().npcSprite.length),
@@ -583,6 +587,8 @@ export default class Game extends IView {
                     Sound.getInstance().stopSound(SoundType.Fight);
                     Sound.getInstance().playSound(SoundType.FigthWin);
 
+                    if (this.gameState == GameState.Over)
+                        return;
                     setTimeout(function () {
                         if (this.gameState == GameState.Over)
                             return;
@@ -946,6 +952,23 @@ export default class Game extends IView {
      */
     onRetry() {
         this.onShow({});
+    }
+
+    onRelive() {
+        Sound.getInstance().playBgm(BgmType.FightBgm);
+        for (let i = 0; i < this.enemyRole.length; i++) {
+            if (this.enemyRole[i].node.active) {
+                this.soliderDead(this.enemyRole[i].node);
+            }
+        }
+        UI.getInstance().hideUI("Result")
+        this.playHeroAnima(Action.Idle);
+        this.switchSoliderFormat(Action.Idle, function () {
+            this.gameState = GameState.Rush;
+            this.gameMode = GameMode.Pattern;
+            this.playHeroAnima(Action.Run);
+            this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
+        }.bind(this))
     }
 
     onHide(params) {

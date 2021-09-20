@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 21:23:50
- * @LastEditTime: 2021-09-17 17:24:06
+ * @LastEditTime: 2021-09-20 15:52:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Rank.ts
@@ -61,7 +61,7 @@ export default class Rank extends IView {
 
         Sound.getInstance().playSound(SoundType.PanelOpen);
 
-        if (GameData.getInstance().rankData.length != 0) {
+        if (GameData.getInstance().rankData != null && GameData.getInstance().rankData.length > 0) {
             this.refreshRank();
             this.refreshMineRank();
         }
@@ -102,11 +102,9 @@ export default class Rank extends IView {
      * @return {*}
      */
     onRegistered() {
-        LogicMgr.getInstance().updateRank(GameData.getInstance().endlessRecord, function () {
-            UI.getInstance().showFloatMsg("成功提交成绩到排行榜")
-            UI.getInstance().showFloatMsg("排行榜数据刷新可能有延时,请稍后刷新查看")
-            this.onShow();
-        }.bind(this));
+        UI.getInstance().showFloatMsg("成功提交成绩到排行榜")
+        UI.getInstance().showFloatMsg("排行榜数据刷新可能有延时,请稍后刷新查看")
+        this.onShow();
     }
 
     /**

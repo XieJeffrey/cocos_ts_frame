@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-18 11:44:06
+ * @LastEditTime: 2021-09-20 15:45:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -95,14 +95,20 @@ export default class Exchange extends IView {
 
     refreshSelectPanel() {
         this.payTxt.node.active = false;
-        let troopsNum = GameData.getInstance().point * GameConfig.getInstance().troops2lv[GameData.getInstance().soliderLv];
+        let lv = 4;
+        let troopsNum = GameData.getInstance().point * GameConfig.getInstance().troops2lv[4];
         for (let i = 1; i <= 3; i++) {
-            this.toggleTypeNode.findChild('' + i + "/mark/txt").getComponent(cc.Label).string = "T{0}:{1}".format(GameData.getInstance().soliderLv + 1, troopsNum);
-        }
+            this.toggleTypeNode.findChild('' + i + "/mark/txt").getComponent(cc.Label).string = "T5:{1}".format(GameData.getInstance().soliderLv + 1, troopsNum);
+            if (i != this.selectType)
+                this.toggleTypeNode.findChild('' + i).getComponent(cc.Toggle).uncheck();
+            else
+                this.toggleTypeNode.findChild('' + i).getComponent(cc.Toggle).check();
+        };
 
     }
 
     refreshExchangePanel() {
+        //  console.log(UserData.getInstance().GameID);
         this.GameIDTxt.string = UserData.getInstance().GameID;
         this.exchangedNum.string = "" + GameData.getInstance().payPoint;
         this.soliderImg.spriteFrame = this.toggleTypeNode.findChild('' + GameData.getInstance().soliderType + "/img").getComponent(cc.Sprite).spriteFrame;
@@ -117,8 +123,8 @@ export default class Exchange extends IView {
                 this.soliderTypeName.string = "骑兵";
                 break
         }
-        let lv = GameData.getInstance().soliderLv
-        this.soliderNumTxt.string = "T{0}:{1}".format(lv + 1, GameData.getInstance().point * GameConfig.getInstance().solider2Point[lv])
+        let lv = 4
+        this.soliderNumTxt.string = "T{0}:{1}".format(lv + 1, GameData.getInstance().point * GameConfig.getInstance().troops2lv[lv])
     }
 
     onHide() { }
@@ -128,6 +134,7 @@ export default class Exchange extends IView {
     }
 
     onExchange() {
+        console.log("doExchange")
         if (UserData.getInstance().GameID == "") {
             UI.getInstance().showFloatMsg("请先完善游戏关联账号");
             UI.getInstance().showUI("Person");
@@ -160,7 +167,7 @@ export default class Exchange extends IView {
      */
     doExchage() {
         LogicMgr.getInstance().exchangeSolider(
-            GameData.getInstance().soliderLv,
+            5,
             GameData.getInstance().point,
             function (data) {
                 console.log(data);
@@ -212,5 +219,11 @@ export default class Exchange extends IView {
             this.selectType = idx;
         else
             this.toggleTypeNode.findChild('' + idx).getComponent(cc.Toggle).check();
+
+        if (GameData.getInstance().soliderType == 0 && UserData.getInstance().GameID != "") {
+            GameData.getInstance().soliderType = this.selectType;
+            LogicMgr.getInstance().setSoliderType(null);
+        }
+
     }
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:15:56
- * @LastEditTime: 2021-09-19 21:04:14
+ * @LastEditTime: 2021-09-20 15:41:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\ui .ts
@@ -112,7 +112,6 @@ export default class UI extends IManager {
 
     public hideUI(name: string, params?: any) {
         name = name.capitalize();
-        console.log(this.uiList)
         if (this.uiList.has(name)) {
             let obj: any = this.uiList.get(name);
             obj.node.active = false;

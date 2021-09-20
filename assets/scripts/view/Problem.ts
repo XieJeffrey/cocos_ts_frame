@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-18 10:24:51
+ * @LastEditTime: 2021-09-20 17:14:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -15,7 +15,7 @@
 
 import App from "../App";
 import { IView } from "../base/IView";
-import { SoundType } from "../common/BaseType";
+import { GameMode, SoundType } from "../common/BaseType";
 import GameConfig from "../config/GameConfig";
 import Question from "../manager/Question";
 import Res from "../module/Res";
@@ -92,7 +92,11 @@ export default class Problem extends IView {
         this.countDown.node.active = !(this.duration == Infinity)
         this.qusIdxLabel.node.active = (this.duration == Infinity)
 
-        let queStr: string = Question.getInstance().getQuestion();
+
+        let model = GameMode.Pattern;
+        if (this.duration != Infinity)
+            model = GameMode.Endless
+        let queStr: string = Question.getInstance().getQuestion(model);
         console.log("queStr:{0}".format(queStr));
         let qData = JSON.parse(queStr);
         for (let i in qData["option"])

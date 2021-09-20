@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 11:51:32
- * @LastEditTime: 2021-09-19 21:00:47
+ * @LastEditTime: 2021-09-20 13:47:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Float.ts
@@ -44,14 +44,13 @@ export default class Float extends IView {
     public showFloatMsg(msg: string, duration) {
         this.content.string = msg;
         this.playAnima(duration);
-        return;
-        if (!this.isPlaying) {
-            this.content.string = msg;
-            this.playAnima(duration);
-        }
-        else {
-            this.msgList.push({ txt: msg, duration: duration });
-        }
+        // if (!this.isPlaying) {
+        //     this.content.string = msg;
+        //     this.playAnima(duration);
+        // }
+        // else {
+        //     this.msgList.push({ txt: msg, duration: duration });
+        // }
     }
 
     /**
@@ -62,7 +61,7 @@ export default class Float extends IView {
     public playAnima(duration: number) {
         this.node.y = 0
         this.node.opacity = 255
-        this.isPlaying = true;
+        // this.isPlaying = true;
         this.node.stopAllActions();
         this.node.runAction(cc.spawn(
             cc.moveBy(duration, cc.v2(0, 150)),

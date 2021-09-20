@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:49:06
- * @LastEditTime: 2021-09-17 13:48:12
+ * @LastEditTime: 2021-09-20 13:25:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\Main.ts
@@ -16,6 +16,8 @@
 import App from "./App";
 import Tool from "./common/Tool";
 import GameData from "./data/GameData";
+import LogicMgr from "./manager/LogicMgr";
+import Net from "./module/Net";
 import UI from "./module/UI";
 const { ccclass, property } = cc._decorator;
 
@@ -53,6 +55,7 @@ export default class Main extends cc.Component {
             UI.getInstance().showUI("Menu");
             this.node.findChild('start').destroy()
             this.enabled = false;
+            LogicMgr.getInstance().userLogin();
         }
     }
 
