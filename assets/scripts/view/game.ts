@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-20 17:32:09
+ * @LastEditTime: 2021-09-21 22:26:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -167,6 +167,7 @@ export default class Game extends IView {
         UI.getInstance().showUI("Dialog", "周公吐哺，天下归心");
         this.recordNode.active = false;
         this.record = 0;
+        GameData.getInstance().reliveNum = 0;
     }
 
     update(dt) {
@@ -694,8 +695,8 @@ export default class Game extends IView {
                 UI.getInstance().showFloatMsg("回答正确,本次战斗消耗了你{0}兵力".format(this.originSoliderNum - GameData.getInstance().soliderNum));
             }
             else {
-                UI.getInstance().showFloatMsg("回答错误,本次战斗消耗了你{0}兵力".format(1000));
-                GameData.getInstance().soliderNum = this.originSoliderNum - 1000;
+                UI.getInstance().showFloatMsg("回答错误,本次战斗消耗了你{0}兵力".format(200));
+                GameData.getInstance().soliderNum = this.originSoliderNum - 200;
                 if (GameData.getInstance().soliderNum <= 0)
                     GameData.getInstance().soliderNum = 0;
                 this.refreshSoliderNum(-1);
@@ -955,6 +956,7 @@ export default class Game extends IView {
     }
 
     onRelive() {
+        GameData.getInstance().reliveNum++;
         Sound.getInstance().playBgm(BgmType.FightBgm);
         for (let i = 0; i < this.enemyRole.length; i++) {
             if (this.enemyRole[i].node.active) {

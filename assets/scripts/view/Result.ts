@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-20 17:26:59
+ * @LastEditTime: 2021-09-21 10:57:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -93,8 +93,10 @@ export default class Result extends IView {
             }
             Sound.getInstance().playSound(SoundType.Win);
         }
-        else
+        else {
             Sound.getInstance().playSound(SoundType.Fail);
+            this.shareBtn.active == (GameData.getInstance().reliveNum < 2)
+        }
 
         this.point.string = "积分 " + (isWin ? getPoint : 0)
         this.height.string = "累计积分: " + GameData.getInstance().point;
@@ -176,8 +178,8 @@ export default class Result extends IView {
     }
 
     shareRelive() {
-        Event.getInstance().emit(EventType.Relive, {});
-        return;
+        // Event.getInstance().emit(EventType.Relive, {});
+        // return;
         LogicMgr.getInstance().shareRelive();
     }
 

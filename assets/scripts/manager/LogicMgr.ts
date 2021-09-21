@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-20 14:52:11
+ * @LastEditTime: 2021-09-20 23:51:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -108,7 +108,7 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     setUserInfo(data, func) {
-        let url = GameConfig.getInstance().url + "/api/setUserinfo?";
+        let url = GameConfig.getInstance().url + "/api/setUserinfo";
         let param = {
             openid: data.id,
             mail: data.mail,
@@ -116,7 +116,7 @@ export default class LogicMgr extends IManager {
             name: data.name,
             address: data.address,
             round: GameData.getInstance().endlessRecord,
-            troops: GameData.getInstance().soliderNum,
+            troops: GameData.getInstance().point,
             level: GameData.getInstance().soliderLv,
         }
 
@@ -136,11 +136,11 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     setUserGameData(func) {
-        let url = GameConfig.getInstance().url + "/api/saveUser?";
+        let url = GameConfig.getInstance().url + "/api/saveUser";
         let param = {
             openid: UserData.getInstance().GameID,
             round: GameData.getInstance().endlessRecord,
-            troops: GameData.getInstance().soliderNum,
+            troops: GameData.getInstance().point,
             level: GameData.getInstance().soliderLv,
         }
 
@@ -160,7 +160,7 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     setTroops(point, func) {
-        let url = GameConfig.getInstance().url + "/api/setTroops?";
+        let url = GameConfig.getInstance().url + "/api/setTroops";
         let param = {
             openid: UserData.getInstance().GameID,
             troops: point,
@@ -305,11 +305,11 @@ export default class LogicMgr extends IManager {
         })
     }
 
-    exchangeSolider(lv, point, call) {
+    exchangeSolider(point, call) {
         let url = GameConfig.getInstance().url + "/api/exchange";
         let param = {
             openid: UserData.getInstance().GameID,
-            level: lv,
+            type: GameData.getInstance().soliderType,
             number: point
         }
 

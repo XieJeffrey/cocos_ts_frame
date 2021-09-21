@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 10:04:07
- * @LastEditTime: 2021-09-20 14:22:02
+ * @LastEditTime: 2021-09-21 00:29:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
@@ -34,6 +34,7 @@ export default class GameData extends IManager {
     public isExchangeOpen: boolean = false;//兑换是否开启
     public totalPool: number = 0;//剩余可兑换兵力
     public todayPool: number = 0;//今日剩余可兑换兵力
+    public reliveNum: number = 0;//复活次数
 
     //启动数据
     public launchData: {

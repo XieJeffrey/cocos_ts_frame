@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-20 15:51:57
+ * @LastEditTime: 2021-09-21 00:05:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -28,7 +28,6 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Person extends IView {
     idInput: cc.EditBox;
-    mailInput: cc.EditBox;
     phoneInput: cc.EditBox;
     nameInput: cc.EditBox;
     addressInput: cc.EditBox;
@@ -39,7 +38,6 @@ export default class Person extends IView {
     onLoad() {
         let content: cc.Node = this.node.findChild('content');
         this.idInput = content.findChild('id/editBox').getComponent(cc.EditBox);
-        this.mailInput = content.findChild('mail/editBox').getComponent(cc.EditBox);
         this.phoneInput = content.findChild('phone/editBox').getComponent(cc.EditBox);
         this.nameInput = content.findChild('name/editBox').getComponent(cc.EditBox);
         this.addressInput = content.findChild('address/editBox').getComponent(cc.EditBox);
@@ -58,7 +56,6 @@ export default class Person extends IView {
     onShow() {
         this.isModify = false;
         this.idInput.string = UserData.getInstance().GameID;
-        this.mailInput.string = UserData.getInstance().Mail;
         this.phoneInput.string = UserData.getInstance().Phone;
         this.nameInput.string = UserData.getInstance().Name;
         this.addressInput.string = UserData.getInstance().Address;
@@ -70,11 +67,6 @@ export default class Person extends IView {
     onCommit() {
         if (this.idInput.string != UserData.getInstance().GameID) {
             UserData.getInstance().GameID = this.idInput.string;
-            this.isModify = true;
-        }
-
-        if (this.mailInput.string != UserData.getInstance().Mail) {
-            UserData.getInstance().Mail = this.mailInput.string;
             this.isModify = true;
         }
 
@@ -105,7 +97,7 @@ export default class Person extends IView {
 
         LogicMgr.getInstance().setUserInfo({
             id: this.idInput.string,
-            mail: this.mailInput.string,
+            mail: "",
             tel: this.phoneInput.string,
             name: this.nameInput.string,
             address: this.addressInput.string,
@@ -113,7 +105,6 @@ export default class Person extends IView {
             this.isModify = false;
             UI.getInstance().showFloatMsg("信息更新成功")
             UserData.getInstance().GameID = this.idInput.string;
-            UserData.getInstance().Mail = this.mailInput.string;
             UserData.getInstance().Phone = this.phoneInput.string;
             UserData.getInstance().Name = this.nameInput.string;
             UserData.getInstance().Address = this.addressInput.string;
