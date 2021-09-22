@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-15 15:29:34
- * @LastEditTime: 2021-09-18 10:22:20
+ * @LastEditTime: 2021-09-22 15:37:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Record.ts
@@ -66,7 +66,7 @@ export default class Record extends IView {
         this.anima.premultipliedAlpha = false;
         this.anima.setAnimation(0, "victory", false);
 
-        if (GameData.getInstance().endlessRecord < record) {
+        if (GameData.getInstance().endlessRecord < record && record != 0) {
             this.newTip.active = true;
             //未注册时在本地保存泼妇沉舟的记录
             if (UserData.getInstance().GameID != "") {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-22 13:54:27
+ * @LastEditTime: 2021-09-22 21:22:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -299,7 +299,31 @@ export default class LogicMgr extends IManager {
         Net.getInstance().post(url, param).then(function (obj: any) {
             let data = obj.data;
             if (data.errCode) {
-                UI.getInstance().showFloatMsg(data.errMsg);
+                switch (data.errCode) {
+                    case -1:
+                        UI.getInstance().showFloatMsg("不能助力自己");
+                        break;
+                    case -2:
+                        UI.getInstance().showFloatMsg("用户ID不存在");
+                        break;
+                    case -3:
+                        UI.getInstance().showFloatMsg("邀请者ID不存在");
+                        break;
+                    case -4:
+                        UI.getInstance().showFloatMsg("已经给别人助力过");
+                        break;
+                    case -5:
+                        UI.getInstance().showFloatMsg("士兵等级不一致，助力失败");
+                        break;
+                    case -6:
+                        UI.getInstance().showFloatMsg("士兵已经满级");
+                        break;
+                    case -7:
+                        UI.getInstance().showFloatMsg("已经互相助力过,请让其他玩家帮你助力");
+                        break;
+                    default:
+                        break;
+                }
                 return;
             }
             GameData.getInstance().soliderLv = data.level;
@@ -332,8 +356,8 @@ export default class LogicMgr extends IManager {
             url += param;
             Net.getInstance().get(url).then(function (data: any) {
                 let obj = data.data;
-                GameConfig.getInstance().activityStart = Tool.timeStrToStamp(obj.startDate);
-                GameConfig.getInstance().activityEndTime = Tool.timeStrToStamp(obj.endDate);
+                GameConfig.getInstance().activityStart = obj.startDate;
+                GameConfig.getInstance().activityEndTime = obj.endDate;
                 GameData.getInstance().isActiviyOpen = obj.opening;
                 if (resolve)
                     resolve(1);
@@ -350,8 +374,8 @@ export default class LogicMgr extends IManager {
             url += param;
             Net.getInstance().get(url).then(function (data: any) {
                 let obj = data.data;
-                GameConfig.getInstance().exchangeStartTime = Tool.timeStrToStamp(obj.startDate);
-                GameConfig.getInstance().exchangeEndTime = Tool.timeStrToStamp(obj.endDate);
+                GameConfig.getInstance().exchangeStartTime = obj.startDate;
+                GameConfig.getInstance().exchangeEndTime = obj.endDate;
                 GameData.getInstance().isExchangeOpen = obj.opening;
                 GameData.getInstance().totalPool = obj.totalPool;
                 GameData.getInstance().todayPool = obj.todayPool;

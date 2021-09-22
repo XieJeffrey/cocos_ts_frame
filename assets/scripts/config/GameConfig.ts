@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-30 14:22:32
- * @LastEditTime: 2021-09-21 10:57:36
+ * @LastEditTime: 2021-09-22 15:23:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\GameConfig.ts
@@ -36,11 +36,11 @@ export default class GameConfig extends IManager {
 
     public lv2Solider: number[] = [100, 200, 400, 600, 1000];
     public isAnswerMuddled: boolean = true;//是否打乱答案顺序
-    public activityStart: number = 0;//活动开始时间
-    public activityEndTime: number = 0;//活动结束时间
+    public activityStart: string = "";//活动开始时间
+    public activityEndTime: string = "";//活动结束时间
 
-    public exchangeStartTime: number = 0;//兑换开始时间
-    public exchangeEndTime: number = 0;//兑换结束时间
+    public exchangeStartTime: string = "";//兑换开始时间
+    public exchangeEndTime: string = "";//兑换结束时间
     public solider2Point = 1;//兵力跟积分的兑换比例
 
     public maxPoint2Lv: number[] = [1000, 2000, 4000, 6000, 10000];//积分上限跟兵力的关系

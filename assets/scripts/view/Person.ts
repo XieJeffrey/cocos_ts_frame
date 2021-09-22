@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-22 11:18:38
+ * @LastEditTime: 2021-09-22 20:20:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -66,22 +66,18 @@ export default class Person extends IView {
 
     onCommit() {
         if (this.idInput.string != UserData.getInstance().GameID) {
-            UserData.getInstance().GameID = this.idInput.string;
             this.isModify = true;
         }
 
         if (this.phoneInput.string != UserData.getInstance().Phone) {
-            UserData.getInstance().Phone = this.phoneInput.string;
             this.isModify = true;
         }
 
         if (this.nameInput.string != UserData.getInstance().Name) {
-            UserData.getInstance().Name = this.nameInput.string;
             this.isModify = true;
         }
 
         if (this.addressInput.string != UserData.getInstance().Address) {
-            UserData.getInstance().Address = this.addressInput.string;
             this.isModify = true;
         }
 
@@ -92,6 +88,16 @@ export default class Person extends IView {
 
         if (this.idInput.string == "") {
             UI.getInstance().showFloatMsg("游戏ID不能为空");
+            return;
+        }
+
+        if (this.idInput.string.length != 8) {
+            UI.getInstance().showFloatMsg("非法的游戏ID");
+            return;
+        }
+
+        if (this.addressInput.string == "") {
+            UI.getInstance().showFloatMsg("收货地址不能为空");
             return;
         }
 
@@ -110,9 +116,14 @@ export default class Person extends IView {
             UserData.getInstance().Address = this.addressInput.string;
             Storage.getInstance().saveUserData();
             LogicMgr.getInstance().setUserGameData(null);
-            LogicMgr.getInstance().updateRank(GameData.getInstance().endlessRecord, function () {
+            if (GameData.getInstance().endlessRecord == 0) {
                 Event.getInstance().emit(EventType.Regist, {});
-            }.bind(this));
+            }
+            else {
+                LogicMgr.getInstance().updateRank(GameData.getInstance().endlessRecord, function () {
+                    Event.getInstance().emit(EventType.Regist, {});
+                }.bind(this));
+            }
             UI.getInstance().hideUI("Person")
         }.bind(this));
     }

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:57:30
- * @LastEditTime: 2021-09-22 12:43:03
+ * @LastEditTime: 2021-09-22 21:43:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Res.ts
@@ -23,6 +23,7 @@ export default class Res extends IManager {
     sceneSprite: Array<Array<cc.SpriteFrame>>;
     cacheSprite: Map<string, cc.SpriteFrame>;
     resultAnima: sp.SkeletonData = null;
+    soliderIcon: Array<cc.SpriteFrame>;
     soliderAnima = {
         zl: {
             zhan: {},
@@ -53,7 +54,7 @@ export default class Res extends IManager {
     init() {
         return new Promise((resolve, reject) => {
             let loadNum = 0;
-            let total = 9;
+            let total = 10;
             let checkLoaded = function () {
                 if (loadNum == total) {
                     resolve(1)
@@ -214,6 +215,21 @@ export default class Res extends IManager {
                 //console.log("[Bust loaded]");
                 checkLoaded();
             }.bind(this))
+
+            //加载5个士兵的等级图标
+            cc.resources.loadDir('solider', cc.SpriteFrame, function (err, asset: Array<cc.SpriteFrame>) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                this.soliderIcon = new Array<cc.SpriteFrame>();
+                for (let i = 0; i < asset.length; i++) {
+                    this.soliderIcon.push(asset[i]);
+                }
+                loadNum++;
+                checkLoaded();
+            }.bind(this))
+
         })
     }
 

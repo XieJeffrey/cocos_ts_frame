@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-22 13:57:41
+ * @LastEditTime: 2021-09-22 21:07:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -44,6 +44,7 @@ export default class Exchange extends IView {
     exchangedNumTitle: cc.Label;
     poolTxt: cc.Label;
     leftTxt: cc.Label;
+    downBtn: cc.Node;
 
     selectType: number = 0;
     toggleArray: Array<cc.Toggle> = null;
@@ -62,6 +63,7 @@ export default class Exchange extends IView {
         this.GameIDTxt = this.exchangePanel.findChild('Id/txt').getComponent(cc.Label);
         this.exchangedNumTitle = this.exchangePanel.findChild('done').getComponent(cc.Label);
         this.exchangedNum = this.exchangePanel.findChild('done/txt').getComponent(cc.Label);
+        this.downBtn = this.node.findChild('download')
 
         this.poolTxt = this.node.findChild('poolTxt').getComponent(cc.Label);
         this.leftTxt = this.node.findChild('point/pay/left').getComponent(cc.Label);
@@ -70,6 +72,7 @@ export default class Exchange extends IView {
     }
 
     register() {
+        this.downBtn.on('click', this.onDownLoad, this);
         this.exchangeBtn.on('click', this.onExchange, this);
         this.closeBtn.on('click', this.onClose, this);
         this.toggleTypeNode = this.node.findChild('select/toggle');
@@ -81,7 +84,7 @@ export default class Exchange extends IView {
     onShow() {
         this.ownedTxt.string = "你当前可兑换积分有:{0}".format(GameData.getInstance().point);
         this.payTxt.string = "你已成功兑换积分:{0}".format(GameData.getInstance().payPoint * GameConfig.getInstance().troops2lv[4]);
-        this.poolTxt.string = "兑换奖池还剩:{0}积分".format(GameData.getInstance().todayPool);
+        this.poolTxt.string = "兑换奖池还剩:{0} T5士兵".format(GameData.getInstance().todayPool / 10);
         this.leftTxt.string = "(还剩{0}积分额度可兑换)".format(10000 - GameData.getInstance().payPoint);
 
         this.selectPanel.active = GameData.getInstance().soliderType == 0;
@@ -115,13 +118,13 @@ export default class Exchange extends IView {
         this.exchangedNum.string = "" + GameData.getInstance().payPoint * GameConfig.getInstance().troops2lv[4];
         this.soliderImg.spriteFrame = this.toggleTypeNode.findChild('' + GameData.getInstance().soliderType + "/img").getComponent(cc.Sprite).spriteFrame;
         switch (GameData.getInstance().soliderType) {
-            case 0:
+            case 1:
                 this.soliderTypeName.string = "步兵";
                 break;
-            case 1:
+            case 2:
                 this.soliderTypeName.string = "弓兵";
                 break
-            case 2:
+            case 3:
                 this.soliderTypeName.string = "骑兵";
                 break
         }
@@ -228,6 +231,9 @@ export default class Exchange extends IView {
         //     GameData.getInstance().soliderType = this.selectType;
         //     LogicMgr.getInstance().setSoliderType(null);
         // }
+    }
 
+    onDownLoad() {
+        LogicMgr.getInstance().downloadGame();
     }
 }

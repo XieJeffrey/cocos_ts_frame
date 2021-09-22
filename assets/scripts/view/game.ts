@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-22 12:07:53
+ * @LastEditTime: 2021-09-22 20:36:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -167,7 +167,7 @@ export default class Game extends IView {
         UI.getInstance().showUI("Dialog", "周公吐哺，天下归心");
         this.recordNode.active = false;
         this.record = 0;
-        GameData.getInstance().reliveNum = 0;
+        GameData.getInstance().reliveNum = 3;
     }
 
     update(dt) {
@@ -291,6 +291,7 @@ export default class Game extends IView {
         let roleType = null;
         this.curWave++;
         if (this.isFightWave(this.curWave)) {
+            GameData.getInstance().reliveNum--;
             roleType = RoleType.Enemy
             if (this.gameMode == GameMode.Endless) {
                 this.curOtherUnit = 10;
@@ -835,7 +836,7 @@ export default class Game extends IView {
      */
     isFightWave(idx: number) {
         if (this.gameMode == GameMode.Pattern) {
-            if (idx == 3 || idx == 6 || idx == 9)
+            if (idx % 3 == 0 && idx > 0)
                 return true;
             return false;
         }
@@ -957,7 +958,6 @@ export default class Game extends IView {
     }
 
     onRelive() {
-        GameData.getInstance().reliveNum++;
         Sound.getInstance().playBgm(BgmType.FightBgm);
         for (let i = 0; i < this.enemyRole.length; i++) {
             if (this.enemyRole[i].node.active) {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:15:56
- * @LastEditTime: 2021-09-22 10:30:15
+ * @LastEditTime: 2021-09-22 20:19:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\ui .ts
@@ -26,6 +26,7 @@ export default class UI extends IManager {
     uiList: Map<string, { node: cc.Node, script: IView }> = new Map<string, { node: cc.Node, script: IView }>();
     root: cc.Node;
     bundle: any;
+    cacheList: Map<string, boolean> = new Map<string, boolean>();
 
     getInstance() { }
 
@@ -66,11 +67,10 @@ export default class UI extends IManager {
     private load(name: string, call: Function) {
         name = name.capitalize();
         console.log("[loading view:" + name + "....]")
-        if (this.uiList.has(name)) {
-            call(this.uiList[name].node)
+        if (this.cacheList.has(name))
             return;
-        }
 
+        this.cacheList.set(name, true);
         this.bundle.load("view/" + name, cc.Prefab, function (err, prefab) {
             if (err) {
                 console.error(err)
@@ -94,6 +94,7 @@ export default class UI extends IManager {
                 console.error("[UIManager]:addComponent {0} failed".format(name));
                 return
             }
+            this.cacheList.delete(name);
             if (call) {
                 console.log("ui:" + name + "is loaded");
                 call(node)

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-20 21:28:58
- * @LastEditTime: 2021-09-20 21:40:50
+ * @LastEditTime: 2021-09-22 15:23:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Rule.ts

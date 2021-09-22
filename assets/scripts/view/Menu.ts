@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-22 13:58:23
+ * @LastEditTime: 2021-09-22 21:39:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -21,18 +21,18 @@ import GameData from "../data/GameData";
 import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
 import Event from "../module/Event";
+import Res from "../module/Res";
 import Sound from "../module/Sound";
+import Storage from "../module/Storage";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Menu extends IView {
-    soliderSpriteList: Array<cc.SpriteFrame> = new Array<cc.SpriteFrame>();
     rankBtn: cc.Node;
     rankTip: cc.Node;
     startBtn: cc.Node;
-    downloadBtn: cc.Node;
     infoBtn: cc.Node;
     lvUpBtn: cc.Node;
     soliderLvTxt: cc.Label;
@@ -47,25 +47,25 @@ export default class Menu extends IView {
         this.rankBtn = this.node.findChild('rank');
         this.infoBtn = this.node.findChild('info');
         this.startBtn = this.node.findChild('start');
-        this.downloadBtn = this.node.findChild('download');
         this.exchangeBtn = this.node.findChild('exchange/btn');
         this.lvUpBtn = this.node.findChild('solider')
         this.soliderLvTxt = this.node.findChild('solider/lv').getComponent(cc.Label);
         this.soliderIcon = this.node.findChild('solider/icon').getComponent(cc.Sprite);
         this.pointTxt = this.node.findChild('exchange/point').getComponent(cc.Label);
         this.recordTxt = this.node.findChild('record/txt').getComponent(cc.Label);
-        this.loadSoliderSprite();
         super.onLoad();
     }
 
     register() {
-        console.log("register");
         this.rankBtn.on('click', this.onClickRank, this)
         this.infoBtn.on('click', this.onClickInfo, this)
         this.startBtn.on('click', this.onClickStart, this)
-        this.downloadBtn.on('click', this.onClickDown, this)
         this.exchangeBtn.on('click', this.onClickExchange, this)
         this.lvUpBtn.on('click', this.onClickLvUp, this)
+        this.node.findChild('exchange').on('click', function () {
+            // Storage.getInstance().clearAll();
+            // UI.getInstance().showFloatMsg("清除所有本地数据，重启重试")
+        }, this)
 
         Event.getInstance().on(EventType.LvUp, this.node, function () { this.refreshSolider() }.bind(this));
         Event.getInstance().on(EventType.RefreshPoint, this.node, function () { this.refreshPoint() }.bind(this));
@@ -109,10 +109,7 @@ export default class Menu extends IView {
      * @return {*}
      */
     refreshSolider() {
-        if (this.soliderSpriteList.length == 0)
-            return;
-
-        this.soliderIcon.spriteFrame = this.soliderSpriteList[GameData.getInstance().soliderLv];
+        this.soliderIcon.spriteFrame = Res.getInstance().soliderIcon[GameData.getInstance().soliderLv];
         this.soliderLvTxt.string = "Lv {0}".format(GameData.getInstance().soliderLv + 1);
     }
 
@@ -132,23 +129,6 @@ export default class Menu extends IView {
      */
     refreshRecord() {
         this.recordTxt.string = "最高得分: " + GameData.getInstance().maxSoliderNum;
-    }
-
-    /**
-     * @description: 加载5级士兵的资源
-     * @param {*}
-     * @return {*}
-     */
-    loadSoliderSprite() {
-        cc.resources.loadDir('solider', cc.SpriteFrame, function (err, asset: Array<cc.Sprite>) {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            for (let i = 0; i < asset.length; i++) {
-                this.soliderSpriteList.push(asset[i]);
-            }
-        }.bind(this))
     }
 
     onClickStart() {

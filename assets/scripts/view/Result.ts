@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-22 13:10:02
+ * @LastEditTime: 2021-09-22 20:42:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -76,6 +76,7 @@ export default class Result extends IView {
 
 
         let getPoint = GameData.getInstance().soliderNum * GameConfig.getInstance().solider2Point;;
+        this.shareBtn.active = !isWin;
 
         if (isWin) {
             if (UserData.getInstance().GameID != "") {
@@ -97,14 +98,13 @@ export default class Result extends IView {
         }
         else {
             Sound.getInstance().playSound(SoundType.Fail);
-            this.shareBtn.active == (GameData.getInstance().reliveNum < 2)
+            this.shareBtn.active = (GameData.getInstance().reliveNum > 0)
         }
 
         this.point.string = "积分 " + (isWin ? getPoint : 0)
         this.height.string = "累计积分: " + GameData.getInstance().point;
         this.round.string = "得分：" + getPoint;
         this.continueBtn.active = isWin;
-        this.shareBtn.active = !isWin;
 
         this.pointPanel.active = false;
         this.btnPanel.active = false;

@@ -3,7 +3,7 @@ import IManager from "../base/IManager";
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-09-17 14:07:23
+ * @LastEditTime: 2021-09-22 17:21:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -132,12 +132,10 @@ export default class Tool extends IManager {
      * @param {number} second
      * @return {*}
      */
-    public static secToCNTime(second: number) {
-        var date: Date = new Date(second);
-        let Y = date.getFullYear();
-        let M = date.getMonth() + 1;
-        let D = date.getDate();
-
+    public static secToCNTime(time: string) {
+        let Y = time.split('-')[0];
+        let M = time.split('-')[1];
+        let D = time.split('-')[2];
         return ("{0}年{1}月{2}日").format(Y, M, D);
     }
 
@@ -150,5 +148,21 @@ export default class Tool extends IManager {
         let date = str.replace('-', '/');
         var timeStamp = new Date(date).getTime();
         return timeStamp;
+    }
+
+    /**
+     * @description: 
+     * @param {string} str
+     * @param {number} len1 变星号的起始值
+     * @param {number} len2 变星号的结束值
+     * @return {*}
+     */
+    public static changeToStar(str: string, len: number = 3) {
+        if (str.length > len) {
+            return "*****" + str.substring(str.length - len - 1, str.length - 1);
+        }
+        else {
+            return "*****" + str[str.length - 1];
+        }
     }
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 17:22:35
- * @LastEditTime: 2021-09-20 17:13:04
+ * @LastEditTime: 2021-09-22 16:05:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\Question.ts

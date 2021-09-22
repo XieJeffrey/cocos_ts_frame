@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-22 13:58:37
+ * @LastEditTime: 2021-09-22 20:46:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -21,7 +21,11 @@ const { ccclass, property } = cc._decorator;
 const localStorage = true;
 @ccclass
 export default class Storage extends IManager {
-    dataKey: string = "debug_key_24";
+    dataKey: string = "debug_key_32";
+
+    clearAll() {
+        cc.sys.localStorage.clear();
+    }
 
     init() {
         return new Promise(function (resolve, reject) {

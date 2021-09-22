@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 21:23:50
- * @LastEditTime: 2021-09-20 21:36:01
+ * @LastEditTime: 2021-09-22 17:19:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Rank.ts
@@ -170,8 +170,10 @@ export default class Rank extends IView {
         else {
             noStr = "" + ++idx;
         }
+
         item.findChild('no').getComponent(cc.Label).string = noStr;
-        item.findChild('name').getComponent(cc.Label).string = data.openid;
+
+        item.findChild('name').getComponent(cc.Label).string = Tool.changeToStar(data.openid);
         item.findChild('time').getComponent(cc.Label).string = data.round;
     }
 
