@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-20 23:51:16
+ * @LastEditTime: 2021-09-22 11:15:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -285,6 +285,10 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     invite(inviter: string) {
+        if (UserData.getInstance().GameID) {
+            UI.getInstance().showFloatMsg("请先完善资料再帮好友助力");
+            return;
+        }
         let url = GameConfig.getInstance().url + "/api/inviteIn";
         let param = {
             openid: UserData.getInstance().GameID,
