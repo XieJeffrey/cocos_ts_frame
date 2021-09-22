@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-21 00:26:32
+ * @LastEditTime: 2021-09-22 13:57:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -17,11 +17,12 @@ import { IView } from "../base/IView";
 import UI from "../module/UI";
 import GameData from "../data/GameData";
 import Sound from "../module/Sound";
-import { SoundType } from "../common/BaseType";
+import { EventType, SoundType } from "../common/BaseType";
 import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
 import Storage from "../module/Storage";
 import GameConfig from "../config/GameConfig";
+import Event from "../module/Event";
 
 const { ccclass, property } = cc._decorator;
 
@@ -40,7 +41,7 @@ export default class Exchange extends IView {
     soliderNumTxt: cc.Label;
     GameIDTxt: cc.Label;
     exchangedNum: cc.Label;
-
+    exchangedNumTitle: cc.Label;
     poolTxt: cc.Label;
     leftTxt: cc.Label;
 
@@ -59,6 +60,7 @@ export default class Exchange extends IView {
         this.soliderNumTxt = this.exchangePanel.findChild('item/mark/txt').getComponent(cc.Label);
         this.soliderTypeName = this.exchangePanel.findChild('item/txt').getComponent(cc.Label);
         this.GameIDTxt = this.exchangePanel.findChild('Id/txt').getComponent(cc.Label);
+        this.exchangedNumTitle = this.exchangePanel.findChild('done').getComponent(cc.Label);
         this.exchangedNum = this.exchangePanel.findChild('done/txt').getComponent(cc.Label);
 
         this.poolTxt = this.node.findChild('poolTxt').getComponent(cc.Label);
@@ -113,16 +115,17 @@ export default class Exchange extends IView {
         this.exchangedNum.string = "" + GameData.getInstance().payPoint * GameConfig.getInstance().troops2lv[4];
         this.soliderImg.spriteFrame = this.toggleTypeNode.findChild('' + GameData.getInstance().soliderType + "/img").getComponent(cc.Sprite).spriteFrame;
         switch (GameData.getInstance().soliderType) {
-            case 1:
+            case 0:
                 this.soliderTypeName.string = "步兵";
                 break;
-            case 2:
+            case 1:
                 this.soliderTypeName.string = "弓兵";
                 break
-            case 3:
+            case 2:
                 this.soliderTypeName.string = "骑兵";
                 break
         }
+        this.exchangedNumTitle.string = "已成功兑换T5 {0}:".format(this.soliderTypeName.string);
         let lv = 4
         this.soliderNumTxt.string = "T{0}:{1}".format(lv + 1, GameData.getInstance().point * GameConfig.getInstance().troops2lv[lv])
     }
@@ -208,6 +211,7 @@ export default class Exchange extends IView {
                 LogicMgr.getInstance().initExchangeStae().then(function () {
                     this.onShow();
                 }.bind(this))
+                Event.getInstance().emit(EventType.RefreshPoint, {})
             }.bind(this)
         )
     }

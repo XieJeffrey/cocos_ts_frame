@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-21 22:26:42
+ * @LastEditTime: 2021-09-22 12:07:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -507,7 +507,7 @@ export default class Game extends IView {
             }
 
             this.playHeroAnima(Action.Idle);
-            this.playSoliderAnima(RoleType.Mine, Action.Idle, 0);
+            this.playSoliderAnima(RoleType.Mine, Action.Idle, GameData.getInstance().soliderLv);
 
             setTimeout(function () {
                 if (this.gameMode == GameMode.Pattern) {
@@ -555,8 +555,8 @@ export default class Game extends IView {
     startFight(fightDuration = 1000, soliderLoss = GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]) {
         console.log("soliderLoss:" + soliderLoss);
         this.playHeroAnima(Action.Attack);
-        this.playSoliderAnima(RoleType.Mine, Action.Attack, 0);
-        this.playSoliderAnima(RoleType.Enemy, Action.Attack, 0);
+        this.playSoliderAnima(RoleType.Mine, Action.Attack, GameData.getInstance().soliderLv);
+        this.playSoliderAnima(RoleType.Enemy, Action.Attack, GameData.getInstance().soliderLv);
 
         Sound.getInstance().playSound(SoundType.Fight, true);
 
@@ -788,6 +788,7 @@ export default class Game extends IView {
         }
         else {
             array = this.enemyRole;
+            lv = 0;//写死敌兵1级资源
         }
 
         for (let i = 0; i < array.length; i++) {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-21 10:57:27
+ * @LastEditTime: 2021-09-22 13:10:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -37,6 +37,7 @@ export default class Result extends IView {
     continueBtn: cc.Node;
     homeBtn: cc.Node;
     shareBtn: cc.Node;
+    round: cc.Label;
 
     pointPanel: cc.Node;
     btnPanel: cc.Node;
@@ -49,6 +50,7 @@ export default class Result extends IView {
         this.pointPanel = this.node.findChild('point')
         this.point = this.node.findChild('point/point').getComponent(cc.Label);
         this.height = this.node.findChild('point/height').getComponent(cc.Label);
+        this.round = this.node.findChild('point/round/txt').getComponent(cc.Label);
 
         this.btnPanel = this.node.findChild('btn');
         this.downloadBtn = this.btnPanel.findChild('download');
@@ -100,6 +102,7 @@ export default class Result extends IView {
 
         this.point.string = "积分 " + (isWin ? getPoint : 0)
         this.height.string = "累计积分: " + GameData.getInstance().point;
+        this.round.string = "得分：" + getPoint;
         this.continueBtn.active = isWin;
         this.shareBtn.active = !isWin;
 

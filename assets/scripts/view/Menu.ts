@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-21 00:17:53
+ * @LastEditTime: 2021-09-22 13:58:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -41,6 +41,7 @@ export default class Menu extends IView {
     anima: sp.Skeleton;
     pointTxt: cc.Label;
     recordTxt: cc.Label;
+    checkLvUp: boolean = false;
 
     onLoad() {
         this.rankBtn = this.node.findChild('rank');
@@ -66,7 +67,8 @@ export default class Menu extends IView {
         this.exchangeBtn.on('click', this.onClickExchange, this)
         this.lvUpBtn.on('click', this.onClickLvUp, this)
 
-        Event.getInstance().on(EventType.LvUp, this.node, this.refreshSolider);
+        Event.getInstance().on(EventType.LvUp, this.node, function () { this.refreshSolider() }.bind(this));
+        Event.getInstance().on(EventType.RefreshPoint, this.node, function () { this.refreshPoint() }.bind(this));
     }
 
     onShow() {
@@ -76,6 +78,10 @@ export default class Menu extends IView {
         this.refreshPoint();
         this.refreshRecord();
         Sound.getInstance().playBgm(BgmType.MenuBgm);
+        if (this.checkLvUp == false) {
+            this.checkInviteParam();
+            this.checkLvUp = true;
+        }
         if (this.anima == null) {
             this.anima = new cc.Node('anima').addComponent(sp.Skeleton);
             this.node.addChild(this.anima.node);
@@ -107,6 +113,7 @@ export default class Menu extends IView {
             return;
 
         this.soliderIcon.spriteFrame = this.soliderSpriteList[GameData.getInstance().soliderLv];
+        this.soliderLvTxt.string = "Lv {0}".format(GameData.getInstance().soliderLv + 1);
     }
 
     /**
@@ -175,6 +182,7 @@ export default class Menu extends IView {
     onClickLvUp() {
         if (UserData.getInstance().GameID == "") {
             UI.getInstance().showFloatMsg("请先完善个人信息");
+            UI.getInstance().showUI("Person");
             return;
         }
         LogicMgr.getInstance().shareLvup();
@@ -209,6 +217,11 @@ export default class Menu extends IView {
      * @return {*}
      */
     checkInviteParam() {
+        // GameData.getInstance().launchData = {
+        //     cmd: 1,
+        //     lv: 1,
+        //     inviter: "123456"
+        // }
         if (GameData.getInstance().launchData != null) {
             LogicMgr.getInstance().invite(GameData.getInstance().launchData.inviter);
         }

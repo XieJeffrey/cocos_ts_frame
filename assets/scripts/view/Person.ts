@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-21 00:05:47
+ * @LastEditTime: 2021-09-22 11:18:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -113,6 +113,7 @@ export default class Person extends IView {
             LogicMgr.getInstance().updateRank(GameData.getInstance().endlessRecord, function () {
                 Event.getInstance().emit(EventType.Regist, {});
             }.bind(this));
+            UI.getInstance().hideUI("Person")
         }.bind(this));
     }
 

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:33:41
- * @LastEditTime: 2021-09-20 00:24:30
+ * @LastEditTime: 2021-09-22 11:42:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\BaseType.ts
@@ -50,6 +50,7 @@ export enum EventType {
     Regist = 3,
     Relive = 4,
     LvUp = 5,
+    RefreshPoint = 6,
 }
 
 /**

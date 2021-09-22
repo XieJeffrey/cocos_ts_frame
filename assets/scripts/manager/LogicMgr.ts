@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-22 11:15:59
+ * @LastEditTime: 2021-09-22 13:54:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -63,6 +63,7 @@ export default class LogicMgr extends IManager {
                 .then(function () { return this.initActivity() }.bind(this))
                 .then(function () { return this.initExchangeStae() }.bind(this))
                 .then(function () {
+                    console.log("[logicMgr init]")
                     if (resolve)
                         resolve(1);
                 }.bind(this))
@@ -285,7 +286,7 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     invite(inviter: string) {
-        if (UserData.getInstance().GameID) {
+        if (UserData.getInstance().GameID == "") {
             UI.getInstance().showFloatMsg("请先完善资料再帮好友助力");
             return;
         }
@@ -295,8 +296,8 @@ export default class LogicMgr extends IManager {
             inviter: inviter
         }
 
-        Net.getInstance().post(url, param).then(function (obj) {
-            let data = JSON.parse(obj);
+        Net.getInstance().post(url, param).then(function (obj: any) {
+            let data = obj.data;
             if (data.errCode) {
                 UI.getInstance().showFloatMsg(data.errMsg);
                 return;
@@ -314,7 +315,6 @@ export default class LogicMgr extends IManager {
         let param = {
             openid: UserData.getInstance().GameID,
             type: GameData.getInstance().soliderType,
-            number: point
         }
 
         Net.getInstance().post(url, param).then(function (data) {
@@ -345,8 +345,8 @@ export default class LogicMgr extends IManager {
     initExchangeStae() {
         console.log("LoginMgr:initExchange")
         return new Promise((resolve, reject) => {
-            let url = GameConfig.getInstance().url;
-            let param = "/api/exchangeStatus";
+            let url = GameConfig.getInstance().url + "/api/exchangeStatus";
+            let param = "?openid={0}".format(UserData.getInstance().GameID);
             url += param;
             Net.getInstance().get(url).then(function (data: any) {
                 let obj = data.data;
@@ -355,6 +355,8 @@ export default class LogicMgr extends IManager {
                 GameData.getInstance().isExchangeOpen = obj.opening;
                 GameData.getInstance().totalPool = obj.totalPool;
                 GameData.getInstance().todayPool = obj.todayPool;
+                if (UserData.getInstance().GameID != "")
+                    GameData.getInstance().point = obj.alreadyExchange;
                 if (resolve)
                     resolve(1);
 
@@ -412,7 +414,7 @@ export default class LogicMgr extends IManager {
                     GameData.getInstance().lvUpTimer = -1;
                 }
             }.bind(this))
-        }.bind(this), 60 * 1000);
+        }.bind(this), 10 * 1000);
     }
 
     userLogin() {
