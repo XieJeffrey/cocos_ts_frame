@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:15:56
- * @LastEditTime: 2021-09-20 15:41:00
+ * @LastEditTime: 2021-09-22 10:30:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\ui .ts
@@ -82,6 +82,10 @@ export default class UI extends IManager {
             this.root.addChild(node);
             node.height = cc.view.getVisibleSize().height;
             node.width = cc.view.getVisibleSize().width;
+            if (this.uiList.has(name)) {
+                node.destroy();
+                return;
+            }
             this.uiList.set(name, {
                 node: node,
                 script: node.addComponent(UIConfig.uiList.get(name).script.capitalize())

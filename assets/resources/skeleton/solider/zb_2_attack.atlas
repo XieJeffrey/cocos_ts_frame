@@ -1,0 +1,90 @@
+
+zb_2_attack.png
+size: 384,384
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1
+  rotate: false
+  xy: 77, 255
+  size: 113, 127
+  orig: 113, 127
+  offset: 0, 0
+  index: -1
+23
+  rotate: false
+  xy: 77, 255
+  size: 113, 127
+  orig: 113, 127
+  offset: 0, 0
+  index: -1
+11
+  rotate: false
+  xy: 129, 6
+  size: 78, 120
+  orig: 78, 120
+  offset: 0, 0
+  index: -1
+13
+  rotate: false
+  xy: 209, 10
+  size: 81, 116
+  orig: 81, 116
+  offset: 0, 0
+  index: -1
+15
+  rotate: false
+  xy: 292, 153
+  size: 82, 114
+  orig: 82, 114
+  offset: 0, 0
+  index: -1
+17
+  rotate: false
+  xy: 292, 39
+  size: 82, 112
+  orig: 82, 112
+  offset: 0, 0
+  index: -1
+19
+  rotate: false
+  xy: 292, 269
+  size: 85, 113
+  orig: 85, 113
+  offset: 0, 0
+  index: -1
+21
+  rotate: true
+  xy: 2, 2
+  size: 93, 125
+  orig: 93, 125
+  offset: 0, 0
+  index: -1
+3
+  rotate: true
+  xy: 192, 278
+  size: 104, 94
+  orig: 104, 94
+  offset: 0, 0
+  index: -1
+5
+  rotate: false
+  xy: 2, 97
+  size: 94, 137
+  orig: 94, 137
+  offset: 0, 0
+  index: -1
+7
+  rotate: false
+  xy: 2, 236
+  size: 73, 146
+  orig: 73, 146
+  offset: 0, 0
+  index: -1
+9
+  rotate: false
+  xy: 98, 128
+  size: 119, 125
+  orig: 119, 125
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,48 @@
+
+zb_2_zhan.png
+size: 340,340
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+11
+  rotate: false
+  xy: 232, 204
+  size: 106, 132
+  orig: 106, 132
+  offset: 0, 0
+  index: -1
+15
+  rotate: false
+  xy: 2, 72
+  size: 110, 132
+  orig: 110, 132
+  offset: 0, 0
+  index: -1
+19
+  rotate: false
+  xy: 2, 206
+  size: 113, 130
+  orig: 113, 130
+  offset: 0, 0
+  index: -1
+23
+  rotate: false
+  xy: 117, 208
+  size: 113, 128
+  orig: 113, 128
+  offset: 0, 0
+  index: -1
+3
+  rotate: false
+  xy: 223, 74
+  size: 110, 128
+  orig: 110, 128
+  offset: 0, 0
+  index: -1
+7
+  rotate: false
+  xy: 114, 74
+  size: 107, 130
+  orig: 107, 130
+  offset: 0, 0
+  index: -1

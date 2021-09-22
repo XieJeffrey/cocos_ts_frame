@@ -1,0 +1,48 @@
+
+zb_5_zhan.png
+size: 360,356
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+11
+  rotate: false
+  xy: 122, 107
+  size: 114, 123
+  orig: 114, 123
+  offset: 0, 0
+  index: -1
+15
+  rotate: false
+  xy: 242, 231
+  size: 114, 123
+  orig: 114, 123
+  offset: 0, 0
+  index: -1
+19
+  rotate: false
+  xy: 238, 107
+  size: 114, 122
+  orig: 114, 122
+  offset: 0, 0
+  index: -1
+23
+  rotate: false
+  xy: 123, 232
+  size: 117, 122
+  orig: 117, 122
+  offset: 0, 0
+  index: -1
+3
+  rotate: false
+  xy: 2, 232
+  size: 119, 122
+  orig: 119, 122
+  offset: 0, 0
+  index: -1
+7
+  rotate: false
+  xy: 2, 108
+  size: 118, 122
+  orig: 118, 122
+  offset: 0, 0
+  index: -1
