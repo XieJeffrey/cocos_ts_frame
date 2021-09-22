@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 21:23:50
- * @LastEditTime: 2021-09-20 15:52:29
+ * @LastEditTime: 2021-09-20 21:36:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Rank.ts
@@ -35,6 +35,7 @@ export default class Rank extends IView {
     registeredItem: cc.Node;
     unregisteredItem: cc.Node;
     registBtn: cc.Node;
+    ruleBtn: cc.Node;
 
     onLoad() {
         this.closeBtn = this.node.findChild('decorate/close');
@@ -44,12 +45,14 @@ export default class Rank extends IView {
         this.registeredItem = this.node.findChild('content/registered');
         this.unregisteredItem = this.node.findChild('content/unregistered');
         this.registBtn = this.unregisteredItem.findChild('register');
+        this.ruleBtn = this.node.findChild('rule/ruleBtn');
         super.onLoad();
     }
 
     register() {
         this.registBtn.on('click', this.onRegister, this);
         this.closeBtn.on('click', this.onClose, this);
+        this.ruleBtn.on('click', this.onRule, this)
         Event.getInstance().on(EventType.Regist, this.node, function () { this.onRegistered(); }.bind(this));
     }
 
@@ -170,5 +173,9 @@ export default class Rank extends IView {
         item.findChild('no').getComponent(cc.Label).string = noStr;
         item.findChild('name').getComponent(cc.Label).string = data.openid;
         item.findChild('time').getComponent(cc.Label).string = data.round;
+    }
+
+    onRule() {
+        UI.getInstance().showUI("Rule");
     }
 }

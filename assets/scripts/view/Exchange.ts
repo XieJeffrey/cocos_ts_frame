@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-20 15:45:24
+ * @LastEditTime: 2021-09-21 00:26:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -78,7 +78,7 @@ export default class Exchange extends IView {
 
     onShow() {
         this.ownedTxt.string = "你当前可兑换积分有:{0}".format(GameData.getInstance().point);
-        this.payTxt.string = "你已成功兑换积分:{0}".format(GameData.getInstance().payPoint);
+        this.payTxt.string = "你已成功兑换积分:{0}".format(GameData.getInstance().payPoint * GameConfig.getInstance().troops2lv[4]);
         this.poolTxt.string = "兑换奖池还剩:{0}积分".format(GameData.getInstance().todayPool);
         this.leftTxt.string = "(还剩{0}积分额度可兑换)".format(10000 - GameData.getInstance().payPoint);
 
@@ -110,7 +110,7 @@ export default class Exchange extends IView {
     refreshExchangePanel() {
         //  console.log(UserData.getInstance().GameID);
         this.GameIDTxt.string = UserData.getInstance().GameID;
-        this.exchangedNum.string = "" + GameData.getInstance().payPoint;
+        this.exchangedNum.string = "" + GameData.getInstance().payPoint * GameConfig.getInstance().troops2lv[4];
         this.soliderImg.spriteFrame = this.toggleTypeNode.findChild('' + GameData.getInstance().soliderType + "/img").getComponent(cc.Sprite).spriteFrame;
         switch (GameData.getInstance().soliderType) {
             case 1:
@@ -151,6 +151,7 @@ export default class Exchange extends IView {
             return;
         }
         if (GameData.getInstance().soliderType == 0) {
+            GameData.getInstance().soliderType = this.selectType;
             LogicMgr.getInstance().setSoliderType(function () {
                 this.doExchage();
             }.bind(this))
@@ -167,12 +168,11 @@ export default class Exchange extends IView {
      */
     doExchage() {
         LogicMgr.getInstance().exchangeSolider(
-            5,
             GameData.getInstance().point,
             function (data) {
-                console.log(data);
                 let obj = data.data;
-                if (typeof obj.errCode == "undefined") {
+                console.log(obj)
+                if (obj.errCode) {
                     switch (obj.errCode) {
                         case -1:
                             UI.getInstance().showFloatMsg("用户不存在");
@@ -198,12 +198,12 @@ export default class Exchange extends IView {
                             break;
                     }
                     console.log("兑换兵力出错:" + obj.errCode)
-                    return
+                    return;
                 }
-                GameData.getInstance().payPoint = GameData.getInstance().point - obj.restTroops;
-                GameData.getInstance().point = obj.restTroops;
+                GameData.getInstance().payPoint += obj.exchangeTroops;
+                GameData.getInstance().point = obj.userRestTroops;
                 Storage.getInstance().saveGameData();
-                UI.getInstance().showFloatMsg("成功兑换{0}T{1}兵力".format(obj.number, obj.level))
+                UI.getInstance().showFloatMsg("成功兑换{0} T5兵力".format(obj.exchangeTroops * GameConfig.getInstance().troops2lv[4]));
                 this.onShow();
                 LogicMgr.getInstance().initExchangeStae().then(function () {
                     this.onShow();
@@ -220,10 +220,10 @@ export default class Exchange extends IView {
         else
             this.toggleTypeNode.findChild('' + idx).getComponent(cc.Toggle).check();
 
-        if (GameData.getInstance().soliderType == 0 && UserData.getInstance().GameID != "") {
-            GameData.getInstance().soliderType = this.selectType;
-            LogicMgr.getInstance().setSoliderType(null);
-        }
+        // if (GameData.getInstance().soliderType == 0 && UserData.getInstance().GameID != "") {
+        //     GameData.getInstance().soliderType = this.selectType;
+        //     LogicMgr.getInstance().setSoliderType(null);
+        // }
 
     }
 }

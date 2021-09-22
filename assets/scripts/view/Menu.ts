@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-20 01:02:11
+ * @LastEditTime: 2021-09-21 00:17:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -173,8 +173,6 @@ export default class Menu extends IView {
     }
 
     onClickLvUp() {
-        UserData.getInstance().GameID = "10100";
-
         if (UserData.getInstance().GameID == "") {
             UI.getInstance().showFloatMsg("请先完善个人信息");
             return;
