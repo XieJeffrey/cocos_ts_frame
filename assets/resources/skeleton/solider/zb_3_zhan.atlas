@@ -1,0 +1,48 @@
+
+zb_3_zhan.png
+size: 396,396
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+zhan0000
+  rotate: false
+  xy: 129, 84
+  size: 122, 155
+  orig: 122, 155
+  offset: 0, 0
+  index: -1
+zhan0008
+  rotate: false
+  xy: 271, 242
+  size: 123, 150
+  orig: 123, 150
+  offset: 0, 0
+  index: -1
+zhan0016
+  rotate: false
+  xy: 253, 92
+  size: 130, 148
+  orig: 130, 148
+  offset: 0, 0
+  index: -1
+zhan0020
+  rotate: false
+  xy: 136, 244
+  size: 133, 148
+  orig: 133, 148
+  offset: 0, 0
+  index: -1
+zhan0024
+  rotate: false
+  xy: 2, 241
+  size: 132, 151
+  orig: 132, 151
+  offset: 0, 0
+  index: -1
+zhan0032
+  rotate: false
+  xy: 2, 84
+  size: 125, 155
+  orig: 125, 155
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,55 @@
+
+zb_3_pao.png
+size: 400,396
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+pao0000
+  rotate: false
+  xy: 2, 63
+  size: 111, 164
+  orig: 111, 164
+  offset: 0, 0
+  index: -1
+pao0002
+  rotate: true
+  xy: 234, 284
+  size: 110, 162
+  orig: 110, 162
+  offset: 0, 0
+  index: -1
+pao0006
+  rotate: true
+  xy: 234, 169
+  size: 113, 155
+  orig: 113, 155
+  offset: 0, 0
+  index: -1
+pao0010
+  rotate: true
+  xy: 115, 47
+  size: 120, 151
+  orig: 120, 151
+  offset: 0, 0
+  index: -1
+pao0014
+  rotate: false
+  xy: 268, 16
+  size: 121, 151
+  orig: 121, 151
+  offset: 0, 0
+  index: -1
+pao0018
+  rotate: false
+  xy: 116, 236
+  size: 116, 158
+  orig: 116, 158
+  offset: 0, 0
+  index: -1
+pao0022
+  rotate: false
+  xy: 2, 229
+  size: 112, 165
+  orig: 112, 165
+  offset: 0, 0
+  index: -1

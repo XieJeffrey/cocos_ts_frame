@@ -1,0 +1,83 @@
+
+zb_4_attack.png
+size: 516,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+da0000
+  rotate: true
+  xy: 172, 236
+  size: 133, 171
+  orig: 133, 171
+  offset: 0, 0
+  index: -1
+da0002
+  rotate: false
+  xy: 315, 15
+  size: 94, 177
+  orig: 94, 177
+  offset: 0, 0
+  index: -1
+da0006
+  rotate: false
+  xy: 411, 33
+  size: 100, 159
+  orig: 100, 159
+  offset: 0, 0
+  index: -1
+da0010
+  rotate: false
+  xy: 2, 401
+  size: 217, 108
+  orig: 217, 108
+  offset: 0, 0
+  index: -1
+da0014
+  rotate: false
+  xy: 391, 322
+  size: 90, 187
+  orig: 90, 187
+  offset: 0, 0
+  index: -1
+da0018
+  rotate: true
+  xy: 137, 8
+  size: 95, 176
+  orig: 95, 176
+  offset: 0, 0
+  index: -1
+da0026
+  rotate: true
+  xy: 137, 105
+  size: 129, 156
+  orig: 129, 156
+  offset: 0, 0
+  index: -1
+da0030
+  rotate: false
+  xy: 345, 194
+  size: 164, 126
+  orig: 164, 126
+  offset: 0, 0
+  index: -1
+da0034
+  rotate: true
+  xy: 221, 371
+  size: 138, 168
+  orig: 138, 168
+  offset: 0, 0
+  index: -1
+da0038
+  rotate: true
+  xy: 2, 261
+  size: 138, 168
+  orig: 138, 168
+  offset: 0, 0
+  index: -1
+da0040
+  rotate: false
+  xy: 2, 88
+  size: 133, 171
+  orig: 133, 171
+  offset: 0, 0
+  index: -1
