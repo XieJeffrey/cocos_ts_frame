@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-15 15:29:34
- * @LastEditTime: 2021-09-22 15:37:26
+ * @LastEditTime: 2021-09-23 15:34:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Record.ts
@@ -72,7 +72,7 @@ export default class Record extends IView {
             if (UserData.getInstance().GameID != "") {
                 LogicMgr.getInstance().updateRank(record, function () {
                     GameData.getInstance().endlessRecord = record;
-                    Storage.getInstance().saveGameData();
+                    LogicMgr.getInstance().setUserGameData(null);
                 })
             }
             else {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-22 20:20:46
+ * @LastEditTime: 2021-09-23 21:56:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -15,6 +15,7 @@
 
 import { IView } from "../base/IView";
 import { EventType, SoundType } from "../common/BaseType";
+import Tool from "../common/Tool";
 import GameData from "../data/GameData";
 import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
@@ -91,7 +92,16 @@ export default class Person extends IView {
             return;
         }
 
-        if (this.idInput.string.length != 8) {
+        if (this.phoneInput.string == "") {
+            UI.getInstance().showFloatMsg("联系方式不能为空");
+            return;
+        }
+
+        if (this.phoneInput.string.length != 11 || !Tool.isNumber(this.phoneInput.string)) {
+            UI.getInstance().showFloatMsg("错误的手机号码")
+            return;
+        }
+        if (this.idInput.string.length > 9 || !Tool.isNumber(this.idInput.string)) {
             UI.getInstance().showFloatMsg("非法的游戏ID");
             return;
         }
@@ -101,35 +111,50 @@ export default class Person extends IView {
             return;
         }
 
-        LogicMgr.getInstance().setUserInfo({
-            id: this.idInput.string,
-            mail: "",
-            tel: this.phoneInput.string,
-            name: this.nameInput.string,
-            address: this.addressInput.string,
-        }, function () {
-            this.isModify = false;
-            UI.getInstance().showFloatMsg("信息更新成功")
-            UserData.getInstance().GameID = this.idInput.string;
-            UserData.getInstance().Phone = this.phoneInput.string;
-            UserData.getInstance().Name = this.nameInput.string;
-            UserData.getInstance().Address = this.addressInput.string;
-            Storage.getInstance().saveUserData();
-            LogicMgr.getInstance().setUserGameData(null);
-            if (GameData.getInstance().endlessRecord == 0) {
-                Event.getInstance().emit(EventType.Regist, {});
-            }
-            else {
-                LogicMgr.getInstance().updateRank(GameData.getInstance().endlessRecord, function () {
-                    Event.getInstance().emit(EventType.Regist, {});
-                }.bind(this));
-            }
-            UI.getInstance().hideUI("Person")
-        }.bind(this));
+        LogicMgr.getInstance().userExist(this.idInput.string).then(function () {
+            LogicMgr.getInstance().setUserInfo({
+                id: this.idInput.string,
+                mail: "",
+                tel: this.phoneInput.string,
+                name: this.nameInput.string,
+                address: this.addressInput.string,
+            }).then(function () {
+                this.infoCommited();
+            }.bind(this))
+        }.bind(this)).catch(function () {
+            UI.getInstance().showFloatMsg("已经存在的ID，无法重复创建")
+        })
     }
 
     onClose() {
         Sound.getInstance().playSound(SoundType.PanelClose);
         UI.getInstance().hideUI('Person')
+    }
+
+    /**
+     * @description: 玩家联系方式已保存
+     * @param {*}
+     * @return {*}
+     */
+    infoCommited() {
+        this.isModify = false;
+        UI.getInstance().showFloatMsg("信息更新成功")
+        console.log(this)
+        UserData.getInstance().GameID = this.idInput.string;
+        UserData.getInstance().Phone = this.phoneInput.string;
+        UserData.getInstance().Name = this.nameInput.string;
+        UserData.getInstance().Address = this.addressInput.string;
+        Storage.getInstance().saveUserData();
+        LogicMgr.getInstance().setUserGameData(null);//保存游戏数据
+        if (GameData.getInstance().endlessRecord == 0) {
+            Event.getInstance().emit(EventType.Regist, {});
+        }
+        else {
+            //保存无尽模式的成绩
+            LogicMgr.getInstance().updateRank(GameData.getInstance().endlessRecord, function () {
+                Event.getInstance().emit(EventType.Regist, {});
+            }.bind(this));
+        }
+        UI.getInstance().hideUI("Person")
     }
 }

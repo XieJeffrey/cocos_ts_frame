@@ -1,7 +1,7 @@
 {
   "title": "Rise_Kingdoms",
   "packageName": "org.cocos2d.demo",
-  "startScene": "1b5a68f7-4d04-4390-96a0-9741e11738cd",
+  "startScene": "f16a2a22-8fe9-41b2-b82a-e84c3c01b9f4",
   "excludeScenes": [],
   "orientation": {
     "landscapeRight": true,

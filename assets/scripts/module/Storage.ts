@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-22 20:46:16
+ * @LastEditTime: 2021-09-23 21:52:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -14,6 +14,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import IManager from "../base/IManager";
+import Base64 from "../common/Base64";
 import GameData from "../data/GameData";
 import UserData from "../data/UserData";
 
@@ -21,7 +22,7 @@ const { ccclass, property } = cc._decorator;
 const localStorage = true;
 @ccclass
 export default class Storage extends IManager {
-    dataKey: string = "debug_key_32";
+    dataKey: string = "debug_key_35";
 
     clearAll() {
         cc.sys.localStorage.clear();
@@ -57,7 +58,7 @@ export default class Storage extends IManager {
             payPoint: GameData.getInstance().payPoint,
         }
         let str = JSON.stringify(json);
-        str = str.encode();
+        str = Base64.encode(str);
         cc.sys.localStorage.setItem('gameData' + this.dataKey, str);
     }
 
@@ -75,7 +76,7 @@ export default class Storage extends IManager {
             mail: UserData.getInstance().Mail,
         }
         let str = JSON.stringify(json);
-        str = str.encode();
+        str = Base64.encode(str)
         console.log(str);
         cc.sys.localStorage.setItem('userData' + this.dataKey, str);
     }
@@ -86,7 +87,7 @@ export default class Storage extends IManager {
             GameData.getInstance().init()
         }
         else {
-            GameData.getInstance().load(str.decode());
+            GameData.getInstance().load(Base64.decode(str));
         }
     }
 
@@ -96,7 +97,7 @@ export default class Storage extends IManager {
             UserData.getInstance().init()
         }
         else {
-            UserData.getInstance().load(str.decode());
+            UserData.getInstance().load(Base64.decode(str));
         }
     }
 

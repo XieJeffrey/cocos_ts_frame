@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-09-18 17:09:03
- * @LastEditTime: 2021-09-22 21:41:31
+ * @LastEditTime: 2021-09-23 09:50:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\build-templates\web-mobile\index.html
@@ -57,7 +57,7 @@
   </div>
 
 <script src="src/settings.js" charset="utf-8"></script>
-<!-- <script src="vconsole.min.js"></script> -->
+<script src="vconsole.min.js"></script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 <script src="main.js" charset="utf-8"></script>
 
@@ -88,9 +88,9 @@
     console.log(document.URL);
 
     // open web debugger console
-    // if (typeof VConsole !== 'undefined') {
-    //     window.vConsole = new VConsole();
-    // }
+    if (typeof VConsole !== 'undefined') {
+        window.vConsole = new VConsole();
+    }
     GetRequest();
 
     var debug = window._CCSettings.debug;

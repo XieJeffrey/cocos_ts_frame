@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-22 21:39:00
+ * @LastEditTime: 2021-09-23 22:38:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -67,7 +67,7 @@ export default class Menu extends IView {
             // UI.getInstance().showFloatMsg("清除所有本地数据，重启重试")
         }, this)
 
-        Event.getInstance().on(EventType.LvUp, this.node, function () { this.refreshSolider() }.bind(this));
+        Event.getInstance().on(EventType.LvUp, this.node, function () { UI.getInstance().showUI("Reward"); this.refreshSolider() }.bind(this));
         Event.getInstance().on(EventType.RefreshPoint, this.node, function () { this.refreshPoint() }.bind(this));
     }
 
@@ -99,6 +99,13 @@ export default class Menu extends IView {
                 this.anima.setAnimation(0, "animation", true);
             }.bind(this))
         }
+
+        if (GameData.getInstance().rewardToShow) {
+            UI.getInstance().showUI("Reward")
+            GameData.getInstance().rewardToShow = false;
+        }
+
+        // UI.getInstance().showUI("Reward")
     }
 
     onHide() { }

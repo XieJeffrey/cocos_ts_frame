@@ -1,230 +1,230 @@
 
 defeated_victory.png
-size: 1192,1192
+size: 492,492
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 失败/1
-  rotate: false
-  xy: 219, 541
-  size: 537, 164
-  orig: 546, 176
-  offset: 8, 6
+  rotate: true
+  xy: 160, 146
+  size: 215, 66
+  orig: 218, 70
+  offset: 3, 2
   index: -1
 失败/2
   rotate: true
-  xy: 880, 275
-  size: 431, 85
-  orig: 453, 97
-  offset: 11, 6
+  xy: 428, 41
+  size: 173, 35
+  orig: 181, 39
+  offset: 4, 2
   index: -1
 失败/defeated
-  rotate: true
-  xy: 1138, 932
-  size: 258, 50
-  orig: 262, 54
-  offset: 2, 2
+  rotate: false
+  xy: 2, 2
+  size: 105, 22
+  orig: 105, 22
+  offset: 0, 0
   index: -1
 失败/she
   rotate: true
-  xy: 990, 675
-  size: 235, 140
-  orig: 250, 157
-  offset: 10, 8
+  xy: 370, 120
+  size: 94, 56
+  orig: 100, 63
+  offset: 4, 4
   index: -1
 失败/光点1
   rotate: false
-  xy: 804, 42
-  size: 95, 102
-  orig: 103, 106
-  offset: 1, 2
+  xy: 442, 222
+  size: 39, 41
+  orig: 41, 42
+  offset: 0, 1
   index: -1
 失败/发光1
   rotate: false
-  xy: 506, 876
-  size: 441, 314
-  orig: 441, 314
+  xy: 206, 364
+  size: 176, 126
+  orig: 176, 126
   offset: 0, 0
   index: -1
 失败/玻璃影1
   rotate: true
-  xy: 662, 9
-  size: 57, 63
-  orig: 57, 65
-  offset: 0, 1
+  xy: 160, 121
+  size: 23, 26
+  orig: 23, 26
+  offset: 0, 0
   index: -1
 失败/玻璃影2
-  rotate: true
-  xy: 1165, 651
-  size: 35, 25
-  orig: 35, 25
+  rotate: false
+  xy: 442, 298
+  size: 14, 10
+  orig: 14, 10
   offset: 0, 0
   index: -1
 失败/玻璃影3
-  rotate: false
-  xy: 219, 332
-  size: 32, 23
-  orig: 32, 23
+  rotate: true
+  xy: 373, 349
+  size: 13, 9
+  orig: 13, 9
   offset: 0, 0
   index: -1
 失败/玻璃影4
-  rotate: true
-  xy: 2, 2
-  size: 17, 25
-  orig: 17, 25
+  rotate: false
+  xy: 483, 253
+  size: 7, 10
+  orig: 7, 10
   offset: 0, 0
   index: -1
 失败/玻璃影5
-  rotate: false
-  xy: 671, 383
-  size: 110, 156
-  orig: 110, 156
+  rotate: true
+  xy: 335, 74
+  size: 44, 62
+  orig: 44, 62
   offset: 0, 0
   index: -1
 失败/玻璃影6
-  rotate: true
-  xy: 967, 683
-  size: 23, 21
-  orig: 23, 21
+  rotate: false
+  xy: 373, 327
+  size: 9, 8
+  orig: 9, 8
   offset: 0, 0
   index: -1
 失败/玻璃影7
   rotate: false
-  xy: 949, 891
-  size: 39, 19
-  orig: 41, 20
-  offset: 1, 0
+  xy: 80, 38
+  size: 16, 8
+  orig: 16, 8
+  offset: 0, 0
   index: -1
 失败/玻璃影8
-  rotate: false
-  xy: 362, 4
-  size: 298, 351
-  orig: 298, 351
+  rotate: true
+  xy: 228, 121
+  size: 119, 140
+  orig: 119, 140
   offset: 0, 0
   index: -1
 失败/碎片1
   rotate: false
-  xy: 880, 148
-  size: 40, 52
-  orig: 42, 54
-  offset: 1, 1
+  xy: 188, 122
+  size: 17, 22
+  orig: 17, 22
+  offset: 0, 0
   index: -1
 失败/碎片2
   rotate: false
-  xy: 727, 43
-  size: 26, 23
-  orig: 28, 24
-  offset: 1, 1
+  xy: 80, 26
+  size: 11, 10
+  orig: 11, 10
+  offset: 0, 0
   index: -1
 失败/碎片3
-  rotate: false
-  xy: 1138, 914
-  size: 23, 16
-  orig: 25, 18
-  offset: 1, 1
+  rotate: true
+  xy: 483, 241
+  size: 10, 7
+  orig: 10, 7
+  offset: 0, 0
   index: -1
 失败/碎片4
   rotate: false
-  xy: 783, 686
-  size: 19, 20
-  orig: 22, 24
-  offset: 1, 2
+  xy: 373, 337
+  size: 9, 10
+  orig: 9, 10
+  offset: 0, 0
   index: -1
 胜利/01
-  rotate: false
-  xy: 761, 708
-  size: 227, 166
-  orig: 231, 167
-  offset: 2, 1
+  rotate: true
+  xy: 373, 216
+  size: 92, 67
+  orig: 92, 67
+  offset: 0, 0
   index: -1
 胜利/02
   rotate: false
-  xy: 2, 876
-  size: 502, 314
-  orig: 516, 328
-  offset: 7, 7
+  xy: 2, 363
+  size: 202, 127
+  orig: 206, 131
+  offset: 2, 2
   index: -1
 胜利/03
   rotate: false
-  xy: 2, 21
-  size: 358, 299
-  orig: 358, 300
+  xy: 228, 242
+  size: 143, 120
+  orig: 143, 120
   offset: 0, 0
   index: -1
 胜利/victory
   rotate: true
-  xy: 1132, 688
-  size: 222, 47
-  orig: 224, 49
-  offset: 1, 1
+  xy: 80, 48
+  size: 90, 20
+  orig: 90, 20
+  offset: 0, 0
   index: -1
 胜利/光1
-  rotate: true
-  xy: 1078, 242
-  size: 431, 85
-  orig: 453, 97
-  offset: 11, 6
+  rotate: false
+  xy: 160, 84
+  size: 173, 35
+  orig: 181, 39
+  offset: 4, 2
   index: -1
 胜利/光2
-  rotate: false
-  xy: 219, 707
-  size: 540, 167
-  orig: 552, 184
-  offset: 11, 9
+  rotate: true
+  xy: 90, 144
+  size: 217, 68
+  orig: 221, 74
+  offset: 4, 3
   index: -1
 胜利/光3
   rotate: false
-  xy: 949, 912
-  size: 187, 278
-  orig: 190, 279
-  offset: 2, 0
+  xy: 2, 26
+  size: 76, 112
+  orig: 76, 112
+  offset: 0, 0
   index: -1
 胜利/光4
   rotate: true
-  xy: 804, 146
-  size: 560, 74
-  orig: 572, 82
-  offset: 11, 4
+  xy: 458, 265
+  size: 225, 31
+  orig: 229, 33
+  offset: 4, 1
   index: -1
 胜利/图层 2
   rotate: true
-  xy: 2, 322
-  size: 552, 215
-  orig: 552, 215
+  xy: 2, 140
+  size: 221, 86
+  orig: 221, 86
   offset: 0, 0
   index: -1
 胜利/小星星1
   rotate: false
-  xy: 671, 357
-  size: 23, 24
-  orig: 26, 26
-  offset: 2, 1
+  xy: 399, 108
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
   index: -1
 胜利/星星1
   rotate: false
-  xy: 880, 202
-  size: 72, 71
-  orig: 72, 71
+  xy: 325, 44
+  size: 29, 28
+  orig: 29, 28
   offset: 0, 0
   index: -1
 胜利/翅膀1
-  rotate: false
-  xy: 219, 357
-  size: 450, 182
-  orig: 452, 184
+  rotate: true
+  xy: 384, 310
+  size: 180, 72
+  orig: 181, 74
   offset: 0, 2
   index: -1
 胜利/翅膀2
   rotate: true
-  xy: 662, 68
-  size: 287, 140
-  orig: 288, 143
-  offset: 0, 3
+  xy: 102, 28
+  size: 114, 56
+  orig: 115, 57
+  offset: 0, 1
   index: -1
 胜利/翅膀3
-  rotate: true
-  xy: 967, 265
-  size: 408, 109
-  orig: 408, 110
+  rotate: false
+  xy: 160, 38
+  size: 163, 44
+  orig: 163, 44
   offset: 0, 0
   index: -1

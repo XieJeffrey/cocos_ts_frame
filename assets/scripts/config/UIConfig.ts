@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:20:53
- * @LastEditTime: 2021-09-20 21:40:28
+ * @LastEditTime: 2021-09-23 15:26:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\uiConfig.ts
@@ -25,7 +25,8 @@ export class UIConfig {
         ['Loading', { prefab: "Loading", order: 21, script: "Loading" }],
         ['Record', { prefab: "Record", order: 5, script: "Record" }],
         ['Exchange', { prefab: "Exchange", order: 5, script: "Exchange" }],
-        ['Rule', { prefab: "Rule", order: 6, script: "Rule" }]
+        ['Rule', { prefab: "Rule", order: 6, script: "Rule" }],
+        ["Reward", { prefan: "Reward", order: 7, script: "Reward" }]
     ])
 
     public static preload = ["Menu", "Loading"]

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:15:56
- * @LastEditTime: 2021-09-22 20:19:29
+ * @LastEditTime: 2021-09-23 16:52:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\ui .ts
@@ -158,7 +158,7 @@ export default class UI extends IManager {
      * @param {string} msg
      * @return {*}
      */
-    public showFloatMsg(msg: string, duration: number = 1): void {
+    public showFloatMsg(msg: string, duration: number = 1.5): void {
         if (this.uiList.has("Float")) {
             (this.uiList.get("Float").script as Float).showFloatMsg(msg, duration);
         }

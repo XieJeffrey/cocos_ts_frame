@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-22 20:42:45
+ * @LastEditTime: 2021-09-23 19:22:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -70,17 +70,16 @@ export default class Result extends IView {
         this.shareBtn.on('click', this.shareRelive, this);
     }
 
-    onShow(isWin) {
+    onShow(getPoint: number) {
+        let isWin = getPoint != 0
         Sound.getInstance().stopBgm();
         this.playTitleAnima(isWin);
 
-
-        let getPoint = GameData.getInstance().soliderNum * GameConfig.getInstance().solider2Point;;
         this.shareBtn.active = !isWin;
 
         if (isWin) {
             if (UserData.getInstance().GameID != "") {
-                LogicMgr.getInstance().setTroops(getPoint, function () {
+                LogicMgr.getInstance().setTroops(getPoint + GameData.getInstance().point, function () {
                     GameData.getInstance().point += getPoint;
                     Storage.getInstance().saveGameData();
                     this.height.string = "累计积分: " + GameData.getInstance().point;

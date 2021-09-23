@@ -3,7 +3,7 @@ import IManager from "../base/IManager";
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-09-22 17:21:18
+ * @LastEditTime: 2021-09-23 21:48:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -159,10 +159,24 @@ export default class Tool extends IManager {
      */
     public static changeToStar(str: string, len: number = 3) {
         if (str.length > len) {
-            return "*****" + str.substring(str.length - len - 1, str.length - 1);
+            return "*****" + str.substring(str.length - len, str.length);
         }
         else {
             return "*****" + str[str.length - 1];
+        }
+    }
+
+    /**
+     * @description: 判断是否正整数
+     * @param {string} val
+     * @return {*}
+     */
+    public static isNumber(val: string) {
+        var regNeg = /^[0-9]*[1-9][0-9]*$/; //正整数
+        if (regNeg.test(val)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

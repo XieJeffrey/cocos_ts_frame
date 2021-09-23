@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-22 21:22:52
+ * @LastEditTime: 2021-09-23 21:59:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -23,6 +23,7 @@ import Event from "../module/Event";
 import Net from "../module/Net";
 import Storage from "../module/Storage";
 import UI from "../module/UI";
+import Game from "../view/Game";
 
 const { ccclass, property } = cc._decorator;
 
@@ -59,14 +60,30 @@ export default class LogicMgr extends IManager {
 
 
         return new Promise(function (resolve, reject) {
-            this.getUserData()
-                .then(function () { return this.initActivity() }.bind(this))
-                .then(function () { return this.initExchangeStae() }.bind(this))
-                .then(function () {
-                    console.log("[logicMgr init]")
-                    if (resolve)
-                        resolve(1);
-                }.bind(this))
+            let login = function () {
+                this.getUserData()
+                    .then(function () { return this.initActivity() }.bind(this))
+                    .then(function () { return this.initExchangeStae() }.bind(this))
+                    .then(function () {
+                        console.log("[logicMgr init]")
+                        if (resolve)
+                            resolve(1);
+                    }.bind(this))
+            }.bind(this)
+
+            if (UserData.getInstance().GameID != "") {
+                this.userExist(UserData.getInstance().GameID).then(function () {
+                    cc.sys.localStorage.clear();
+                    Storage.getInstance().init();
+                    //  UI.getInstance().showFloatMsg("本地数据已清除");
+                    console.log("本地数据已清除");
+                    login();
+                })
+            }
+            else {
+                login();
+            }
+
         }.bind(this))
 
     }
@@ -95,7 +112,18 @@ export default class LogicMgr extends IManager {
             for (let i = 0; i < obj.rank.length; i++) {
                 GameData.getInstance().rankData.push({ openid: obj.rank[i].openid, round: obj.rank[i].round })
             }
-            GameData.getInstance().myRank = obj.self;
+
+            if (typeof obj.self == "number") {
+                if (obj.self > 10000) {
+                    GameData.getInstance().myRank = Infinity;
+                }
+                else
+                    GameData.getInstance().myRank = obj.self
+            }
+            else
+                GameData.getInstance().myRank = Infinity;
+
+            console.log("我的排名:{0}".format(GameData.getInstance().myRank));
             if (func)
                 func();
         }.bind(this), function () {
@@ -108,26 +136,28 @@ export default class LogicMgr extends IManager {
      * @param {*}
      * @return {*}
      */
-    setUserInfo(data, func) {
-        let url = GameConfig.getInstance().url + "/api/setUserinfo";
-        let param = {
-            openid: data.id,
-            mail: data.mail,
-            tel: data.tel,
-            name: data.name,
-            address: data.address,
-            round: GameData.getInstance().endlessRecord,
-            troops: GameData.getInstance().point,
-            level: GameData.getInstance().soliderLv,
-        }
+    setUserInfo(data) {
+        return new Promise((resolve, reject) => {
+            let url = GameConfig.getInstance().url + "/api/setUserinfo";
+            let param = {
+                openid: data.id,
+                mail: data.mail,
+                tel: data.tel,
+                name: data.name,
+                address: data.address,
+            }
 
-        Net.getInstance().post(url, param).then(function (data) {
-            console.log(data);
-            if (func)
-                func()
-        }, function () {
-            UI.getInstance().showFloatMsg("设置用户数据出错");
+            Net.getInstance().post(url, param).then(function (data) {
+                if (resolve)
+                    resolve(1);
+            }).catch(function () {
+                if (reject)
+                    reject();
+                console.error("set userInfo error");
+                UI.getInstance().showFloatMsg("设置用户信息出错");
+            })
         })
+
     }
 
     /**
@@ -136,6 +166,7 @@ export default class LogicMgr extends IManager {
      * @param {*} func
      * @return {*}
      */
+
     setUserGameData(func) {
         let url = GameConfig.getInstance().url + "/api/saveUser";
         let param = {
@@ -147,6 +178,7 @@ export default class LogicMgr extends IManager {
 
         Net.getInstance().post(url, param).then(function (data) {
             console.log(data);
+            Storage.getInstance().saveUserData();
             if (func)
                 func()
         }, function () {
@@ -195,7 +227,7 @@ export default class LogicMgr extends IManager {
                 let obj = data.data
                 console.log(obj);
                 GameData.getInstance().endlessRecord = parseInt(obj.round);
-                GameData.getInstance().soliderNum = obj.trpops;
+                GameData.getInstance().point = obj.troops;
                 GameData.getInstance().soliderLv = obj.level;
                 if (resolve)
                     resolve(1);
@@ -205,7 +237,6 @@ export default class LogicMgr extends IManager {
                     reject();
             })
         })
-
     }
 
     /**
@@ -225,6 +256,7 @@ export default class LogicMgr extends IManager {
         }
 
         Net.getInstance().post(url, param).then(function (data: string) {
+            GameData.getInstance().resetRankData();
             if (func)
                 func();
         }, function () {
@@ -328,7 +360,10 @@ export default class LogicMgr extends IManager {
             }
             GameData.getInstance().soliderLv = data.level;
             Storage.getInstance().saveGameData();
-            Event.getInstance().emit(EventType.LvUp, {});
+            if (UI.getInstance().isShow("Menu"))
+                Event.getInstance().emit(EventType.LvUp, {});
+            else
+                GameData.getInstance().rewardToShow = true;
         }, function () {
             UI.getInstance().showFloatMsg("升级助力失败");
         })
@@ -380,7 +415,7 @@ export default class LogicMgr extends IManager {
                 GameData.getInstance().totalPool = obj.totalPool;
                 GameData.getInstance().todayPool = obj.todayPool;
                 if (UserData.getInstance().GameID != "")
-                    GameData.getInstance().point = obj.alreadyExchange;
+                    GameData.getInstance().payPoint = obj.alreadyExchange;
                 if (resolve)
                     resolve(1);
 
@@ -400,6 +435,12 @@ export default class LogicMgr extends IManager {
         url += param;
         Net.getInstance().get(url).then(function (data: any) {
             let obj = data.data
+            if (obj == null) {
+                console.log("不存在的用户数据")
+                //UI.getInstance().showFloatMsg("不存在的用户数据")
+                clearInterval(GameData.getInstance().lvUpTimer);
+                return;
+            }
             if (func)
                 func(obj.level);
         })
@@ -433,7 +474,10 @@ export default class LogicMgr extends IManager {
                 if (GameData.getInstance().soliderLv != lv) {
                     GameData.getInstance().soliderLv = lv;
                     Storage.getInstance().saveGameData();
-                    Event.getInstance().emit(EventType.LvUp, {});
+                    if (UI.getInstance().isShow("Menu"))
+                        Event.getInstance().emit(EventType.LvUp, {});
+                    else
+                        GameData.getInstance().rewardToShow = true;
                     clearInterval(GameData.getInstance().lvUpTimer);
                     GameData.getInstance().lvUpTimer = -1;
                 }
@@ -441,12 +485,41 @@ export default class LogicMgr extends IManager {
         }.bind(this), 10 * 1000);
     }
 
+    /**
+     * @description: 用户登录时统计数据
+     * @param {*}
+     * @return {*}
+     */
     userLogin() {
         if (UserData.getInstance().GameID == "")
             return;
         let url = GameConfig.getInstance().url + "/api/launch";
         let param = "?openid=" + UserData.getInstance().GameID;
         Net.getInstance().get(url + param);
+
+    }
+
+    /**
+     * @description: 用户是否存在
+     * @param {string} openid
+     * @return {*}
+     */
+    userExist(openid: string) {
+        return new Promise((resolve, reject) => {
+            let url = GameConfig.getInstance().url + "/api/userExisted";
+            let param = "?openid=" + openid;
+            Net.getInstance().get(url + param).then(function (data: any) {
+                let obj = data.data
+                if (!obj.existed) {
+                    if (resolve)
+                        resolve(1);
+                }
+                else {
+                    if (reject)
+                        reject();
+                }
+            })
+        })
 
     }
 }

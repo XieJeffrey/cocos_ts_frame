@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-20 21:28:58
- * @LastEditTime: 2021-09-22 15:23:16
+ * @LastEditTime: 2021-09-23 16:36:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Rule.ts
@@ -26,8 +26,8 @@ export default class Rule extends IView {
     timeTxt: cc.Label;
 
     onLoad() {
-        this.bg = this.node.findChild('bg');
-        this.timeTxt = this.node.findChild('title').getComponent(cc.Label);
+        this.bg = this.node.findChild('close');
+        this.timeTxt = this.node.findChild('scrollview/view/content/bg/title').getComponent(cc.Label);
         super.onLoad();
     }
 

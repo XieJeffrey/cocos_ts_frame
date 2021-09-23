@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-22 21:07:58
+ * @LastEditTime: 2021-09-23 20:18:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -83,9 +83,10 @@ export default class Exchange extends IView {
 
     onShow() {
         this.ownedTxt.string = "你当前可兑换积分有:{0}".format(GameData.getInstance().point);
-        this.payTxt.string = "你已成功兑换积分:{0}".format(GameData.getInstance().payPoint * GameConfig.getInstance().troops2lv[4]);
+        this.payTxt.string = "你已成功兑换积分:{0}".format(GameData.getInstance().payPoint * 10);
         this.poolTxt.string = "兑换奖池还剩:{0} T5士兵".format(GameData.getInstance().todayPool / 10);
-        this.leftTxt.string = "(还剩{0}积分额度可兑换)".format(10000 - GameData.getInstance().payPoint);
+        let lv = GameData.getInstance().soliderLv;
+        this.leftTxt.string = "(还剩{0}积分额度可兑换)".format(GameConfig.getInstance().maxPoint2Lv[lv] - GameData.getInstance().payPoint);
 
         this.selectPanel.active = GameData.getInstance().soliderType == 0;
         this.exchangePanel.active = GameData.getInstance().soliderType != 0;
@@ -113,6 +114,7 @@ export default class Exchange extends IView {
     }
 
     refreshExchangePanel() {
+        this.payTxt.node.active = true;
         //  console.log(UserData.getInstance().GameID);
         this.GameIDTxt.string = UserData.getInstance().GameID;
         this.exchangedNum.string = "" + GameData.getInstance().payPoint * GameConfig.getInstance().troops2lv[4];

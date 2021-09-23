@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 21:23:50
- * @LastEditTime: 2021-09-22 17:19:55
+ * @LastEditTime: 2021-09-23 17:09:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Rank.ts
@@ -36,6 +36,7 @@ export default class Rank extends IView {
     unregisteredItem: cc.Node;
     registBtn: cc.Node;
     ruleBtn: cc.Node;
+    itemList: Array<cc.Node>;
 
     onLoad() {
         this.closeBtn = this.node.findChild('decorate/close');
@@ -46,6 +47,7 @@ export default class Rank extends IView {
         this.unregisteredItem = this.node.findChild('content/unregistered');
         this.registBtn = this.unregisteredItem.findChild('register');
         this.ruleBtn = this.node.findChild('rule/ruleBtn');
+        this.itemList = new Array();
         super.onLoad();
     }
 
@@ -77,10 +79,8 @@ export default class Rank extends IView {
     }
 
     onHide() {
-        for (let i = 0; i < this.rankParent.children.length; i++) {
-            if (i == 0)
-                continue;
-            this.rankParent.children[i].destroy();
+        for (let i = 0; i < this.itemList.length; i++) {
+            this.itemList[i].destroy();
         }
     }
 
@@ -107,6 +107,7 @@ export default class Rank extends IView {
     onRegistered() {
         UI.getInstance().showFloatMsg("成功提交成绩到排行榜")
         UI.getInstance().showFloatMsg("排行榜数据刷新可能有延时,请稍后刷新查看")
+        GameData.getInstance().resetRankData();
         this.onShow();
     }
 
@@ -116,6 +117,9 @@ export default class Rank extends IView {
      * @return {*}
      */
     refreshRank() {
+        for (let i = 0; i < this.itemList.length; i++) {
+            this.itemList[i].destroy();
+        }
         for (let i = 0; i < GameData.getInstance().rankData.length; i++) {
             let item = null;
             if (i == 0) {
@@ -124,6 +128,7 @@ export default class Rank extends IView {
             else {
                 item = cc.instantiate(this.rankItem);
                 this.rankParent.addChild(item);
+                this.itemList.push(item);
             }
             item.active = true;
             this.refreshRankItemData(i, GameData.getInstance().rankData[i], item);
@@ -164,7 +169,7 @@ export default class Rank extends IView {
      */
     refreshRankItemData(idx: number, data: any, item: cc.Node) {
         let noStr = "" + idx;
-        if (idx > 10000 || idx == null) {
+        if (idx > 10000 || idx == Infinity) {
             noStr = "未上榜"
         }
         else {
@@ -172,7 +177,6 @@ export default class Rank extends IView {
         }
 
         item.findChild('no').getComponent(cc.Label).string = noStr;
-
         item.findChild('name').getComponent(cc.Label).string = Tool.changeToStar(data.openid);
         item.findChild('time').getComponent(cc.Label).string = data.round;
     }

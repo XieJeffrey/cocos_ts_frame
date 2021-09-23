@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 10:04:07
- * @LastEditTime: 2021-09-21 00:29:07
+ * @LastEditTime: 2021-09-23 16:54:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\data\GameData.ts
@@ -36,6 +36,8 @@ export default class GameData extends IManager {
     public todayPool: number = 0;//今日剩余可兑换兵力
     public reliveNum: number = 0;//复活次数
 
+    public rewardToShow: boolean = false; //是否有未显示的奖励
+
     //启动数据
     public launchData: {
         cmd: number,
@@ -56,6 +58,16 @@ export default class GameData extends IManager {
         this.soliderType = obj.type;
         this.point = obj.point;
         this.payPoint = obj.payPoint;
+    }
+
+    /**
+     * @description: 重置排行榜数据
+     * @param {*}
+     * @return {*}
+     */
+    resetRankData() {
+        this.rankData = null;
+        this.myRank = 1000000;
     }
 
     //是否排行版上版
