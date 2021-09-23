@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 17:37:41
- * @LastEditTime: 2021-09-23 22:56:11
+ * @LastEditTime: 2021-09-24 01:13:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\game.ts
@@ -62,7 +62,6 @@ export default class Game extends IView {
     recordTxt: cc.Label = null;//当前闯过？关
     recordShadowTxt: cc.Label = null;//文字阴影
     recordHistoryTxt: cc.Label = null;//历史最高
-    getPoint: number = 0;//获取积分
 
     onLoad() {
         //滚动背景
@@ -168,7 +167,6 @@ export default class Game extends IView {
         UI.getInstance().showUI("Dialog", "周公吐哺，天下归心");
         this.recordNode.active = false;
         this.record = 0;
-        this.getPoint = 0;
         GameData.getInstance().reliveNum = 3;
     }
 
@@ -275,12 +273,11 @@ export default class Game extends IView {
      */
     initWave() {
         this.curWave = -1;
-        this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
-
-        this.neutralPool = [2, 2, 2, 2, 2, 1, 1];
-        this.enemyPool = [1, 2, 3];
+        this.neutralPool = [2, 1, 1, 2, 1, 1, 2];
+        this.enemyPool = [2, 2, 1];
         this.neutralPool.muddled();
         this.enemyPool.muddled();
+        this.nextWave(GameConfig.getInstance().WaveStartPosY, GameData.getInstance().soliderLv);
     }
 
     /**
@@ -300,10 +297,7 @@ export default class Game extends IView {
                 this.curEnemyNum = 10 * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
             }
             else {
-                if (this.enemyPool.length > 0)
-                    this.curOtherUnit = this.enemyPool.pop();
-                else
-                    this.curOtherUnit = Math.ceil(Math.random() * 2);
+                this.curOtherUnit = this.enemyPool.pop();
                 this.curEnemyNum = this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
             }
             this.totalUnit = 0;
@@ -322,10 +316,7 @@ export default class Game extends IView {
         }
         else {
             roleType = RoleType.Neutral;
-            if (this.neutralPool.length > 0)
-                this.curOtherUnit = this.neutralPool.pop();
-            else
-                this.curOtherUnit = Math.ceil(Math.random() * 2);
+            this.curOtherUnit = this.neutralPool.pop();
             this.totalUnit += this.curOtherUnit;
             let pos = this.npcPosList.shift();
             this.genNpcOnPos(pos);
@@ -556,12 +547,12 @@ export default class Game extends IView {
      * @return {*}
      */
     startFight(fightDuration = 1, soliderLoss = GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]) {
-        console.log("soliderLoss:" + soliderLoss);
         this.playHeroAnima(Action.Attack);
         this.playSoliderAnima(RoleType.Mine, Action.Attack, GameData.getInstance().soliderLv);
         this.playSoliderAnima(RoleType.Enemy, Action.Attack, GameData.getInstance().soliderLv);
 
         Sound.getInstance().playSound(SoundType.Fight, true);
+        console.log("startFight:" + this.curOtherUnit)
 
         //做个延时，因为攻击动画有延时
         this.scheduleOnce(function () {
@@ -577,7 +568,7 @@ export default class Game extends IView {
                 GameData.getInstance().soliderNum -= soliderLoss;
                 if (GameData.getInstance().soliderNum < 0)
                     GameData.getInstance().soliderNum = 0;
-
+                this.refreshSoliderNum(-1);
                 let num = this.getMineSoliderUnitNum()
                 for (let i = 0; i < this.mineRole.length; i++) {
                     if (this.mineRole[i].node.active && i >= num)
@@ -598,8 +589,7 @@ export default class Game extends IView {
                             return;
                         this.gameOver()
                         if (this.gameMode == GameMode.Pattern) {
-                            this.getPoint = 0;
-                            UI.getInstance().showUI('Result', this.getPoint);
+                            UI.getInstance().showUI('Result', false);
                             console.log("[Pattern Model GameOver]");
                         }
                         else {
@@ -618,11 +608,9 @@ export default class Game extends IView {
                     Sound.getInstance().stopSound(SoundType.Fight);
                     UI.getInstance().showFloatMsg("本次战斗消耗了你{0}兵力".format(this.originSoliderNum - GameData.getInstance().soliderNum));
                     this.scheduleOnce(function () {
-                        this.getPoint += GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
-                        this.refreshSoliderNum(1)
                         if (this.curWave == 9) {
                             this.gameOver();
-                            UI.getInstance().showUI('Result', this.getPoint);
+                            UI.getInstance().showUI('Result', true);
                             return;
                         }
                         this.nextWave(GameConfig.getInstance().WaveStartPosY + 400, GameData.getInstance().soliderLv);
@@ -649,8 +637,7 @@ export default class Game extends IView {
 
         if (this.gameMode == GameMode.Pattern) {
             if (result) {
-                this.getPoint += GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
-                UI.getInstance().showFloatMsg("回答正确，村民加入了你的队伍");
+                UI.getInstance().showFloatMsg("回答正确，有{0}村民加入了你".format(this.curOtherUnit * GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv]));
                 Sound.getInstance().playSound(SoundType.AnswerRight);
                 console.log("答对了");
                 this.npcRole.runAction(cc.fadeOut(0.5));
@@ -673,7 +660,6 @@ export default class Game extends IView {
                 this.refreshSoliderNum(1);
             }
             else {
-                this.refreshSoliderNum(0);
                 UI.getInstance().showFloatMsg("回答错误，村民不愿意加入你的队伍");
                 Sound.getInstance().playSound(SoundType.AnswerWrong);
                 console.log("答错了");
@@ -699,11 +685,14 @@ export default class Game extends IView {
             if (result) {
                 this.record++;
                 this.refreshRecord();
-                UI.getInstance().showFloatMsg("回答正确,所向披靡大败敌军");
+                UI.getInstance().showFloatMsg("回答正确,本次战斗消耗了你{0}兵力".format(this.originSoliderNum - GameData.getInstance().soliderNum));
             }
             else {
-                UI.getInstance().showFloatMsg("回答错误,本次战斗损失惨重");
-                GameData.getInstance().soliderNum = this.originSoliderNum - 200;
+                let unitNum = GameConfig.getInstance().lv2Solider[GameData.getInstance().soliderLv];
+                unitNum = unitNum * 2;
+
+                UI.getInstance().showFloatMsg("回答错误,本次战斗消耗了你{0}兵力".format(unitNum));
+                GameData.getInstance().soliderNum = this.originSoliderNum - unitNum;
                 if (GameData.getInstance().soliderNum <= 0)
                     GameData.getInstance().soliderNum = 0;
                 this.refreshSoliderNum(-1);
@@ -857,8 +846,6 @@ export default class Game extends IView {
      * @return {*}
      */
     refreshSoliderNum(state: number) {
-        if (state < 0)
-            state = 0;
         if (state == 0)
             this.soliderNumState.node.active = false;
         else {
@@ -868,7 +855,7 @@ export default class Game extends IView {
             if (state == -1)
                 this.soliderNumState.spriteFrame = Res.getInstance().commonSprite.get('down');
         }
-        this.soliderNumTxt.string = "" + this.getPoint;
+        this.soliderNumTxt.string = "" + GameData.getInstance().soliderNum;
     }
 
     /**

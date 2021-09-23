@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-23 19:22:50
+ * @LastEditTime: 2021-09-24 01:00:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -70,24 +70,35 @@ export default class Result extends IView {
         this.shareBtn.on('click', this.shareRelive, this);
     }
 
-    onShow(getPoint: number) {
-        let isWin = getPoint != 0
+    onShow(isWin) {
+
         Sound.getInstance().stopBgm();
         this.playTitleAnima(isWin);
 
         this.shareBtn.active = !isWin;
-
+        let getPoint = GameData.getInstance().soliderNum;
         if (isWin) {
             if (UserData.getInstance().GameID != "") {
-                LogicMgr.getInstance().setTroops(getPoint + GameData.getInstance().point, function () {
-                    GameData.getInstance().point += getPoint;
-                    Storage.getInstance().saveGameData();
-                    this.height.string = "累计积分: " + GameData.getInstance().point;
-                }.bind(this))
+                if (getPoint > GameData.getInstance().point) {
+                    LogicMgr.getInstance().setTroops(getPoint, function () {
+                        GameData.getInstance().point = getPoint - GameData.getInstance().payPoint;
+                        LogicMgr.getInstance().setUserGameData(function () {
+                            Storage.getInstance().saveGameData();
+                        }.bind(this))
+                    }.bind(this))
+                }
+                // LogicMgr.getInstance().setTroops(getPoint + GameData.getInstance().point, function () {
+                //     GameData.getInstance().point += getPoint;
+                //     Storage.getInstance().saveGameData();
+                //     this.height.string = "累计积分: " + GameData.getInstance().point;
+                // }.bind(this))
             }
             else {
-                GameData.getInstance().point += getPoint;
-                Storage.getInstance().saveGameData();
+                if (getPoint > GameData.getInstance().point) {
+                    GameData.getInstance().point = getPoint;
+                    Storage.getInstance().saveGameData();
+                }
+
                 this.height.string = "累计积分: " + GameData.getInstance().point;
             }
             if (GameData.getInstance().maxSoliderNum < GameData.getInstance().soliderNum) {
@@ -100,8 +111,9 @@ export default class Result extends IView {
             this.shareBtn.active = (GameData.getInstance().reliveNum > 0)
         }
 
-        this.point.string = "积分 " + (isWin ? getPoint : 0)
-        this.height.string = "累计积分: " + GameData.getInstance().point;
+        this.point.string = "积分 " + (isWin ? GameData.getInstance().point : 0)
+        //   this.height.string = "累计积分: " + GameData.getInstance().point;
+        this.height.string = "";
         this.round.string = "得分：" + getPoint;
         this.continueBtn.active = isWin;
 

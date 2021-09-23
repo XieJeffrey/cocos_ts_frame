@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-25 14:02:31
- * @LastEditTime: 2021-09-20 17:14:52
+ * @LastEditTime: 2021-09-24 01:10:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Problem.ts
@@ -75,6 +75,8 @@ export default class Problem extends IView {
         if (this.duration <= 0) {
             if (this.resultCall)
                 this.resultCall(false);
+            UI.getInstance().hideUI("Problem");
+
             this.duration = Infinity;
         }
     }
@@ -99,6 +101,7 @@ export default class Problem extends IView {
         let queStr: string = Question.getInstance().getQuestion(model);
         console.log("queStr:{0}".format(queStr));
         let qData = JSON.parse(queStr);
+        this.answer = new Array();
         for (let i in qData["option"])
             this.answer.push(qData["option"][i])
         let answerStr = this.answer[0]

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-23 21:59:17
+ * @LastEditTime: 2021-09-24 01:06:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -78,7 +78,9 @@ export default class LogicMgr extends IManager {
                     //  UI.getInstance().showFloatMsg("本地数据已清除");
                     console.log("本地数据已清除");
                     login();
-                })
+                }).catch(function () {
+                    login();
+                }.bind(this))
             }
             else {
                 login();
