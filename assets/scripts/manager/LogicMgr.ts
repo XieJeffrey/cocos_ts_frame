@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-24 01:06:55
+ * @LastEditTime: 2021-09-24 22:04:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -38,6 +38,7 @@ export default class LogicMgr extends IManager {
             console.log("cc_game_onshow:" + this.isShare);
             if (this.isShare) {
                 let now = new Date().getTime();
+                console.log("分享时间:{0}".format(now - this.shareTime))
                 if (now - this.shareTime >= 5000) {
                     console.log("分享成功")
                     if (this.shareCall)
@@ -96,7 +97,11 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     downloadGame() {
-        wx && wx.miniProgram.navigateTo({ url: '../down/down' })
+        if (Tool.isWxMp())
+            wx && wx.miniProgram.navigateTo({ url: '../down/down' })
+        else
+            location.assign(GameConfig.getInstance().download);
+
     }
     // update (dt) {}   
     /**
@@ -367,6 +372,9 @@ export default class LogicMgr extends IManager {
             else
                 GameData.getInstance().rewardToShow = true;
         }, function () {
+            UI.getInstance().showFloatMsg("升级助力失败");
+        }).catch(function (err) {
+            console.error(err);
             UI.getInstance().showFloatMsg("升级助力失败");
         })
     }

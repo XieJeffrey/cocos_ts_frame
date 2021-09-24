@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-23 20:18:24
+ * @LastEditTime: 2021-09-24 23:34:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -83,7 +83,7 @@ export default class Exchange extends IView {
 
     onShow() {
         this.ownedTxt.string = "你当前可兑换积分有:{0}".format(GameData.getInstance().point);
-        this.payTxt.string = "你已成功兑换积分:{0}".format(GameData.getInstance().payPoint * 10);
+        this.payTxt.string = "你已成功兑换积分:{0}".format(GameData.getInstance().payPoint);
         this.poolTxt.string = "兑换奖池还剩:{0} T5士兵".format(GameData.getInstance().todayPool / 10);
         let lv = GameData.getInstance().soliderLv;
         this.leftTxt.string = "(还剩{0}积分额度可兑换)".format(GameConfig.getInstance().maxPoint2Lv[lv] - GameData.getInstance().payPoint);

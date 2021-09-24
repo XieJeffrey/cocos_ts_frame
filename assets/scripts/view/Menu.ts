@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-24 11:09:43
+ * @LastEditTime: 2021-09-25 01:20:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -21,6 +21,7 @@ import LogicMgr from "../manager/LogicMgr";
 import Event from "../module/Event";
 import Res from "../module/Res";
 import Sound from "../module/Sound";
+import Storage from "../module/Storage";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -39,11 +40,13 @@ export default class Menu extends IView {
     pointTxt: cc.Label;
     recordTxt: cc.Label;
     checkLvUp: boolean = false;
+    ruleBtn: cc.Node;
 
     onLoad() {
         this.rankBtn = this.node.findChild('rank');
         this.infoBtn = this.node.findChild('info');
         this.startBtn = this.node.findChild('start');
+        this.ruleBtn = this.node.findChild('rule');
         this.exchangeBtn = this.node.findChild('exchange/btn');
         this.lvUpBtn = this.node.findChild('solider')
         this.soliderLvTxt = this.node.findChild('solider/lv').getComponent(cc.Label);
@@ -59,6 +62,7 @@ export default class Menu extends IView {
         this.startBtn.on('click', this.onClickStart, this)
         this.exchangeBtn.on('click', this.onClickExchange, this)
         this.lvUpBtn.on('click', this.onClickLvUp, this)
+        this.ruleBtn.on('click', this.onClickRule, this)
         this.node.findChild('exchange').on('click', function () {
             // Storage.getInstance().clearAll();
             // UI.getInstance().showFloatMsg("清除所有本地数据，重启重试")
@@ -98,10 +102,12 @@ export default class Menu extends IView {
             }.bind(this))
         }
 
-        if (GameData.getInstance().rewardToShow) {
-            UI.getInstance().showUI("Reward")
-            GameData.getInstance().rewardToShow = false;
-        }
+        setTimeout(function () {
+            if (GameData.getInstance().rewardToShow) {
+                UI.getInstance().showUI("Reward")
+                GameData.getInstance().rewardToShow = false;
+            }
+        }.bind(this), 800)
 
         // UI.getInstance().showUI("Reward")
     }
@@ -172,6 +178,11 @@ export default class Menu extends IView {
         }
         LogicMgr.getInstance().shareLvup();
         Sound.getInstance().playSound(SoundType.Click);
+    }
+
+    onClickRule() {
+        Sound.getInstance().playSound(SoundType.Click);
+        UI.getInstance().showUI("Rule");
     }
 
     onClickExchange() {

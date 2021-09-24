@@ -3,7 +3,7 @@ import IManager from "../base/IManager";
 /*
  * @Author: your name
  * @Date: 2021-08-23 14:41:29
- * @LastEditTime: 2021-09-23 21:48:50
+ * @LastEditTime: 2021-09-24 22:01:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\common\Tool.ts
@@ -179,4 +179,27 @@ export default class Tool extends IManager {
             return false;
         }
     }
+
+    public static isWxMp() {
+        var ua: any = window.navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') { //判断是否是微信环境
+            console.log("--------  in weixin")
+            //微信环境
+            if (ua.match(/miniProgram/i) == 'miniprogram') {
+                console.log('---------  进入mp')
+                // 小程序环境下逻辑 
+                return true
+            } else {
+                console.log('--------  进入wx h5');
+                return false
+                //非小程序环境下逻辑
+            }
+
+        } else {
+            return false
+            //非微信环境逻辑
+        }
+        //return (ua.match(/MicroMessenger/i) == 'micromessenger') ? true : false
+    }
+
 }

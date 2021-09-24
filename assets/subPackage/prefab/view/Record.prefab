@@ -36,7 +36,7 @@
         "__id__": 32
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [],
     "_prefab": {
       "__id__": 35
@@ -290,7 +290,7 @@
         "__id__": 8
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 11
@@ -806,7 +806,7 @@
       "ctor": "Float64Array",
       "array": [
         -260,
-        609,
+        353,
         0,
         0,
         0,
@@ -945,7 +945,7 @@
     "_alignFlags": 1,
     "_left": 0,
     "_right": 0,
-    "_top": 0.1,
+    "_top": 0.26,
     "_bottom": 0,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,

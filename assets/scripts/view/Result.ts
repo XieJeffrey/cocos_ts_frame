@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-24 12:55:24
+ * @LastEditTime: 2021-09-25 01:43:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -14,7 +14,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { IView } from "../base/IView";
-import { EventType, SoundType } from "../common/BaseType";
+import { EventType, GameMode, SoundType } from "../common/BaseType";
 import GameConfig from "../config/GameConfig";
 import GameData from "../data/GameData";
 import UserData from "../data/UserData";
@@ -82,6 +82,8 @@ export default class Result extends IView {
                 if (getPoint > GameData.getInstance().point) {
                     LogicMgr.getInstance().setTroops(getPoint, function () {
                         GameData.getInstance().point = getPoint - GameData.getInstance().payPoint;
+                        if (GameData.getInstance().point <= 0)
+                            GameData.getInstance().point = 0;
                         this.point.string = "积分 " + GameData.getInstance().point;
                         LogicMgr.getInstance().setUserGameData(function () {
                             Storage.getInstance().saveGameData();
@@ -104,6 +106,7 @@ export default class Result extends IView {
             }
             if (GameData.getInstance().maxSoliderNum < GameData.getInstance().soliderNum) {
                 GameData.getInstance().maxSoliderNum = GameData.getInstance().soliderNum;
+                Storage.getInstance().saveGameData();
             }
             Sound.getInstance().playSound(SoundType.Win);
         }
@@ -184,7 +187,7 @@ export default class Result extends IView {
             if (this.shareBtn.active)
                 this.shareBtn.playDuangAnima();
 
-            this.downloadBtn.playDuangAnima();
+            //   this.downloadBtn.playDuangAnima();
             this.homeBtn.playDuangAnima();
             this.retryBtn.playDuangAnima();
 

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-23 21:52:39
+ * @LastEditTime: 2021-09-24 22:10:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -20,10 +20,9 @@ import UserData from "../data/UserData";
 
 const { ccclass, property } = cc._decorator;
 const localStorage = true;
+const dataKey = "releaseKeyWGJX"
 @ccclass
 export default class Storage extends IManager {
-    dataKey: string = "debug_key_35";
-
     clearAll() {
         cc.sys.localStorage.clear();
     }
@@ -58,8 +57,8 @@ export default class Storage extends IManager {
             payPoint: GameData.getInstance().payPoint,
         }
         let str = JSON.stringify(json);
-        str = Base64.encode(str);
-        cc.sys.localStorage.setItem('gameData' + this.dataKey, str);
+        // str = Base64.encode(str);
+        cc.sys.localStorage.setItem('gameData' + dataKey, str);
     }
 
     /**
@@ -76,28 +75,29 @@ export default class Storage extends IManager {
             mail: UserData.getInstance().Mail,
         }
         let str = JSON.stringify(json);
-        str = Base64.encode(str)
+        // str = Base64.encode(str)
         console.log(str);
-        cc.sys.localStorage.setItem('userData' + this.dataKey, str);
+        cc.sys.localStorage.setItem('userData' + dataKey, str);
     }
 
     loadGameData() {
-        let str: string = cc.sys.localStorage.getItem("gameData" + this.dataKey)
+        let str: string = cc.sys.localStorage.getItem("gameData" + dataKey)
         if (str === "" || str === null) {
             GameData.getInstance().init()
         }
         else {
-            GameData.getInstance().load(Base64.decode(str));
+            GameData.getInstance().load(str);
         }
     }
 
     loadUserData() {
-        let str: string = cc.sys.localStorage.getItem("userData" + this.dataKey)
+        let str: string = cc.sys.localStorage.getItem("userData" + dataKey)
+        console.log("localUserData:{0}".format(str));
         if (str === "" || str === null) {
             UserData.getInstance().init()
         }
         else {
-            UserData.getInstance().load(Base64.decode(str));
+            UserData.getInstance().load(str);
         }
     }
 

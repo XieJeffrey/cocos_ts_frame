@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:56:09
- * @LastEditTime: 2021-09-18 11:48:30
+ * @LastEditTime: 2021-09-24 18:27:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\App.ts
@@ -43,11 +43,13 @@ export default class App {
         this.initCall = call;
 
         this.storage.init().then(function () { this.inited() }.bind(this));
-        this.logicMgr.init().then(function () { this.inited() }.bind(this));
         this.sound.init().then(function () { this.inited() }.bind(this));
         this.res.init().then(function () { this.inited() }.bind(this));
         this.ui.init().then(function () { this.inited() }.bind(this));
         this.question.init().then(function () { this.inited() }.bind(this));
+        setTimeout(function () {
+            this.logicMgr.init().then(function () { this.inited() }.bind(this));
+        }.bind(this), 500);
     }
 
     inited() {

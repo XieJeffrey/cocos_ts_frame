@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 21:23:50
- * @LastEditTime: 2021-09-23 17:09:08
+ * @LastEditTime: 2021-09-25 01:05:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Rank.ts
@@ -182,6 +182,6 @@ export default class Rank extends IView {
     }
 
     onRule() {
-        UI.getInstance().showUI("Rule");
+        UI.getInstance().showUI("RewardRule");
     }
 }

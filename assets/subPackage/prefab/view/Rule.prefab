@@ -24,13 +24,16 @@
         "__id__": 5
       },
       {
-        "__id__": 25
+        "__id__": 8
+      },
+      {
+        "__id__": 23
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 29
+      "__id__": 27
     },
     "_opacity": 255,
     "_color": {
@@ -188,24 +191,20 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "scrollview",
+    "_name": "cover",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
     },
-    "_children": [
+    "_children": [],
+    "_active": true,
+    "_components": [
       {
         "__id__": 6
       }
     ],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 23
-      }
-    ],
     "_prefab": {
-      "__id__": 24
+      "__id__": 7
     },
     "_opacity": 255,
     "_color": {
@@ -217,20 +216,20 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 720,
-      "height": 1600
+      "width": 100,
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 1
+      "y": 0.5
     },
     "_trs": {
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        0,
-        0,
+        264.509,
+        594.491,
         0,
         0,
         0,
@@ -255,15 +254,58 @@
     "_id": ""
   },
   {
+    "__type__": "cc.Sprite",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 5
+    },
+    "_enabled": true,
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
+    "_spriteFrame": {
+      "__uuid__": "a068f904-ad75-4db9-94ca-4d4e97f89079"
+    },
+    "_type": 0,
+    "_sizeMode": 0,
+    "_fillType": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 0,
+    "_isTrimmedMode": true,
+    "_atlas": null,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__uuid__": "5166c721-252a-42ef-822d-2e88592483a1"
+    },
+    "fileId": "a8l4dgT9JNhIAPcP6lYsAm",
+    "sync": false
+  },
+  {
     "__type__": "cc.Node",
-    "_name": "view",
+    "_name": "scrollview",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 5
+      "__id__": 1
     },
     "_children": [
       {
-        "__id__": 7
+        "__id__": 9
       }
     ],
     "_active": true,
@@ -324,17 +366,14 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "content",
-    "_objFlags": 0,
+    "_name": "view",
+    "_objFlags": 512,
     "_parent": {
-      "__id__": 6
+      "__id__": 8
     },
     "_children": [
       {
-        "__id__": 8
-      },
-      {
-        "__id__": 15
+        "__id__": 10
       }
     ],
     "_active": true,
@@ -356,8 +395,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 220,
-      "height": 3792.3199999999997
+      "width": 720,
+      "height": 1600
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -395,27 +434,27 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bg",
-    "_objFlags": 0,
+    "_name": "content",
+    "_objFlags": 512,
     "_parent": {
-      "__id__": 7
+      "__id__": 9
     },
     "_children": [
       {
-        "__id__": 9
+        "__id__": 11
+      },
+      {
+        "__id__": 14
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 12
-      },
-      {
-        "__id__": 13
+        "__id__": 17
       }
     ],
     "_prefab": {
-      "__id__": 14
+      "__id__": 18
     },
     "_opacity": 255,
     "_color": {
@@ -427,20 +466,20 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 720,
-      "height": 1600
+      "width": 220,
+      "height": 2358.2
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 0.5
+      "y": 1
     },
     "_trs": {
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
         0,
-        -920,
+        0,
         0,
         0,
         0,
@@ -469,17 +508,17 @@
     "_name": "title",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 8
+      "__id__": 10
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 10
+        "__id__": 12
       }
     ],
     "_prefab": {
-      "__id__": 11
+      "__id__": 13
     },
     "_opacity": 255,
     "_color": {
@@ -491,8 +530,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 520,
-      "height": 40
+      "width": 540,
+      "height": 50.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -503,8 +542,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -34.258,
-        559.181,
+        0,
+        -225.2,
         0,
         0,
         0,
@@ -533,7 +572,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 9
+      "__id__": 11
     },
     "_enabled": true,
     "_materials": [
@@ -543,10 +582,10 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "活动时间:2022021-10-06 12:00:00",
-    "_N$string": "活动时间:2022021-10-06 12:00:00",
+    "_string": "活动规则",
+    "_N$string": "活动规则",
     "_fontSize": 30,
-    "_lineHeight": 30,
+    "_lineHeight": 28,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -554,7 +593,7 @@
     "_batchAsBitmap": false,
     "_styleFlags": 1,
     "_underlineHeight": 0,
-    "_N$horizontalAlign": 0,
+    "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 2,
@@ -569,120 +608,7 @@
     "asset": {
       "__uuid__": "5166c721-252a-42ef-822d-2e88592483a1"
     },
-    "fileId": "f5RAisV89OwZIqlDEweYSs",
-    "sync": false
-  },
-  {
-    "__type__": "cc.Sprite",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 8
-    },
-    "_enabled": true,
-    "_materials": [
-      {
-        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
-      }
-    ],
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "96e2caa8-655c-48fd-86a6-45c19e00465a"
-    },
-    "_type": 0,
-    "_sizeMode": 0,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_atlas": null,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.Button",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 8
-    },
-    "_enabled": true,
-    "_normalMaterial": null,
-    "_grayMaterial": null,
-    "duration": 0.1,
-    "zoomScale": 1.2,
-    "clickEvents": [],
-    "_N$interactable": true,
-    "_N$enableAutoGrayEffect": false,
-    "_N$transition": 0,
-    "transition": 0,
-    "_N$normalColor": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_N$pressedColor": {
-      "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
-      "a": 255
-    },
-    "pressedColor": {
-      "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
-      "a": 255
-    },
-    "_N$hoverColor": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "hoverColor": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_N$disabledColor": {
-      "__type__": "cc.Color",
-      "r": 124,
-      "g": 124,
-      "b": 124,
-      "a": 255
-    },
-    "_N$normalSprite": null,
-    "_N$pressedSprite": null,
-    "pressedSprite": null,
-    "_N$hoverSprite": null,
-    "hoverSprite": null,
-    "_N$disabledSprite": null,
-    "_N$target": {
-      "__id__": 8
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__uuid__": "5166c721-252a-42ef-822d-2e88592483a1"
-    },
-    "fileId": "e2KdapGHxMto6TTW9tVjce",
+    "fileId": "b3rQ2lbjRH0qGWvDf+ZHf6",
     "sync": false
   },
   {
@@ -690,20 +616,17 @@
     "_name": "rule",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 7
+      "__id__": 10
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 16
-      },
-      {
-        "__id__": 17
+        "__id__": 15
       }
     ],
     "_prefab": {
-      "__id__": 18
+      "__id__": 16
     },
     "_opacity": 255,
     "_color": {
@@ -716,7 +639,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 580,
-      "height": 1992.32
+      "height": 1837.8
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -728,7 +651,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -2536.16,
+        -1189.3,
         0,
         0,
         0,
@@ -757,7 +680,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 15
+      "__id__": 14
     },
     "_enabled": true,
     "_materials": [
@@ -767,10 +690,10 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "活动规则：\n\n1、 活动时间：2021年9月24日12:00 - 2021年10月7日11:59。\n\n2、 活动期间，用户与小程序内等级相同的人分享升级链接，对方在成功激活链接后，双方均可合成升级，并在等级达到2、3、4、5级时领取对应的等级奖励，等级不相同的两位用户则无法合成升级。\n\n3、 活动期间，双方均需要在小程序内绑定手机号后方可成功激活链接并合成升级，每位用户仅可帮另一位用户激活链接一次。\n\n4、 用户在常规模式下剩余的兵力将以1:1的比例转换为积分，积分可于主界面抢兑各等级的兵种奖励，活动期间每天将限量开放部分奖池，并于活动结束后完全开放，总奖池最高可兑换2021万T5兵。兑换截止时间为2021年10月14日11:59。\n\n1、 每位用户在兑换界面选定兑换兵种后将不可更改，实际发放的兵种等级将根据兑换截止日期用户所绑定游戏ID的对应兵种科技决定。如对应兵种的科技未达到T5，则会按照2倍、4倍、6倍、10倍比例对应发放T4、T3、T2、T1的兵种奖励。\n\n5、 用户在破釜沉舟模式中的成绩将计入排行榜，根据答题闯关次数进行排名。答题闯关次数越多，排名越高。如答题闯关次数相同，则根据达成时间的先后顺序排名。\n\n6、 排行榜成绩将于2021年10月6日11:59进行最终结算，排名第1位的用户将获得iPhone 13 Pro手机一部，排名第2位的用户将获得华为P50 Pro手机一部，排名第3位的用户将获得AirPods Max一个，排名第4-10位的用户将获得万国觉醒联名耳机1个。\n\n7、 虚拟道具奖励将在奖励兑换时间结束后15个工作日内在游戏内发放至活动绑定的手机号对应账号，由用户自行选择收取奖励的角色。\n\n8、 实物奖励将在奖励兑换时间结束后30日内通过邮寄形式发出，请在活动期间内及时填写正确的收货信息。\n\n9、 活动绑定的手机号及活动页面填写的收货信息为奖励发放的唯一依据，活动绑定手机号后不可修改，如未及时填写或信息填写错误导致奖励发放失败或错误，将不予补发。\n\n10、 如用户利用任何手段进行作弊，或通过其他方式扰乱活动公平秩序，运营方有权不予发放奖励，并保留追究其法律责任的权力。\n\n11、 如用户绑定的活动手机号码在游戏内奖励发放前未注册《万国觉醒》游戏账户的，则视为放弃虚拟及实物奖励。\n\n12、 本活动相关数据以运营方后台数据为准，运营方保留在法律许可的范围内，对活动规则进行解释的权力。",
-    "_N$string": "活动规则：\n\n1、 活动时间：2021年9月24日12:00 - 2021年10月7日11:59。\n\n2、 活动期间，用户与小程序内等级相同的人分享升级链接，对方在成功激活链接后，双方均可合成升级，并在等级达到2、3、4、5级时领取对应的等级奖励，等级不相同的两位用户则无法合成升级。\n\n3、 活动期间，双方均需要在小程序内绑定手机号后方可成功激活链接并合成升级，每位用户仅可帮另一位用户激活链接一次。\n\n4、 用户在常规模式下剩余的兵力将以1:1的比例转换为积分，积分可于主界面抢兑各等级的兵种奖励，活动期间每天将限量开放部分奖池，并于活动结束后完全开放，总奖池最高可兑换2021万T5兵。兑换截止时间为2021年10月14日11:59。\n\n1、 每位用户在兑换界面选定兑换兵种后将不可更改，实际发放的兵种等级将根据兑换截止日期用户所绑定游戏ID的对应兵种科技决定。如对应兵种的科技未达到T5，则会按照2倍、4倍、6倍、10倍比例对应发放T4、T3、T2、T1的兵种奖励。\n\n5、 用户在破釜沉舟模式中的成绩将计入排行榜，根据答题闯关次数进行排名。答题闯关次数越多，排名越高。如答题闯关次数相同，则根据达成时间的先后顺序排名。\n\n6、 排行榜成绩将于2021年10月6日11:59进行最终结算，排名第1位的用户将获得iPhone 13 Pro手机一部，排名第2位的用户将获得华为P50 Pro手机一部，排名第3位的用户将获得AirPods Max一个，排名第4-10位的用户将获得万国觉醒联名耳机1个。\n\n7、 虚拟道具奖励将在奖励兑换时间结束后15个工作日内在游戏内发放至活动绑定的手机号对应账号，由用户自行选择收取奖励的角色。\n\n8、 实物奖励将在奖励兑换时间结束后30日内通过邮寄形式发出，请在活动期间内及时填写正确的收货信息。\n\n9、 活动绑定的手机号及活动页面填写的收货信息为奖励发放的唯一依据，活动绑定手机号后不可修改，如未及时填写或信息填写错误导致奖励发放失败或错误，将不予补发。\n\n10、 如用户利用任何手段进行作弊，或通过其他方式扰乱活动公平秩序，运营方有权不予发放奖励，并保留追究其法律责任的权力。\n\n11、 如用户绑定的活动手机号码在游戏内奖励发放前未注册《万国觉醒》游戏账户的，则视为放弃虚拟及实物奖励。\n\n12、 本活动相关数据以运营方后台数据为准，运营方保留在法律许可的范围内，对活动规则进行解释的权力。",
-    "_fontSize": 26,
-    "_lineHeight": 32,
+    "_string": "1、 活动时间：2021年9月24日12:00 - 2021年10月7日11:59。\n\n2、 活动期间，用户与小程序内等级相同的人分享升级链接，对方在成功激活链接后，双方均可合成升级，并在等级达到2、3、4、5级时领取对应的等级奖励，等级不相同的两位用户则无法合成升级。\n\n3、 活动期间，双方均需要在小程序内绑定手机号后方可成功激活链接并合成升级，每位用户仅可帮另一位用户激活链接一次。\n\n4、 用户在常规模式下获得的最高得分可于主界面抢兑各等级的兵种奖励，从等级1到等级5分别可获得的积分上限为1000、2000、4000、6000、10000，多次答题得分不累积，只取最高分兑换。\n\n5、 活动期间每天将限量开放部分奖池，并于活动结束后完全开放，总奖池最高可兑换2021万T5兵。兑换截止时间为2021年10月14日11:59。\n\n6、 每位用户在兑换界面选定兑换兵种后将不可更改，实际发放的兵种等级将根据兑换截止日期用户所绑定游戏ID的对应兵种科技决定。如对应兵种的科技未达到T5，则会按照2倍、4倍、6倍、10倍比例对应发放T4、T3、T2、T1的兵种奖励。\n\n7、 用户在破釜沉舟模式中的成绩将计入排行榜，根据答题闯关次数进行排名。答题闯关次数越多，排名越高。如答题闯关次数相同，则根据达成时间的先后顺序排名。\n\n8、 排行榜成绩将于2021年10月7日11:59进行最终结算，排名第1位的用户将获得iPhone 13 Pro手机一部，排名第2位的用户将获得华为P50 Pro手机一部，排名第3位的用户将获得AirPods Max一个，排名第4-10位的用户将获得万国觉醒联名耳机1个。\n\n9、 虚拟道具奖励将在奖励兑换时间结束后15个工作日内在游戏内发放至活动绑定的游戏ID内。\n\n10、 实物奖励将在奖励兑换时间结束后30日内通过邮寄形式发出，请在活动期间内及时填写正确的收货信息。\n\n11、 活动绑定的游戏ID、手机号及活动页面填写的收货信息为奖励发放的唯一依据，绑定后不可修改，如未及时填写或信息填写错误导致奖励发放失败或错误，将不予补发。\n\n12、 如用户利用任何手段进行作弊，或通过其他方式扰乱活动公平秩序，运营方有权不予发放奖励，并保留追究其法律责任的权力。\n\n13、 如用户绑定的活动手机号码在游戏内奖励发放前未注册《万国觉醒》游戏账户的，则视为放弃虚拟及实物奖励。\n\n14、 本活动相关数据以运营方后台数据为准，运营方保留在法律许可的范围内，对活动规则进行解释的权力。",
+    "_N$string": "1、 活动时间：2021年9月24日12:00 - 2021年10月7日11:59。\n\n2、 活动期间，用户与小程序内等级相同的人分享升级链接，对方在成功激活链接后，双方均可合成升级，并在等级达到2、3、4、5级时领取对应的等级奖励，等级不相同的两位用户则无法合成升级。\n\n3、 活动期间，双方均需要在小程序内绑定手机号后方可成功激活链接并合成升级，每位用户仅可帮另一位用户激活链接一次。\n\n4、 用户在常规模式下获得的最高得分可于主界面抢兑各等级的兵种奖励，从等级1到等级5分别可获得的积分上限为1000、2000、4000、6000、10000，多次答题得分不累积，只取最高分兑换。\n\n5、 活动期间每天将限量开放部分奖池，并于活动结束后完全开放，总奖池最高可兑换2021万T5兵。兑换截止时间为2021年10月14日11:59。\n\n6、 每位用户在兑换界面选定兑换兵种后将不可更改，实际发放的兵种等级将根据兑换截止日期用户所绑定游戏ID的对应兵种科技决定。如对应兵种的科技未达到T5，则会按照2倍、4倍、6倍、10倍比例对应发放T4、T3、T2、T1的兵种奖励。\n\n7、 用户在破釜沉舟模式中的成绩将计入排行榜，根据答题闯关次数进行排名。答题闯关次数越多，排名越高。如答题闯关次数相同，则根据达成时间的先后顺序排名。\n\n8、 排行榜成绩将于2021年10月7日11:59进行最终结算，排名第1位的用户将获得iPhone 13 Pro手机一部，排名第2位的用户将获得华为P50 Pro手机一部，排名第3位的用户将获得AirPods Max一个，排名第4-10位的用户将获得万国觉醒联名耳机1个。\n\n9、 虚拟道具奖励将在奖励兑换时间结束后15个工作日内在游戏内发放至活动绑定的游戏ID内。\n\n10、 实物奖励将在奖励兑换时间结束后30日内通过邮寄形式发出，请在活动期间内及时填写正确的收货信息。\n\n11、 活动绑定的游戏ID、手机号及活动页面填写的收货信息为奖励发放的唯一依据，绑定后不可修改，如未及时填写或信息填写错误导致奖励发放失败或错误，将不予补发。\n\n12、 如用户利用任何手段进行作弊，或通过其他方式扰乱活动公平秩序，运营方有权不予发放奖励，并保留追究其法律责任的权力。\n\n13、 如用户绑定的活动手机号码在游戏内奖励发放前未注册《万国觉醒》游戏账户的，则视为放弃虚拟及实物奖励。\n\n14、 本活动相关数据以运营方后台数据为准，运营方保留在法律许可的范围内，对活动规则进行解释的权力。",
+    "_fontSize": 25,
+    "_lineHeight": 30,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -786,76 +709,6 @@
     "_id": ""
   },
   {
-    "__type__": "cc.Button",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 15
-    },
-    "_enabled": true,
-    "_normalMaterial": null,
-    "_grayMaterial": null,
-    "duration": 0.1,
-    "zoomScale": 1.2,
-    "clickEvents": [],
-    "_N$interactable": true,
-    "_N$enableAutoGrayEffect": false,
-    "_N$transition": 0,
-    "transition": 0,
-    "_N$normalColor": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_N$pressedColor": {
-      "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
-      "a": 255
-    },
-    "pressedColor": {
-      "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
-      "a": 255
-    },
-    "_N$hoverColor": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "hoverColor": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_N$disabledColor": {
-      "__type__": "cc.Color",
-      "r": 124,
-      "g": 124,
-      "b": 124,
-      "a": 255
-    },
-    "_N$normalSprite": null,
-    "_N$pressedSprite": null,
-    "pressedSprite": null,
-    "_N$hoverSprite": null,
-    "hoverSprite": null,
-    "_N$disabledSprite": null,
-    "_N$target": {
-      "__id__": 15
-    },
-    "_id": ""
-  },
-  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -863,7 +716,7 @@
     "asset": {
       "__uuid__": "5166c721-252a-42ef-822d-2e88592483a1"
     },
-    "fileId": "b91X/bmG9KMacEbW7cCByH",
+    "fileId": "74iO8mbfFNIp2EybyN/U+G",
     "sync": false
   },
   {
@@ -871,13 +724,13 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 7
+      "__id__": 10
     },
     "_enabled": true,
     "_layoutSize": {
       "__type__": "cc.Size",
       "width": 220,
-      "height": 3792.3199999999997
+      "height": 2358.2
     },
     "_resize": 1,
     "_N$layoutType": 2,
@@ -889,10 +742,10 @@
     "_N$startAxis": 0,
     "_N$paddingLeft": 0,
     "_N$paddingRight": 0,
-    "_N$paddingTop": 120,
-    "_N$paddingBottom": 260,
+    "_N$paddingTop": 200,
+    "_N$paddingBottom": 250,
     "_N$spacingX": 0,
-    "_N$spacingY": -180,
+    "_N$spacingY": 20,
     "_N$verticalDirection": 1,
     "_N$horizontalDirection": 0,
     "_N$affectedByScale": false,
@@ -906,7 +759,7 @@
     "asset": {
       "__uuid__": "5166c721-252a-42ef-822d-2e88592483a1"
     },
-    "fileId": "eaSCltBChPt5dtnu5kNQNc",
+    "fileId": "57baqwPhFH9KvO/wK3zqqA",
     "sync": false
   },
   {
@@ -914,7 +767,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 6
+      "__id__": 9
     },
     "_enabled": true,
     "_materials": [
@@ -937,7 +790,7 @@
     "asset": {
       "__uuid__": "5166c721-252a-42ef-822d-2e88592483a1"
     },
-    "fileId": "0eIuHvaW5PJZZmrsVtrLdY",
+    "fileId": "f3Rb4sPe5APJ10FpUMUsxz",
     "sync": false
   },
   {
@@ -945,22 +798,22 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 5
+      "__id__": 8
     },
     "_enabled": true,
     "horizontal": false,
     "vertical": true,
     "inertia": true,
-    "brake": 0.75,
+    "brake": 0.85,
     "elastic": true,
     "bounceDuration": 0.23,
     "scrollEvents": [],
     "cancelInnerEvents": true,
     "_N$content": {
-      "__id__": 7
+      "__id__": 10
     },
     "content": {
-      "__id__": 7
+      "__id__": 10
     },
     "_N$horizontalScrollBar": null,
     "_N$verticalScrollBar": null,
@@ -974,7 +827,7 @@
     "asset": {
       "__uuid__": "5166c721-252a-42ef-822d-2e88592483a1"
     },
-    "fileId": "42xIUR+VpPrJwlzbt77yov",
+    "fileId": "68v7tvEF1MgrLOmZzjmLdS",
     "sync": false
   },
   {
@@ -988,14 +841,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 26
+        "__id__": 24
       },
       {
-        "__id__": 27
+        "__id__": 25
       }
     ],
     "_prefab": {
-      "__id__": 28
+      "__id__": 26
     },
     "_opacity": 255,
     "_color": {
@@ -1049,7 +902,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 25
+      "__id__": 23
     },
     "_enabled": true,
     "_materials": [
@@ -1081,7 +934,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 25
+      "__id__": 23
     },
     "_enabled": true,
     "_normalMaterial": null,
@@ -1142,7 +995,7 @@
     "hoverSprite": null,
     "_N$disabledSprite": null,
     "_N$target": {
-      "__id__": 25
+      "__id__": 23
     },
     "_id": ""
   },
@@ -1154,7 +1007,7 @@
     "asset": {
       "__uuid__": "5166c721-252a-42ef-822d-2e88592483a1"
     },
-    "fileId": "21K0R5ZUlGy4L+pW8RmYXC",
+    "fileId": "3anJNSjgxFAr8nKIN/ElRI",
     "sync": false
   },
   {
