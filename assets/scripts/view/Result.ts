@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-24 01:00:45
+ * @LastEditTime: 2021-09-24 12:55:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -82,6 +82,7 @@ export default class Result extends IView {
                 if (getPoint > GameData.getInstance().point) {
                     LogicMgr.getInstance().setTroops(getPoint, function () {
                         GameData.getInstance().point = getPoint - GameData.getInstance().payPoint;
+                        this.point.string = "积分 " + GameData.getInstance().point;
                         LogicMgr.getInstance().setUserGameData(function () {
                             Storage.getInstance().saveGameData();
                         }.bind(this))
@@ -110,8 +111,8 @@ export default class Result extends IView {
             Sound.getInstance().playSound(SoundType.Fail);
             this.shareBtn.active = (GameData.getInstance().reliveNum > 0)
         }
-
-        this.point.string = "积分 " + (isWin ? GameData.getInstance().point : 0)
+        console.log(GameData.getInstance().point)
+        this.point.string = "积分 " + GameData.getInstance().point;
         //   this.height.string = "累计积分: " + GameData.getInstance().point;
         this.height.string = "";
         this.round.string = "得分：" + getPoint;
