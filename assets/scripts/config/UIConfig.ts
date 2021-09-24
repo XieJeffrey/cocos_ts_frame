@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 11:20:53
- * @LastEditTime: 2021-09-23 15:26:36
+ * @LastEditTime: 2021-09-24 11:12:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\uiConfig.ts
@@ -29,5 +29,5 @@ export class UIConfig {
         ["Reward", { prefan: "Reward", order: 7, script: "Reward" }]
     ])
 
-    public static preload = ["Menu", "Loading"]
+    public static preload = ["Loading"]
 }

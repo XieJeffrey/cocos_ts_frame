@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 15:40:48
- * @LastEditTime: 2021-09-24 00:55:08
+ * @LastEditTime: 2021-09-24 11:09:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\menu.ts
@@ -15,15 +15,12 @@
 
 import { IView } from "../base/IView";
 import { BgmType, EventType, SoundType } from "../common/BaseType";
-import Tool from "../common/Tool";
-import GameConfig from "../config/GameConfig";
 import GameData from "../data/GameData";
 import UserData from "../data/UserData";
 import LogicMgr from "../manager/LogicMgr";
 import Event from "../module/Event";
 import Res from "../module/Res";
 import Sound from "../module/Sound";
-import Storage from "../module/Storage";
 import UI from "../module/UI";
 
 const { ccclass, property } = cc._decorator;
@@ -82,6 +79,7 @@ export default class Menu extends IView {
             this.checkInviteParam();
             this.checkLvUp = true;
         }
+
         if (this.anima == null) {
             this.anima = new cc.Node('anima').addComponent(sp.Skeleton);
             this.node.addChild(this.anima.node);

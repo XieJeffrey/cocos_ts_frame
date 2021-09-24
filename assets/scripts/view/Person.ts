@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-23 21:56:13
+ * @LastEditTime: 2021-09-24 10:54:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -111,14 +111,16 @@ export default class Person extends IView {
             return;
         }
 
+        let userData = {
+            id: this.idInput.string,
+            mail: ".",
+            tel: this.phoneInput.string,
+            name: this.nameInput.string,
+            address: this.addressInput.string,
+        }
+
         LogicMgr.getInstance().userExist(this.idInput.string).then(function () {
-            LogicMgr.getInstance().setUserInfo({
-                id: this.idInput.string,
-                mail: "",
-                tel: this.phoneInput.string,
-                name: this.nameInput.string,
-                address: this.addressInput.string,
-            }).then(function () {
+            LogicMgr.getInstance().setUserInfo(userData).then(function () {
                 this.infoCommited();
             }.bind(this))
         }.bind(this)).catch(function () {
@@ -139,7 +141,6 @@ export default class Person extends IView {
     infoCommited() {
         this.isModify = false;
         UI.getInstance().showFloatMsg("信息更新成功")
-        console.log(this)
         UserData.getInstance().GameID = this.idInput.string;
         UserData.getInstance().Phone = this.phoneInput.string;
         UserData.getInstance().Name = this.nameInput.string;
