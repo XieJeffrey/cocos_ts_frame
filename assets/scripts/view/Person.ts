@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-26 01:03:12
+ * @LastEditTime: 2021-09-26 01:18:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -111,12 +111,13 @@ export default class Person extends IView {
         //     return;
         // }
 
-        if (UserData.getInstance().GameID != "") {
-            if (UserData.getInstance().GameID != this.idInput.string) {
-                UI.getInstance().showFloatMsg("设备已绑定游戏ID，不可更改");
-                return;
-            }
-        }
+        // if (UserData.getInstance().GameID != "") {
+        //     if (UserData.getInstance().GameID != this.idInput.string) {
+        //         UI.getInstance().showFloatMsg("设备已绑定游戏ID，不可更改");
+        //         return;
+        //     }
+        // }
+
         let userData = {
             id: this.idInput.string,
             mail: ".",
