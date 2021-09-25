@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-30 14:22:32
- * @LastEditTime: 2021-09-25 21:53:04
+ * @LastEditTime: 2021-09-26 00:10:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\GameConfig.ts
@@ -17,7 +17,7 @@ import IManager from "../base/IManager";
 
 export default class GameConfig extends IManager {
     public url: string = "https://rok-question-data.lilithgames.com";//服务器地址
-    //public url: string = "https://pig2.shaoweiwy.cn:3001";//测试服地址
+    // public url: string = "https://pig2.shaoweiwy.cn:3001";//测试服地址
     public download: string = "https://vda.lilisi.com/tracking?dap_code=2daccca51ac0ec8690ac5536acc0543c";//下载链接
     public GameTip: Array<string> = [
         "帮助村民解答难题，他们将会加入您的队伍，并肩作战"

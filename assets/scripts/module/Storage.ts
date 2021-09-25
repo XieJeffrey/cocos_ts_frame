@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-25 18:11:24
+ * @LastEditTime: 2021-09-25 22:29:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -108,7 +108,7 @@ export default class Storage extends IManager {
      */
     loadUserData() {
         let str: string = cc.sys.localStorage.getItem("userData" + dataKey)
-        console.log("localUserData:{0}".format(str));
+        console.log("localUserData:" + str);
         if (str === "" || str === null) {
             str = cc.sys.localStorage.getItem("userData" + dataKey);
             if (str === "" || str === null)

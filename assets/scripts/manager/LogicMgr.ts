@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-25 18:22:06
+ * @LastEditTime: 2021-09-26 00:12:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -14,6 +14,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import IManager from "../base/IManager";
+import Base64 from "../common/Base64";
 import { EventType } from "../common/BaseType";
 import Tool from "../common/Tool";
 import GameConfig from "../config/GameConfig";
@@ -23,7 +24,6 @@ import Event from "../module/Event";
 import Net from "../module/Net";
 import Storage from "../module/Storage";
 import UI from "../module/UI";
-import Game from "../view/Game";
 
 const { ccclass, property } = cc._decorator;
 
@@ -145,13 +145,16 @@ export default class LogicMgr extends IManager {
      */
     setUserInfo(data) {
         return new Promise((resolve, reject) => {
+            // console.log(encodeURI(Base64.encode(data.name)))
+            // console.log(encodeURI(Base64.encode(data.address)))
+
             let url = GameConfig.getInstance().url + "/api/setUserinfo";
             let param = {
                 openid: data.id,
                 mail: data.mail,
                 tel: data.tel,
-                name: data.name,
-                address: data.address,
+                name: encodeURI(Base64.encode(data.name)),
+                address: encodeURI(Base64.encode(data.address)),
             }
 
             Net.getInstance().post(url, param).then(function (data) {
@@ -555,6 +558,8 @@ export default class LogicMgr extends IManager {
             let param = "?openid=" + openid;
             Net.getInstance().get(url + param).then(function (data: any) {
                 let obj = data.data;
+                obj.name = decodeURI(Base64.decode(obj.name));
+                obj.address = decodeURI(Base64.decode(obj.address));
                 if (resolve) {
                     resolve(obj);
                 }

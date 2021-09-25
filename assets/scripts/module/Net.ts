@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-23 23:55:12
- * @LastEditTime: 2021-09-20 13:28:26
+ * @LastEditTime: 2021-09-25 23:54:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Net.ts
@@ -51,7 +51,7 @@ export default class Net extends IManager {
             };
             console.log('request:' + url + "?" + str);
             xhr.open("POST", url, true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=utf-8');
             xhr.send(str);
         })
     }
