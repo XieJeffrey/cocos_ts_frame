@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-26 00:12:32
+ * @LastEditTime: 2021-09-26 00:24:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -558,6 +558,13 @@ export default class LogicMgr extends IManager {
             let param = "?openid=" + openid;
             Net.getInstance().get(url + param).then(function (data: any) {
                 let obj = data.data;
+                //用户在user表但没在userinfo表
+                if (JSON.stringify(obj) == "{}") {
+                    if (resolve) {
+                        resolve(null);
+                    }
+                    return;
+                }
                 obj.name = decodeURI(Base64.decode(obj.name));
                 obj.address = decodeURI(Base64.decode(obj.address));
                 if (resolve) {

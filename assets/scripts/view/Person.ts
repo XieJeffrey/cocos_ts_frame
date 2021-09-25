@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-25 20:47:32
+ * @LastEditTime: 2021-09-26 00:35:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -132,14 +132,30 @@ export default class Person extends IView {
             }.bind(this))
         }.bind(this)).catch(function () {
             //当前用户已在服务器上有数据
-            LogicMgr.getInstance().getUserPhone(this.idInput.string).then(function (userData: any) {
+            LogicMgr.getInstance().getUserPhone(this.idInput.string).then(function (data: any) {
+                if (data == null) {
+                    //这波用户在userinfo没有数据，没法验证
+                    //直接更新到服务器吧阿门
+                    LogicMgr.getInstance().setUserInfo(userData).then(function () {
+                        this.isModify = false;
+                        UI.getInstance().showFloatMsg("同步数据成功");
+                        UI.getInstance().hideUI('Person');
+                        UserData.getInstance().GameID = this.idInput.string;
+                        UserData.getInstance().Phone = this.phoneInput.string;
+                        UserData.getInstance().Name = this.nameInput.string;
+                        UserData.getInstance().Address = this.addressInput.string;
+                        Storage.getInstance().saveUserData();
+                    }.bind(this))
+                    return;
+                }
+
                 //验证手机号码是否相同
-                if (this.phoneInput.string == userData.tel) {
+                if (this.phoneInput.string == data.tel) {
                     //同步服务器数据到本地
-                    UserData.getInstance().GameID = userData.openid
-                    UserData.getInstance().Name = userData.name;
-                    UserData.getInstance().Phone = userData.tel;
-                    UserData.getInstance().Address = userData.address;
+                    UserData.getInstance().GameID = data.openid
+                    UserData.getInstance().Name = data.name;
+                    UserData.getInstance().Phone = data.tel;
+                    UserData.getInstance().Address = data.address;
                     LogicMgr.getInstance().getUserData().then(function () {
                         Storage.getInstance().saveUserData();
                         Storage.getInstance().saveGameData();
