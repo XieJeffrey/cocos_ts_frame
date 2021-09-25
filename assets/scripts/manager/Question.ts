@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 17:22:35
- * @LastEditTime: 2021-09-23 19:36:16
+ * @LastEditTime: 2021-09-25 18:20:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\config\Question.ts
@@ -90,7 +90,7 @@ export default class Question extends IManager {
                 key = Object.keys(this.question)[idx]
             }
         }
-        console.log(this.question[key])
+        //console.log(this.question[key])
         return JSON.stringify(this.question[key]);
     }
 

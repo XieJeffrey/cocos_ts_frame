@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-24 22:04:25
+ * @LastEditTime: 2021-09-25 18:22:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -185,7 +185,7 @@ export default class LogicMgr extends IManager {
 
         Net.getInstance().post(url, param).then(function (data) {
             console.log(data);
-            Storage.getInstance().saveUserData();
+            Storage.getInstance().saveGameData();
             if (func)
                 func()
         }, function () {
@@ -236,6 +236,10 @@ export default class LogicMgr extends IManager {
                 GameData.getInstance().endlessRecord = parseInt(obj.round);
                 GameData.getInstance().point = obj.troops;
                 GameData.getInstance().soliderLv = obj.level;
+                //限制士兵的最高等级
+                if (GameData.getInstance().soliderLv >= 5) {
+                    GameData.getInstance().soliderLv = 4;
+                }
                 if (resolve)
                     resolve(1);
             }, function () {
@@ -470,6 +474,11 @@ export default class LogicMgr extends IManager {
     }
 
     shareLvup() {
+        if (GameData.getInstance().soliderLv >= 4) {
+            UI.getInstance().showFloatMsg("士兵已到最高等级");
+            return;
+        }
+
         let url = "../share/share?cmd=1&inviter={0}&lv={1}".format(UserData.getInstance().GameID, GameData.getInstance().soliderLv);
         console.log(url)
         wx & wx.miniProgram.navigateTo({ url: url });
@@ -483,6 +492,9 @@ export default class LogicMgr extends IManager {
             this.getUserlv(function (lv) {
                 if (GameData.getInstance().soliderLv != lv) {
                     GameData.getInstance().soliderLv = lv;
+                    if (GameData.getInstance().soliderLv >= 5) {
+                        GameData.getInstance().soliderLv = 4;
+                    }
                     Storage.getInstance().saveGameData();
                     if (UI.getInstance().isShow("Menu"))
                         Event.getInstance().emit(EventType.LvUp, {});
@@ -530,6 +542,23 @@ export default class LogicMgr extends IManager {
                 }
             })
         })
+    }
 
+    /**
+     * @description: 获取用户的联系方式
+     * @param {string} openid
+     * @return {*}
+     */
+    getUserPhone(openid: string) {
+        return new Promise((resolve, reject) => {
+            let url = GameConfig.getInstance().url + "/api/getUserinfo"
+            let param = "?openid=" + openid;
+            Net.getInstance().get(url + param).then(function (data: any) {
+                let obj = data.data;
+                if (resolve) {
+                    resolve(obj);
+                }
+            })
+        })
     }
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-16 21:37:46
- * @LastEditTime: 2021-09-24 23:34:51
+ * @LastEditTime: 2021-09-25 18:05:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Exchange.ts
@@ -23,6 +23,7 @@ import LogicMgr from "../manager/LogicMgr";
 import Storage from "../module/Storage";
 import GameConfig from "../config/GameConfig";
 import Event from "../module/Event";
+import Game from "./Game";
 
 const { ccclass, property } = cc._decorator;
 
@@ -82,6 +83,9 @@ export default class Exchange extends IView {
     }
 
     onShow() {
+        // if (GameData.getInstance().payPoint > 0 && GameData.getInstance().soliderType == 0) {
+        //     GameData.getInstance().soliderType = Math.ceil(Math.random() * 3);
+        // }
         this.ownedTxt.string = "你当前可兑换积分有:{0}".format(GameData.getInstance().point);
         this.payTxt.string = "你已成功兑换积分:{0}".format(GameData.getInstance().payPoint);
         this.poolTxt.string = "兑换奖池还剩:{0} T5士兵".format(GameData.getInstance().todayPool / 10);
@@ -149,18 +153,15 @@ export default class Exchange extends IView {
             return;
         }
 
-        if (this.selectType == 0) {
-            UI.getInstance().showFloatMsg("请先选择兑换兵种");
-            return
-        }
-
-        if (GameData.getInstance().point <= 0) {
-            UI.getInstance().showFloatMsg("兑换积分不足");
-            return;
-        }
         if (GameData.getInstance().soliderType == 0) {
-            GameData.getInstance().soliderType = this.selectType;
+            if (this.selectType == 0) {
+                UI.getInstance().showFloatMsg("请先选择兑换兵种");
+                return
+            }
             LogicMgr.getInstance().setSoliderType(function () {
+                GameData.getInstance().soliderType = this.selectType;
+                Storage.getInstance().saveGameData();
+                this.onShow();
                 this.doExchage();
             }.bind(this))
         }
@@ -175,6 +176,10 @@ export default class Exchange extends IView {
      * @return {*}
      */
     doExchage() {
+        if (GameData.getInstance().point <= 0) {
+            UI.getInstance().showFloatMsg("兑换积分不足");
+            return;
+        }
         LogicMgr.getInstance().exchangeSolider(
             GameData.getInstance().point,
             function (data) {

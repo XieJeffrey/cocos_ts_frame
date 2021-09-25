@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 00:28:47
- * @LastEditTime: 2021-09-24 22:10:25
+ * @LastEditTime: 2021-09-25 18:11:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\Storage.ts
@@ -80,21 +80,41 @@ export default class Storage extends IManager {
         cc.sys.localStorage.setItem('userData' + dataKey, str);
     }
 
+    /**
+     * @description: 加载本地游戏数据
+     * @param {*}
+     * @return {*}
+     */
     loadGameData() {
         let str: string = cc.sys.localStorage.getItem("gameData" + dataKey)
         if (str === "" || str === null) {
-            GameData.getInstance().init()
+            str = cc.sys.localStorage.getItem("gameData" + dataKey);
+            if (str === "" || str === null) {
+                GameData.getInstance().init();
+            }
+            else {
+                GameData.getInstance().load(str);
+            }
         }
         else {
             GameData.getInstance().load(str);
         }
     }
 
+    /**
+     * @description: 加载本地玩家数据
+     * @param {*}
+     * @return {*}
+     */
     loadUserData() {
         let str: string = cc.sys.localStorage.getItem("userData" + dataKey)
         console.log("localUserData:{0}".format(str));
         if (str === "" || str === null) {
-            UserData.getInstance().init()
+            str = cc.sys.localStorage.getItem("userData" + dataKey);
+            if (str === "" || str === null)
+                UserData.getInstance().init()
+            else
+                UserData.getInstance().load(str);
         }
         else {
             UserData.getInstance().load(str);
@@ -103,6 +123,9 @@ export default class Storage extends IManager {
 
     loadLaunchData() {
         let str = cc.sys.localStorage.getItem("withParam");
+        if (str == "" || str == null) {
+            str = cc.sys.localStorage.getItem("withParam");
+        }
         console.log("luanchData:" + str);
         if (str != "" && str != null) {
             cc.sys.localStorage.removeItem("withParam");

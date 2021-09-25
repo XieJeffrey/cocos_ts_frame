@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-04 12:24:39
- * @LastEditTime: 2021-09-24 10:54:21
+ * @LastEditTime: 2021-09-25 18:12:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Person.ts
@@ -120,12 +120,35 @@ export default class Person extends IView {
         }
 
         LogicMgr.getInstance().userExist(this.idInput.string).then(function () {
+            //空白的新用户
             LogicMgr.getInstance().setUserInfo(userData).then(function () {
                 this.infoCommited();
             }.bind(this))
         }.bind(this)).catch(function () {
-            UI.getInstance().showFloatMsg("已经存在的ID，无法重复创建")
-        })
+            //当前用户已在服务器上有数据
+            LogicMgr.getInstance().getUserPhone(this.idInput.string).then(function (userData: any) {
+                //验证手机号码是否相同
+                if (this.phoneInput.string == userData.tel) {
+                    //同步服务器数据到本地
+                    UserData.getInstance().GameID = userData.openid
+                    UserData.getInstance().Name = userData.name;
+                    UserData.getInstance().Phone = userData.tel;
+                    UserData.getInstance().Address = userData.address;
+                    LogicMgr.getInstance().getUserData().then(function () {
+                        Storage.getInstance().saveUserData();
+                        Storage.getInstance().saveGameData();
+                        UI.getInstance().showFloatMsg("同步数据成功");
+                        UI.getInstance().hideUI('Person');
+                    }.bind(this))
+
+                    LogicMgr.getInstance().initExchangeStae();
+                }
+                else {
+                    UI.getInstance().showFloatMsg("ID与联系方式不匹配")
+                }
+            }.bind(this))
+            // UI.getInstance().showFloatMsg("已经存在的ID，无法重复创建")
+        }.bind(this))
     }
 
     onClose() {
@@ -145,8 +168,10 @@ export default class Person extends IView {
         UserData.getInstance().Phone = this.phoneInput.string;
         UserData.getInstance().Name = this.nameInput.string;
         UserData.getInstance().Address = this.addressInput.string;
+
         Storage.getInstance().saveUserData();
         LogicMgr.getInstance().setUserGameData(null);//保存游戏数据
+
         if (GameData.getInstance().endlessRecord == 0) {
             Event.getInstance().emit(EventType.Regist, {});
         }
