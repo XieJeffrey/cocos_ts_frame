@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-09-03 15:17:51
- * @LastEditTime: 2021-09-25 01:43:53
+ * @LastEditTime: 2021-09-26 22:22:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\view\Result.ts
@@ -134,6 +134,8 @@ export default class Result extends IView {
         }
         else
             Sound.getInstance().playSound(SoundType.Fail);
+
+        this.shareBtn.active = false;
     }
 
     onHide() { }
@@ -196,6 +198,7 @@ export default class Result extends IView {
     }
 
     shareRelive() {
+        return;//关闭分享复活
         // Event.getInstance().emit(EventType.Relive, {});
         // return;
         LogicMgr.getInstance().shareRelive();

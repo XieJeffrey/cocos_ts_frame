@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-26 00:24:04
+ * @LastEditTime: 2021-09-26 22:21:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -36,6 +36,8 @@ export default class LogicMgr extends IManager {
     init() {
         cc.game.on(cc.game.EVENT_SHOW, function () {
             console.log("cc_game_onshow:" + this.isShare);
+            //关闭分享复活
+            return;
             if (this.isShare) {
                 let now = new Date().getTime();
                 console.log("分享时间:{0}".format(now - this.shareTime))
