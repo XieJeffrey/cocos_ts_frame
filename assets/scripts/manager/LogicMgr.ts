@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-27 19:20:26
+ * @LastEditTime: 2021-09-27 20:49:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -226,6 +226,7 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     getUserData() {
+        let self = this
         return new Promise((resolve, reject) => {
             if (UserData.getInstance().GameID == "") {
                 if (resolve)
@@ -241,7 +242,7 @@ export default class LogicMgr extends IManager {
                 GameData.getInstance().endlessRecord = parseInt(obj.round);
                 GameData.getInstance().point = obj.troops;
                 GameData.getInstance().soliderLv = obj.level;
-                this.limitSoliderLv();
+                self.limitSoliderLv();
                 if (resolve)
                     resolve(1);
             }, function () {
@@ -331,6 +332,7 @@ export default class LogicMgr extends IManager {
      * @return {*}
      */
     invite(inviter: string) {
+        let self = this
         if (UserData.getInstance().GameID == "") {
             UI.getInstance().showFloatMsg("请先完善资料再帮好友助力");
             return;
@@ -372,7 +374,7 @@ export default class LogicMgr extends IManager {
                 return;
             }
             GameData.getInstance().soliderLv = data.level;
-            this.limitSoliderLv();
+            self.limitSoliderLv();
             Storage.getInstance().saveGameData();
             if (UI.getInstance().isShow("Menu"))
                 Event.getInstance().emit(EventType.LvUp, {});
@@ -484,6 +486,7 @@ export default class LogicMgr extends IManager {
     }
 
     shareLvup() {
+        let self = this
         if (GameData.getInstance().soliderLv >= 4) {
             UI.getInstance().showFloatMsg("士兵已到最高等级");
             return;
@@ -502,7 +505,7 @@ export default class LogicMgr extends IManager {
             this.getUserlv(function (lv) {
                 if (GameData.getInstance().soliderLv != lv) {
                     GameData.getInstance().soliderLv = lv;
-                    this.limitSoliderLv();
+                    self.limitSoliderLv();
                     Storage.getInstance().saveGameData();
                     if (UI.getInstance().isShow("Menu"))
                         Event.getInstance().emit(EventType.LvUp, {});
