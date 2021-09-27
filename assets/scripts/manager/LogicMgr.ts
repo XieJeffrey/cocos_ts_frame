@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-26 22:21:45
+ * @LastEditTime: 2021-09-27 19:20:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -241,10 +241,7 @@ export default class LogicMgr extends IManager {
                 GameData.getInstance().endlessRecord = parseInt(obj.round);
                 GameData.getInstance().point = obj.troops;
                 GameData.getInstance().soliderLv = obj.level;
-                //限制士兵的最高等级
-                if (GameData.getInstance().soliderLv >= 5) {
-                    GameData.getInstance().soliderLv = 4;
-                }
+                this.limitSoliderLv();
                 if (resolve)
                     resolve(1);
             }, function () {
@@ -375,6 +372,7 @@ export default class LogicMgr extends IManager {
                 return;
             }
             GameData.getInstance().soliderLv = data.level;
+            this.limitSoliderLv();
             Storage.getInstance().saveGameData();
             if (UI.getInstance().isShow("Menu"))
                 Event.getInstance().emit(EventType.LvUp, {});
@@ -433,6 +431,13 @@ export default class LogicMgr extends IManager {
                 GameData.getInstance().isExchangeOpen = obj.opening;
                 GameData.getInstance().totalPool = obj.totalPool;
                 GameData.getInstance().todayPool = obj.todayPool;
+
+                if (GameData.getInstance().todayPool < 0)
+                    GameData.getInstance().todayPool = 0;
+
+                if (GameData.getInstance().totalPool < 0)
+                    GameData.getInstance().totalPool = 0;
+
                 if (UserData.getInstance().GameID != "")
                     GameData.getInstance().payPoint = obj.alreadyExchange;
                 if (resolve)
@@ -497,9 +502,7 @@ export default class LogicMgr extends IManager {
             this.getUserlv(function (lv) {
                 if (GameData.getInstance().soliderLv != lv) {
                     GameData.getInstance().soliderLv = lv;
-                    if (GameData.getInstance().soliderLv >= 5) {
-                        GameData.getInstance().soliderLv = 4;
-                    }
+                    this.limitSoliderLv();
                     Storage.getInstance().saveGameData();
                     if (UI.getInstance().isShow("Menu"))
                         Event.getInstance().emit(EventType.LvUp, {});
@@ -574,5 +577,16 @@ export default class LogicMgr extends IManager {
                 }
             })
         })
+    }
+
+    /**
+     * @description: 限制最高的等级
+     * @param {*}
+     * @return {*}
+     */
+    limitSoliderLv() {
+        if (GameData.getInstance().soliderLv >= 5) {
+            GameData.getInstance().soliderLv = 4;
+        }
     }
 }
