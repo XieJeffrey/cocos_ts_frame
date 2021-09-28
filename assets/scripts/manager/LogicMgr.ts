@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-27 20:49:19
+ * @LastEditTime: 2021-09-28 15:43:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -337,6 +337,8 @@ export default class LogicMgr extends IManager {
             UI.getInstance().showFloatMsg("请先完善资料再帮好友助力");
             return;
         }
+
+        this.countShare(null);
         let url = GameConfig.getInstance().url + "/api/inviteIn";
         let param = {
             openid: UserData.getInstance().GameID,
@@ -474,6 +476,7 @@ export default class LogicMgr extends IManager {
 
     //分享复活
     shareRelive() {
+        this.countShare(null);
         let url = "../share/share?cmd=0"
         console.log(url)
 
