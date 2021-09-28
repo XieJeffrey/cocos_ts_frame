@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-28 15:43:56
+ * @LastEditTime: 2021-09-28 15:50:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -338,7 +338,6 @@ export default class LogicMgr extends IManager {
             return;
         }
 
-        this.countShare(null);
         let url = GameConfig.getInstance().url + "/api/inviteIn";
         let param = {
             openid: UserData.getInstance().GameID,
@@ -495,8 +494,8 @@ export default class LogicMgr extends IManager {
             return;
         }
 
+        this.countShare(null);
         let url = "../share/share?cmd=1&inviter={0}&lv={1}".format(UserData.getInstance().GameID, GameData.getInstance().soliderLv);
-        console.log(url)
         wx & wx.miniProgram.navigateTo({ url: url });
 
         if (GameData.getInstance().lvUpTimer != -1) {
