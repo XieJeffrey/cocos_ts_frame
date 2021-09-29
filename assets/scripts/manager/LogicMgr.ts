@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-24 14:13:09
- * @LastEditTime: 2021-09-28 15:43:56
+ * @LastEditTime: 2021-09-29 13:47:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \cocos_ts_frame\assets\scripts\module\logicMgr.ts
@@ -243,6 +243,9 @@ export default class LogicMgr extends IManager {
                 GameData.getInstance().point = obj.troops;
                 GameData.getInstance().soliderLv = obj.level;
                 self.limitSoliderLv();
+                if (obj.level == 5) {
+                    self.resetLv();
+                }
                 if (resolve)
                     resolve(1);
             }, function () {
@@ -594,5 +597,23 @@ export default class LogicMgr extends IManager {
         if (GameData.getInstance().soliderLv >= 5) {
             GameData.getInstance().soliderLv = 4;
         }
+    }
+
+    /**
+     * @description: 把等级为6的改成等级5
+     * @param {*}
+     * @return {*}
+     */
+    resetLv() {
+        let url = GameConfig.getInstance().url + "/api/saveUser";
+        let param = {
+            openid: UserData.getInstance().GameID,
+            round: GameData.getInstance().endlessRecord,
+            troops: GameData.getInstance().point,
+            level: GameData.getInstance().soliderLv,
+        }
+        Net.getInstance().post(url, param).then(function (data) {
+            Storage.getInstance().saveGameData();
+        })
     }
 }
